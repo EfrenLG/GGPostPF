@@ -1,10 +1,18 @@
 import React from 'react';
+
+// Librerías de terceros
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
+// Estilos globales
 import './App.css';
+
+// Componentes de layout
 import Header from './layout/header/header.jsx';
 import Footer from './layout/footer/footer.jsx';
+
+// Páginas
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
 
@@ -28,17 +36,5 @@ function App() {
 export default App;
 
 /*
-<Router path='*' element={<NotFound />} />
-
-
-function App() {
-  return (
-    <>
-      <Header />
-      <main className="main-content">
-        <Container />
-      </main>
-      <Footer />
-    </>
-  );
-};*/
+  <Router path='*' element={<NotFound />} />
+*/
