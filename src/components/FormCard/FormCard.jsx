@@ -1,4 +1,5 @@
 import React from 'react';
+import './FormCard.css';
 import { progressBar } from '../../functions/progessBar';
 
 const FormCard = ({ title, onSubmit, register, errors, fields, buttons, password, setPassword }) => {
