@@ -1,0 +1,31 @@
+:root {
+    --black-matte: #1C1C1C;
+    --bone-white: #F9F6EF;
+    --accent-blue: #4C9AFF;
+    --soft-purple: #B8A9F5;
+    --light-blue: #E6F0FF;
+    --light-gray: #F2F2F2;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+
+body {
+    background: linear-gradient(to bottom right, var(--light-blue), #ffffff);
+    color: var(--black-matte);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

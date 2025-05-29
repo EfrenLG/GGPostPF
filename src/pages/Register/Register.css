@@ -1,0 +1,103 @@
+.container {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(76, 154, 255, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.container:hover {
+    transform: scale(1.01);
+}
+
+form label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+form input {
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 0.3rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: var(--light-gray);
+    transition: border 0.3s ease;
+}
+
+form input:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 4px rgba(76, 154, 255, 0.4);
+}
+
+form p {
+    font-size: 0.8rem;
+    color: #cc0000;
+    margin-bottom: 0.5rem;
+}
+
+#progress-container {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#progress-bar {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    margin-top: 1.5rem;
+    margin-right: 0.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#btn-form {
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+#btn-form:hover {
+    background-color: #3a86e9;
+    transform: scale(1.02);
+}
+
+.btn-back {
+    background-color: transparent;
+    color: var(--black-matte);
+    border: 2px solid var(--black-matte);
+}
+
+.btn-back:hover {
+    background-color: var(--black-matte);
+    color: white;
+    transform: scale(1.02);
+}
+
+@media (max-width: 576px) {
+
+    .container {
+        padding: 1.5rem;
+    }
+
+    button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 0.75rem;
+    }
+}
