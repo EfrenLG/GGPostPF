@@ -6,7 +6,7 @@ export const checkUser = async (username, email) => {
     };
 
     try {
-        const response = await fetch('http://localhost:5173/auth/check', {
+        const response = await fetch('https://ggpostb.onrender.com/auth/check', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export const createUser = async (username, email, password) => {
 
     try {
 
-        const response = await fetch(`http://localhost:3000/auth/register`, {
+        const response = await fetch(`https://ggpostb.onrender.com/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ export const sendEmail = async (username, email) => {
 
     try {
 
-        const response = await fetch(`http://localhost:3000/email/send-email`, {
+        const response = await fetch(`https://ggpostb.onrender.com/email/send-email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
