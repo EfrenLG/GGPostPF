@@ -89,6 +89,13 @@ button {
     transform: scale(1.02);
 }
 
+@media (max-width: 768px) {
+  body {
+    background-color: yellow !important;
+  }
+}
+
+
 @media (max-width: 576px) {
 
     .container {
