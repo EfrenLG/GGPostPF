@@ -1,15 +1,9 @@
-.container {
-    width: 100%;
-    max-width: 500px;
-    background: white;
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(76, 154, 255, 0.2);
-    transition: transform 0.2s ease;
-}
-
-.container:hover {
-    transform: scale(1.01);
+.page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  padding: 2rem;
 }
 
 @media (max-width: 576px) {

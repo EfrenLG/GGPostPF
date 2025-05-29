@@ -18,23 +18,26 @@ const Login = () => {
     const onSubmit = (data) => console.log(data.username);
 
     return (
-        <FormCard
-            title='Iniciar sesión'
-            onSubmit={handleSubmit(onSubmit)}
-            register={register}
-            errors={errors}
-            password={password}
-            setPassword={setPassword}
-            fields={[
-                { name: 'username', label: 'Usuario:', type: 'text', placeholder: 'Introduzca su nombre...' },
-                { name: 'password', label: 'Contraseña:', type: 'password', placeholder: 'Introduzca su contraseña...' }
-            ]}
-            buttons={
-                <button type="button" className="btn-back" onClick={() => navigate('/register')}>
-                    Registrarse
-                </button>
-            }
-        />
+        <div className="page-wrapper">
+
+            <FormCard
+                title='Iniciar sesión'
+                onSubmit={handleSubmit(onSubmit)}
+                register={register}
+                errors={errors}
+                password={password}
+                setPassword={setPassword}
+                fields={[
+                    { name: 'username', label: 'Usuario:', type: 'text', placeholder: 'Introduzca su nombre...' },
+                    { name: 'password', label: 'Contraseña:', type: 'password', placeholder: 'Introduzca su contraseña...' }
+                ]}
+                buttons={
+                    <button type="button" className="btn-back" onClick={() => navigate('/register')}>
+                        Registrarse
+                    </button>
+                }
+            />
+        </div>
     );
 };
 

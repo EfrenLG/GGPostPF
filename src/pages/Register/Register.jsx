@@ -21,26 +21,28 @@ const Register = () => {
     };
 
     return (
+        <div className="page-wrapper">
 
-        <FormCard
-            title='Registro'
-            onSubmit={handleSubmit(onSubmit)}
-            register={register}
-            errors={errors}
-            password={password}
-            setPassword={setPassword}
-            fields={[
-                { name: 'username', label: 'Usuario:', type: 'text', placeholder: 'Introduzca su usuario...' },
-                { name: 'email', label: 'Email:', type: 'email', placeholder: 'Introduzca su email...' },
-                { name: 'password', label: 'Contraseña:', type: 'password', placeholder: 'Introduzca su contraseña...' },
-                { name: 'passwordRepeat', label: 'Repita la contraseña:', type: 'password', placeholder: 'Repita la contraseña...' },
-            ]}
-            buttons={
-                <button type="button" className="btn-back" onClick={() => navigate('/')}>
-                    Atrás
-                </button>
-            }
-        />
+            <FormCard
+                title='Registro'
+                onSubmit={handleSubmit(onSubmit)}
+                register={register}
+                errors={errors}
+                password={password}
+                setPassword={setPassword}
+                fields={[
+                    { name: 'username', label: 'Usuario:', type: 'text', placeholder: 'Introduzca su usuario...' },
+                    { name: 'email', label: 'Email:', type: 'email', placeholder: 'Introduzca su email...' },
+                    { name: 'password', label: 'Contraseña:', type: 'password', placeholder: 'Introduzca su contraseña...' },
+                    { name: 'passwordRepeat', label: 'Repita la contraseña:', type: 'password', placeholder: 'Repita la contraseña...' },
+                ]}
+                buttons={
+                    <button type="button" className="btn-back" onClick={() => navigate('/')}>
+                        Atrás
+                    </button>
+                }
+            />
+        </div>
     );
 };
 
