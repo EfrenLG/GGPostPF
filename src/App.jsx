@@ -19,7 +19,7 @@ import Register from './pages/Register/Register.jsx';
 function App() {
   return (
     <Router>
-      <div className='app'>
+      <div className='layout-wrapper'>
         <Header />
         <div className='main-content'>
           <Routes>
