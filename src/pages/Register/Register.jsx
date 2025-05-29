@@ -5,10 +5,12 @@ import schema from './schemaValidations';
 import './Register.css';
 import FormCard from '../../components/FormCard/FormCard'
 import { checkUser, createUser, sendEmail } from '../../services/register/register';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
@@ -34,7 +36,7 @@ const Register = () => {
                 { name: 'passwordRepeat', label: 'Repita la contraseña:', type: 'password', placeholder: 'Repita la contraseña...' },
             ]}
             buttons={
-                <button type="button" className="btn-back" onClick={() => window.location.href = './index.html'}>
+                <button type="button" className="btn-back" onClick={() => navigate('/')}>
                     Atrás
                 </button>
             }
@@ -43,9 +45,3 @@ const Register = () => {
 };
 
 export default Register;
-
-/*
-    <div id="progress-container">
-        <div id="progress-bar"></div>
-    </div>
-*/

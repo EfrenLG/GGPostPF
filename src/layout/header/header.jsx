@@ -1,18 +1,21 @@
 import './header.css';
 import { url } from '../../functions/url.js';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
 
-
     let header = '';
     let logo = '';
+    const navigate = useNavigate();
 
-    if (url !== 'post.html' && url !== 'user.html' && url !== 'rawgAPI.html') {
+    if (url !== 'post' && url !== 'user' && url !== 'rawgAPI') {
 
         logo = (
-            <a href="./index.html">
-                <img src="../images/logo_small.webp" alt="Logo GGPost" className="header-logo" />
-            </a>
+            <img src="../images/logo_small.webp"
+                alt="Logo GGPost"
+                className="header-logo"
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate('/')} />
         );
 
         header = (
@@ -27,17 +30,22 @@ const Header = () => {
     } else {
 
         logo = (
-            <a href="./post.html">
-                <img src="../images/logo_small.webp" alt="Logo GGPost" className="header-logo" />
-            </a>
+            <img src="../images/logo_small.webp"
+                alt="Logo GGPost"
+                className="header-logo"
+                style={{ cursor: 'pointer' }}
+                onClick={() => navigate('/post')} />
         );
 
         header = (
             <div className="header-right">
                 <div className="profile-icon">
-                    <a href="./user.html">
-                        <img src="../images/default.png" alt="Perfil" id="profile-image" className="profile-img" />
-                    </a>
+                    <img src="../images/default.png"
+                        alt="Perfil"
+                        id="profile-image"
+                        className="profile-img"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate('/user')} />
                 </div>
             </div>
         );

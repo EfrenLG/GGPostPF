@@ -4,10 +4,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import schema from './schemaValidations';
 import './Login.css';
 import FormCard from '../../components/FormCard/FormCard'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema)
@@ -28,7 +30,7 @@ const Login = () => {
                 { name: 'password', label: 'Contraseña:', type: 'password', placeholder: 'Introduzca su contraseña...' }
             ]}
             buttons={
-                <button type="button" className="btn-back" onClick={() => window.location.href = './register.html'}>
+                <button type="button" className="btn-back" onClick={() => navigate('/register')}>
                     Registrarse
                 </button>
             }
