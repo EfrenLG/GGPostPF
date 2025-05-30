@@ -56,11 +56,7 @@ const Register = () => {
 
             const registerUserR = await userService.registerUser(registerData);
 
-            const emailData = {
-                'email': data.email
-            };
-
-            if (registerUserR) { const emailUserR = await userService.emailUser(emailData) }
+            if (registerUserR) { const emailUserR = await userService.emailUser(userData) }
 
         } catch (error) {
             console.error("Error al verificar el usuario:", error);

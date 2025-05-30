@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './ChargeCard.css';
 
 const ChargeCard = ({ text }) => {
 
