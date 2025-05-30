@@ -5,14 +5,16 @@ const URL_API = 'https://ggpostb.onrender.com';
 const api = axios.create({
 
     baseURL: URL_API,
-    timeout: 10000, 
+    timeout: 10000,
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 const userService = {
-    checkUser: (userData) => api.post('/auth/check', userData)
+    checkUser: (userData) => api.post('/auth/check', userData),
+    registerUser: (userData) => api.post('/auth/register', userData),
+    emailUser: (userData) => api.post('/email/send-email', userData)
 };
 
 export default userService;

@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import schema from './schemaValidations';
 import './Register.css';
 import FormCard from '../../components/FormCard/FormCard'
+import ChargeCard from '../../components/ChargeCard/ChargeCard'
 import userService from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,17 +13,60 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors }, setError } = useForm({
         resolver: yupResolver(schema)
     });
 
     const onSubmit = async (data) => {
         const userData = {
-            "username": data.username,
-            "email": data.email
+            'username': data.username,
+            'email': data.email
         };
-        const checkUserR = await userService.checkUser(userData);
-        console.log(checkUserR);
+        try {
+            const checkUserR = await userService.checkUser(userData);
+            let hasError = false;
+
+            if (checkUserR.data.username === true) {
+                setError('username', {
+                    type: 'manual',
+                    message: 'El usuario ya está en uso.'
+                });
+                hasError = true;
+            };
+
+            if (checkUserR.data.email === true) {
+                setError('email', {
+                    type: 'manual',
+                    message: 'El email ya está en uso.'
+                });
+                hasError = true;
+            };
+
+            if (hasError) return;
+
+            <ChargeCard
+                text='Usuario creado'
+            />
+
+            const registerData = {
+                'username': data.username,
+                'email': data.email,
+                'password': data.password
+            };
+
+            const registerUserR = await userService.registerUser(registerData);
+
+            const emailData = {
+                'email': data.email
+            };
+
+            if (registerUserR) { const emailUserR = await userService.emailUser(emailData) }
+
+        } catch (error) {
+            console.error("Error al verificar el usuario:", error);
+
+        };
+
     };
 
     return (
