@@ -16,12 +16,14 @@ const ChargeCard = ({ text }) => {
 
 
     return (
-        <div className='card'>
-            {loanding ? (
-                <p>...Cargando</p>
-            ) : (
-                <p className='succes'>✅ {text}</p>
-            )}
+        <div className="card-overlay">
+            <div className='card'>
+                {loanding ? (
+                    <p>...Cargando</p>
+                ) : (
+                    <p className='succes'>✅ {text}</p>
+                )}
+            </div>
         </div>
     );
 };
