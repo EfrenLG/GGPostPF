@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import schema from './schemaValidations';
 import './Register.css';
 import FormCard from '../../components/FormCard/FormCard'
-import { checkUser, createUser, sendEmail } from '../../services/register/register';
+import userService from '../../services/api';
 import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -17,7 +17,11 @@ const Register = () => {
     });
 
     const onSubmit = async (data) => {
-        const checkUserR = await checkUser(data.username, data.email);
+        const userData = {
+            "username": data.username,
+            "email": data.email
+        };
+        const checkUserR = await userService.checkUser(userData);
     };
 
     return (

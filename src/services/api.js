@@ -1,3 +1,20 @@
+import axios from 'axios';
+
+const URL_API = 'https://ggpostb.onrender.com';
+
+const api = axios.create({
+
+    baseURL: URL_API,
+    timeout: 10000, 
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
+
+const userService = {
+    checkUser: () => api.get('/auth/check', userData)
+};
+
 export const checkUser = async (username, email) => {
 
     const userData = {
