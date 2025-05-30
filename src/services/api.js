@@ -15,6 +15,8 @@ const userService = {
     checkUser: () => api.get('/auth/check', userData)
 };
 
+export default userService;
+
 export const checkUser = async (username, email) => {
 
     const userData = {
