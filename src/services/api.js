@@ -12,7 +12,7 @@ const api = axios.create({
 });
 
 const userService = {
-    checkUser: () => api.get('/auth/check', userData)
+    checkUser: (userData) => api.get('/auth/check', userData)
 };
 
 export default userService;
