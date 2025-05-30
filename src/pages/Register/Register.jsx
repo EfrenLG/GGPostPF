@@ -22,6 +22,7 @@ const Register = () => {
             "email": data.email
         };
         const checkUserR = await userService.checkUser(userData);
+        console.log(checkUserR);
     };
 
     return (
