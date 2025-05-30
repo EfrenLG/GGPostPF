@@ -60,9 +60,8 @@ const Register = () => {
 
                 const emailUserR = await userService.emailUser(userData)
 
-                const nav = () => navigate('/');
-                nav;
-            }
+                navigate('/');
+            };
 
         } catch (error) {
             console.error("Error al verificar el usuario:", error);
@@ -73,7 +72,7 @@ const Register = () => {
     return (
         <div className="page-wrapper">
 
-            {showCard && <ChargeCard text='Usuario creado' />}
+            {showCard && <ChargeCard text='Usuario creado'/>}
 
             <FormCard
                 title='Registro'

@@ -5,17 +5,47 @@ import schema from './schemaValidations';
 import './Login.css';
 import FormCard from '../../components/FormCard/FormCard'
 import { useNavigate } from 'react-router-dom';
+import userService from '../../services/api';
 
 const Login = () => {
 
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors }, setError } = useForm({
         resolver: yupResolver(schema)
     });
 
-    const onSubmit = (data) => console.log(data.username);
+    const onSubmit = async (data) => {
+
+        try {
+            const userData = {
+                'username': data.username,
+                'password': data.password
+            };
+
+            let handleError = false;
+
+            const loginUserR = await userService.loginUser(userData);
+
+            if (loginUserR.data.username === false || loginUserR.data.password === false) {
+
+                setError('password', {
+                    type: 'manual',
+                    message: 'Datos erróneos.'
+                });
+                handleError = true;
+            };
+
+            if (handleError) return;
+
+            navigate('/post');
+
+        } catch (error) {
+            console.error("Error al verificar el usuario:", error);
+
+        };
+    };
 
     return (
         <div className="page-wrapper">
