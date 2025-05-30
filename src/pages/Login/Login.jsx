@@ -24,26 +24,20 @@ const Login = () => {
                 'password': data.password
             };
 
-            let handleError = false;
-
             const loginUserR = await userService.loginUser(userData);
-
-            if (loginUserR.data.username === false || loginUserR.data.password === false) {
-
-                setError('password', {
-                    type: 'manual',
-                    message: 'Datos erróneos.'
-                });
-                handleError = true;
-            };
-
-            if (handleError) return;
 
             navigate('/post');
 
         } catch (error) {
             console.error("Error al verificar el usuario:", error);
 
+            if (error.response?.status === 401 && error.response.data?.error === 'Credenciales inválidas') {
+
+                setError('password', {
+                    type: 'manual',
+                    message: 'Credenciales inválidas.'
+                });
+            };
         };
     };
 
