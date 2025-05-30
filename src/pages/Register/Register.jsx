@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const Register = () => {
 
     const [password, setPassword] = useState('');
+    const [showCard, setShowCard] = useState(false);
+
     const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors }, setError } = useForm({
@@ -44,9 +46,7 @@ const Register = () => {
 
             if (hasError) return;
 
-            <ChargeCard
-                text='Usuario creado'
-            />
+            setShowCard(true);
 
             const registerData = {
                 'username': data.username,
@@ -67,6 +67,8 @@ const Register = () => {
 
     return (
         <div className="page-wrapper">
+
+            {showCard && <ChargeCard text='Usuario creado'/>}
 
             <FormCard
                 title='Registro'
