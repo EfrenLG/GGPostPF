@@ -7,8 +7,9 @@ const Header = () => {
     let header = '';
     let logo = '';
     const navigate = useNavigate();
+    const resultURL = url();
 
-    if (url !== 'post' && url !== 'user' && url !== 'rawgAPI') {
+    if (resultURL !== 'post' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
 
         logo = (
             <img src="../images/logo_small.webp"
@@ -16,16 +17,6 @@ const Header = () => {
                 className="header-logo"
                 style={{ cursor: 'pointer' }}
                 onClick={() => navigate('/')} />
-        );
-
-        header = (
-            <div className="header-bar">
-                <div className="api">
-                    <div className="api-time" id="api-time">
-
-                    </div>
-                </div>
-            </div>
         );
     } else {
 

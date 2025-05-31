@@ -8,14 +8,17 @@ const api = axios.create({
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json'
-    }
+    }, 
+    withCredentials: true
+
 });
 
 const userService = {
     checkUser: (userData) => api.post('/auth/check', userData),
     registerUser: (userData) => api.post('/auth/register', userData),
     emailUser: (userData) => api.post('/email/send-email', userData),
-    loginUser: (userData) => api.post('/auth/login', userData)
+    loginUser: (userData) => api.post('/auth/login', userData),
+    getUser: (userData) => api.post('/auth/check', userData),
 };
 
 export default userService;

@@ -15,6 +15,7 @@ import Footer from './layout/footer/footer.jsx';
 // Páginas
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
+import Post from './pages/Post/Post.jsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Login />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/post' element={<Post />} />
           </Routes>
         </div>
         <Footer />

@@ -27,12 +27,6 @@ header {
     flex-grow: 1;
 }
 
-.header-bar {
-    display: flex;
-    justify-content: flex-end;
-    padding: 1rem;
-}
-
 .header-right {
     display: flex;
     align-items: center;
