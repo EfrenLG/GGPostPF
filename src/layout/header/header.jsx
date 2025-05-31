@@ -36,7 +36,7 @@ const Header = () => {
             <div className="header-right">
                 <div className="profile-icon">
                     <img
-                        src={`../images/${icon}`}
+                        src={`/images/${icon}`}
                         alt="Perfil"
                         id="profile-image"
                         className="profile-img"
