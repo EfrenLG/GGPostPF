@@ -18,7 +18,8 @@ const userService = {
     registerUser: (userData) => api.post('/auth/register', userData),
     emailUser: (userData) => api.post('/email/send-email', userData),
     loginUser: (userData) => api.post('/auth/login', userData),
-    getUser: (userData) => api.post('/auth/check', userData),
+    getUser: () => api.get('/api/user/data'),
+    getPosts: () => api.get('/api/post/all'),
 };
 
 export default userService;

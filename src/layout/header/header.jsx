@@ -9,6 +9,10 @@ const Header = () => {
     const navigate = useNavigate();
     const resultURL = url();
 
+    const userIcon = localStorage.getItem('userIcon');
+
+    const icon = userIcon ? userIcon : 'default.png';
+
     if (resultURL !== 'post' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
 
         logo = (
@@ -31,7 +35,8 @@ const Header = () => {
         header = (
             <div className="header-right">
                 <div className="profile-icon">
-                    <img src="../images/default.png"
+                    <img
+                        src={`../images/${icon}`}
                         alt="Perfil"
                         id="profile-image"
                         className="profile-img"

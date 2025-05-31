@@ -26,6 +26,9 @@ const Login = () => {
 
             const loginUserR = await userService.loginUser(userData);
 
+            localStorage.setItem('userId', JSON.stringify(loginUserR.data.user.id));
+            localStorage.setItem('userIcon', JSON.stringify(loginUserR.data.user.icon));
+
             navigate('/post');
 
         } catch (error) {
