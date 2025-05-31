@@ -36,7 +36,7 @@ const Header = () => {
             <div className="header-right">
                 <div className="profile-icon">
                     <img
-                        src={`/images/${icon}`}
+                        src={`https://ggpostb.onrender.com/images/${icon}`}
                         alt="Perfil"
                         id="profile-image"
                         className="profile-img"
