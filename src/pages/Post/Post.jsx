@@ -21,7 +21,7 @@ const Post = () => {
             console.log(dataPost);
         } catch (error) {
 
-            if(error === 'Acceso no autorizado'){
+            if(error.response.data.error === 'Acceso no autorizado'){
                 navigate('/')
             }
             console.log('Error cargando los post', error);
