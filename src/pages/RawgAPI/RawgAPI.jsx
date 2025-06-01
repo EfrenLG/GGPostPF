@@ -3,12 +3,31 @@ import MenuToggle from '../../components/MenuToggle/MenuToggle';
 import './RawgAPI.css';
 
 const platformMap = {
-    4: 'PC',
-    187: 'PS5',
-    18: 'PS4',
+    7: 'Nintendo Switch',
+    8: 'Nintendo 3DS',
+    9: 'Nintendo DS',
+    13: 'Nintendo DSi',
+    10: 'Wii U',
+    11: 'Wii',
+    105: 'Nintendo GameCube',
+    24: 'Game Boy Advance',
+    43: 'Game Boy Color',
+    26: 'Game Boy',
+    79: 'Super Nintendo Entertainment System (SNES)',
+    49: 'Nintendo Entertainment System (NES)',
+    83: 'Nintendo 64',
+    187: 'PlayStation 5',
+    18: 'PlayStation 4',
+    16: 'PlayStation 3',
+    15: 'PlayStation 2',
+    27: 'PlayStation',
+    19: 'PlayStation Vita',
+    17: 'PSP',
+    186: 'Xbox Series S/X',
     1: 'Xbox One',
-    186: 'Xbox Series X',
-    7: 'Switch',
+    14: 'Xbox 360',
+    80: 'Xbox',
+    4: 'PC',
 };
 
 const reversePlatformMap = Object.fromEntries(
