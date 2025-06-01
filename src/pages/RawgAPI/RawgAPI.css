@@ -35,60 +35,6 @@
     margin-top: 20px;
     grid-template-columns: repeat(3, 1fr);
     padding: 0 1rem;
-    /* algo de padding lateral */
-}
-
-/* 2 columnas en pantallas menores a 900px */
-@media (max-width: 900px) {
-    .games-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* 1 columna y tarjetas 100% ancho en pantallas menores a 600px */
-@media (max-width: 600px) {
-    .games-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .game-card {
-        width: 100%;
-        /* asegúrate que la tarjeta tome todo el ancho del grid */
-        max-width: 100%;
-        /* no permitir que se pase del ancho */
-        margin: 0 auto;
-        /* centrado */
-    }
-}
-
-/* Mejor ajuste para pantallas super pequeñas (menores a 500px) */
-@media (max-width: 500px) {
-
-    html,
-    body {
-        font-size: 14px;
-        /* reduce tamaño de fuente para caber mejor */
-    }
-
-    .games-grid {
-        padding: 0 0.5rem;
-        /* menos padding lateral para más espacio */
-    }
-
-    .game-card {
-        width: 100%;
-        max-width: 100%;
-        margin: 0 auto;
-        box-shadow: none;
-        /* opcional: simplificar sombra para móviles */
-    }
-
-    .platform-filter select {
-        width: 100%;
-        /* que el select ocupe todo el ancho */
-        max-width: 100%;
-        box-sizing: border-box;
-    }
 }
 
 .game-card {
@@ -108,12 +54,10 @@
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* Contenedor para la imagen para mantener proporción 16:9 */
 .game-image-container {
     position: relative;
     width: 100%;
     padding-top: 56.25%;
-    /* 16:9 ratio */
     overflow: hidden;
 }
 
@@ -148,4 +92,47 @@
     font-size: 0.95rem;
     color: #444;
     line-height: 1.3;
+}
+
+@media (max-width: 900px) {
+    .games-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .games-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .game-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 500px) {
+
+    html,
+    body {
+        font-size: 14px;
+    }
+
+    .games-grid {
+        padding: 0 0.5rem;
+    }
+
+    .game-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        box-shadow: none;
+    }
+
+    .platform-filter select {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
 }

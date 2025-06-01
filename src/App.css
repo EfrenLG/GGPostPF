@@ -10,8 +10,8 @@ body, html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden; /* evita scroll horizontal */
-    width: 100vw; /* ancho total de la ventana */
+    overflow-x: hidden; 
+    width: 100vw; 
 }
 
 .layout-wrapper {
