@@ -6,7 +6,7 @@ const MenuToggle = () => {
     const navigate = useNavigate();
 
     return (
-        <div>
+        <div className='menu-container'>
             <input type="checkbox" id="menu-toggle" hidden />
             <label htmlFor="menu-toggle" className="menu-button">☰ Menú</label>
             <label htmlFor="menu-toggle" className="overlay"></label>

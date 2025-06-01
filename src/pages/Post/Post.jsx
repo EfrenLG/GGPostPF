@@ -31,9 +31,7 @@ const Post = () => {
     };
 
     return (
-        <div>
-            <MenuToggle />
-        </div>
+        <MenuToggle />
     );
 };
 

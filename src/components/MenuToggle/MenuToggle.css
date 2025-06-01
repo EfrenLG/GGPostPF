@@ -1,5 +1,13 @@
+.menu-container {
+    display: block;
+    width: 100%;
+    position: relative;
+}
+
 .menu-button {
-    position: fixed;
+    display: block; /* asegúrate de esto */
+    width: fit-content; /* o un ancho fijo */
+    margin: 1rem auto;  /* opcional, para centrar */
     top: 80px;      /* justo debajo del header */
     left: 0;
     z-index: 1100;
@@ -13,7 +21,6 @@
     border-radius: 4px;
     user-select: none; /* opcional, evita selección al clicar */
 }
-
 
 
 .overlay {
