@@ -1,8 +1,8 @@
 .menu-button {
     position: fixed;
-    top: 10px; /* distancia desde arriba, ajusta a tu gusto */
-    left: 10px; /* distancia desde la izquierda, ajusta a tu gusto */
-    z-index: 1100; /* más alto que overlay y side-menu */
+    top: 80px;      /* justo debajo del header */
+    left: 0;
+    z-index: 1100;
     width: 150px;
     font-size: 1.5rem;
     cursor: pointer;
@@ -11,7 +11,9 @@
     background-color: var(--accent-blue);
     color: var(--bone-white);
     border-radius: 4px;
+    user-select: none; /* opcional, evita selección al clicar */
 }
+
 
 
 .overlay {
