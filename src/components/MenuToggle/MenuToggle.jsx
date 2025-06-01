@@ -13,8 +13,8 @@ const MenuToggle = () => {
             <aside class="side-menu">
                 <nav>
                     <ul>
-                        <li><a href={navigate("/post.html")}>Publicaciones</a></li>
-                        <li><a href={navigate("/rawgAPI.html")}>Los Mejores Valorados</a></li>
+                        <li><a onClick={() => navigate("/post")}>Publicaciones</a></li>
+                        <li><a onClick={() => navigate("/rawgAPI")}>Los Mejores Valorados</a></li>
                     </ul>
                 </nav>
             </aside>
