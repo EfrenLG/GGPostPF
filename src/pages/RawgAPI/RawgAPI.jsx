@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
-import rawgAPI from '../../services/api'; // No lo estás usando, ¿es tu apiKey aquí?
+import './RawgAPI.css';
 
 const platformMap = {
     4: 'PC',
