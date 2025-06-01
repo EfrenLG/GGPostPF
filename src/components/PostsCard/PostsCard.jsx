@@ -1,4 +1,4 @@
-const PostsCard = (posts) => {
+const PostsCard = ({ posts }) => {
 
     return (
         <div className="userPosts">
