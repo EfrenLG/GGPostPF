@@ -47,6 +47,47 @@ header {
     object-fit: cover;
 }
 
+@media (max-width: 700px) {
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .header-title {
+        display: none;
+    }
+
+    .header-logo {
+        order: 1;
+    }
+
+    .header-right {
+        order: 2;
+    }
+}
+
+@media (max-width: 599px) {
+    .header-content {
+        flex-direction: row;
+        justify-content: space-between;
+        text-align: left;
+    }
+
+    .header-title {
+        display: none;
+    }
+
+    .header-logo {
+        order: 1;
+    }
+
+    .header-right {
+        order: 2;
+    }
+}
+
+
 @media (max-width: 576px) {
     .header-content {
         flex-direction: column;
@@ -55,10 +96,12 @@ header {
     .header-logo {
         height: 60px;
         margin-bottom: 0.5rem;
+        order: 1;
     }
 
     .header-title {
         font-size: 1.5rem;
         text-align: center;
+        order: 2;
     }
 }

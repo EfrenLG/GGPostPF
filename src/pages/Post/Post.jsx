@@ -3,6 +3,7 @@ import userService from '../../services/api';
 import './Post.css';
 import { useNavigate } from 'react-router-dom';
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
+import PostsCard from '../../components/PostsCard/PostsCard';
 
 const Post = () => {
 
@@ -31,7 +32,10 @@ const Post = () => {
     };
 
     return (
-        <MenuToggle />
+        <>
+            <MenuToggle />
+            <PostsCard posts = {dataPost} />
+        </>
     );
 };
 
