@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import userService from '../../services/api';
+import './Post.css';
 import { useNavigate } from 'react-router-dom';
+import MenuToggle from '../../components/MenuToggle/MenuToggle';
 
 const Post = () => {
 
@@ -21,7 +23,7 @@ const Post = () => {
             console.log(dataPost);
         } catch (error) {
 
-            if(error.response.data.error === 'Acceso no autorizado'){
+            if (error.response.data.error === 'Acceso no autorizado') {
                 navigate('/')
             }
             console.log('Error cargando los post', error);
@@ -30,7 +32,7 @@ const Post = () => {
 
     return (
         <div>
-            <h1>hpaa</h1>
+            <MenuToggle />
         </div>
     );
 };

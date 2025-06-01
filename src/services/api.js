@@ -22,4 +22,8 @@ const userService = {
     getPosts: () => api.get('/api/post/all'),
 };
 
+const rawgAPI = {
+        getRawg: () => api.get(``),
+}
+
 export default userService;
