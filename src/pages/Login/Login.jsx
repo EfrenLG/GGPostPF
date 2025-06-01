@@ -20,7 +20,7 @@ const Login = () => {
 
         try {
             const userData = {
-                'username': data.username,
+                'username': data.username.trim().toLoweCase(),
                 'password': data.password
             };
 
