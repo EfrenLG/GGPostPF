@@ -1,7 +1,9 @@
+import './PostsCard.css';
+
 const PostsCard = ({ posts }) => {
 
     return (
-        <div className="userPosts">
+        <div id="userPosts" className="posts-container" >
             {posts.map((post) => (
                 <div className="post-card" key={post._id}>
                     <img
