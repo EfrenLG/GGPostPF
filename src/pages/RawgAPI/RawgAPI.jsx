@@ -74,6 +74,7 @@ const RawgAPI = () => {
     return (
         <>
             <MenuToggle />
+
             <div className="post-content">
                 <h2 className="section-title">🎮 Mejores juegos valorados</h2>
 

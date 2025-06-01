@@ -14,16 +14,23 @@ const MenuToggle = () => {
         }
     };
 
+    const handleNavigate = (path) => {
+        if (checkboxRef.current) {
+            checkboxRef.current.checked = false; // cierra menú
+        }
+        navigate(path);
+    };
+
     return (
-    <div>
-      <input type="checkbox" id="menu-toggle" hidden ref={checkboxRef} />
-            <label for="menu-toggle" class="menu-button" onClick={handleToggleClick}>☰ Menú</label>
-            <label for="menu-toggle" class="overlay"></label>
-            <aside class="side-menu">
+        <div className="menu-toggle-container">
+            <input type="checkbox" id="menu-toggle" hidden ref={checkboxRef} />
+            <label htmlFor="menu-toggle" className="menu-button" onClick={handleToggleClick}>☰ Menú</label>
+            <label htmlFor="menu-toggle" className="overlay"></label>
+            <aside className="side-menu">
                 <nav>
                     <ul>
-                        <li><a onClick={() => navigate("/post")}>Publicaciones</a></li>
-                        <li><a onClick={() => navigate("/rawgAPI")}>Los Mejores Valorados</a></li>
+                        <li><a onClick={() => handleNavigate("/post")}>Publicaciones</a></li>
+                        <li><a onClick={() => handleNavigate("/rawgAPI")}>Los Mejores Valorados</a></li>
                     </ul>
                 </nav>
             </aside>

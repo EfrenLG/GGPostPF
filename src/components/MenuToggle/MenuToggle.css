@@ -1,171 +1,115 @@
+/* Contenedor padre que controla flujo */
+.menu-toggle-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* Sin posición fija */
+  position: relative;
+}
+
+/* Botón estático, ocupa su espacio */
 .menu-button {
-    position: fixed;
-    top: 80px;      /* justo debajo del header */
-    left: 0;
-    z-index: 1100;
-    width: 150px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: var(--accent-blue);
-    color: var(--bone-white);
-    border-radius: 4px;
-    user-select: none; /* opcional, evita selección al clicar */
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--accent-blue);
+  color: var(--bone-white);
+  border-radius: 4px;
+  width: 150px;
+  user-select: none;
+  /* Deja el botón alineado a la izquierda */
+  margin-left: 0;
 }
 
-
-
+/* Overlay cubre toda la pantalla solo cuando menú está abierto */
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: none;
+  z-index: 1000;
 }
 
+#menu-toggle:checked ~ .overlay {
+  display: block;
+}
+
+/* Menú lateral estático debajo del botón, oculto por defecto */
 .side-menu {
-    position: fixed;
-    top: 112px;
-    left: -60%;
-    width: 25%;
-    height: calc(100% - 166px);
-    background-color: var(--accent-blue);
-    padding: 2rem 1rem;
-    color: var(--bone-white);
-    transition: left 0.3s ease;
-    z-index: 1002;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-    overflow-y: auto;
+  background-color: var(--accent-blue);
+  color: var(--bone-white);
+  padding: 1rem;
+  width: 250px;
+  max-width: 100%;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  overflow-y: auto;
+  height: auto;
+  max-height: 300px;
+  /* Por defecto, menú oculto */
+  display: none;
+  z-index: 1001;
 }
 
+/* Mostrar menú cuando checkbox está marcado */
+#menu-toggle:checked ~ .side-menu {
+  display: block;
+}
+
+/* Lista sin estilos de lista */
 .side-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .side-menu li {
-    margin: 1.5rem 0;
-}
-
-.side-menu li,
-.side-menu li a {
+  margin: 1rem 0;
   cursor: pointer;
 }
 
 .side-menu a {
-    position: relative;
-    color: var(--bone-white);
-    text-decoration: none;
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
-}
-
-.side-menu a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0%;
-    height: 2px;
-    background-color: #B8A9F5;
-    transition: width 0.3s ease;
+  color: var(--bone-white);
+  text-decoration: none;
+  font-size: 1.2rem;
+  display: block;
+  transition: color 0.3s ease;
 }
 
 .side-menu a:hover {
-    color: #B8A9F5;
+  color: #B8A9F5;
 }
 
-.side-menu a:hover::after {
+/* Responsive: en pantallas grandes, botón y menú pueden ir lado a lado */
+@media (min-width: 768px) {
+  .menu-toggle-container {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .menu-button {
+    margin-right: 1rem;
+    width: 150px;
+    flex-shrink: 0;
+  }
+  .side-menu {
+    display: block !important; /* Mostrar menú siempre */
+    max-height: none;
+    height: auto;
+    width: 250px;
+    margin-top: 0;
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .menu-button {
     width: 100%;
-}
-
-#menu-toggle:checked~.side-menu {
-    left: 0;
-}
-
-#menu-toggle:checked~.overlay {
-    display: block;
-}
-
-@media (max-width: 1024px) {
-    .side-menu {
-        width: 25%;
-        left: -45%;
-    }
-
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
-}
-
-@media (max-width: 600px) {
-    .side-menu {
-        width: 25%;
-        left: -80%;
-        top: 210px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
-
-    .side-menu a {
-        font-size: 1rem;
-    }
-
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
-}
-
-@media (max-width: 599px) {
-    .header-content {
-        flex-direction: column;
-    }
-
-    .header-logo {
-        height: 60px;
-        margin-bottom: 0.5rem;
-    }
-
-    .header-title {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 210px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
-}
-
-@media (max-width: 482px) {
-    .header-content {
-        flex-direction: column;
-    }
-
-    .header-logo {
-        height: 60px;
-        margin-bottom: 0.5rem;
-    }
-
-    .header-title {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 240px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
+  }
+  .side-menu {
+    width: 100%;
+    max-height: 200px;
+  }
 }
