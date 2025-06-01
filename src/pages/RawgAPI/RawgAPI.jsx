@@ -95,11 +95,13 @@ const RawgAPI = () => {
                         const platforms = game.platforms?.map(p => platformMap[p.platform.id]).filter(Boolean).join(', ') || 'Varias plataformas';
                         return (
                             <div key={game.id} className="game-card">
-                                <img
-                                    src={game.background_image || '../images/default-cover.jpg'}
-                                    alt={game.name}
-                                    className="game-image"
-                                />
+                                <div class="game-image-container">
+                                    <img
+                                        src={game.background_image || '../images/default-cover.jpg'}
+                                        alt={game.name}
+                                        className="game-image"
+                                    />
+                                </div>
                                 <div className="game-details">
                                     <h3>{game.name}</h3>
                                     <p><strong>Rating:</strong> {game.rating} / 5</p>
