@@ -49,7 +49,7 @@ const PostsCard = ({ posts }) => {
 
         const postData = {
             'idPost': idPost,
-            'idUser': idUser
+            'userId': idUser
         };
 
         await userService.likePost(postData);
