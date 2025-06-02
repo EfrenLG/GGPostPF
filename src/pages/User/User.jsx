@@ -77,8 +77,9 @@ const User = () => {
                 </div>
 
                 <div className="tab-content user_posts">
+                    <PostsCard post={dataPost} />
                 </div>
-
+                
                 <div className="tab-content add_posts">
                     <form className="post-form" id="post-form">
                         <div className="post-image-wrapper">
@@ -109,5 +110,3 @@ const User = () => {
 };
 
 export default User;
-
-//                    <PostsCard post={dataPost} />
