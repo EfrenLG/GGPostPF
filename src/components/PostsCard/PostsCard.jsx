@@ -9,6 +9,7 @@ const PostsCard = ({ posts }) => {
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
     const [like, setLike] = useState(false);
+    const [likes, setLikes] = useState(0);
 
     const filterPosts = posts.filter(post => {
 
@@ -32,10 +33,9 @@ const PostsCard = ({ posts }) => {
         setselectedPost(post);
     };
 
-    const viewLike = (likes,  operation) => {
+    const viewLike = (likes, operation) => {
 
-
-        const cont = operation === 'sum' ? likes +1 : likes -1;
+        const cont = operation === 'sum' ? likes + 1 : likes - 1;
         return cont;
     };
 
@@ -101,6 +101,7 @@ const PostsCard = ({ posts }) => {
 
         {selectedPost && (
             <div id="postModal" className='modal'>
+                {setLikes(selectedPost.likes.length)}
                 <div className="modal-content">
                     <span>Visitas: {selectedPost.views}</span>
                     {like === true ? (
@@ -108,16 +109,18 @@ const PostsCard = ({ posts }) => {
                             <i className="fa fa-heart" style={{ color: '#ff0000' }}
                                 onClick={() => {
                                     setLike(false),
-                                        sendLike(selectedPost._id, userId)
-                                }}></i> Likes: {() => viewLike(selectedPost.likes.length, 'res')}
+                                        sendLike(selectedPost._id, userId),
+                                        viewLike(selectedPost.likes.length, 'res')
+                                }}></i> Likes: {likes}
                         </>
                     ) : (
                         <>
                             <i className="fa-regular fa-heart"
                                 onClick={() => {
                                     setLike(true),
-                                        sendLike(selectedPost._id, userId)
-                                }}></i> Likes: {() => viewLike(selectedPost.likes.length, 'sum')}
+                                        sendLike(selectedPost._id, userId),
+                                        viewLike(selectedPost.likes.length, 'sum')
+                                }}></i> Likes: {likes}
                         </>
                     )}
                     <span className="like-btn" id="like-btn"> </span>
