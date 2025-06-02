@@ -28,8 +28,12 @@ const PostsCard = ({ posts }) => {
     };
 
     const sendView = async (idPost) => {
+
+        const dataPost ={
+            'idPost': idPost
+        };
         
-        await userService.viewPost(idPost);
+        await userService.viewPost(dataPost);
     };
 
     /*const editPost = async () => {
