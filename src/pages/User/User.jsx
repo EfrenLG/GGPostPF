@@ -13,6 +13,10 @@ const User = () => {
     const userId = localStorage.getItem('userId');
     const userIcon = localStorage.getItem('userIcon');
 
+    useEffect(() => {
+        dataUserAPI(userId);
+    }, []);
+
     const dataUserAPI = async (userId) => {
 
         try {
@@ -31,8 +35,6 @@ const User = () => {
             console.log('Error cargando los post', error);
         };
     };
-
-    dataUserAPI(userId);
 
     const icon = userIcon ? userIcon : 'default.png';
 
@@ -80,7 +82,7 @@ const User = () => {
                 <div className="tab-content user_posts">
                     <PostsCard posts={dataPost} />
                 </div>
-                
+
                 <div className="tab-content add_posts">
                     <form className="post-form" id="post-form">
                         <div className="post-image-wrapper">
