@@ -71,6 +71,7 @@ const PostsCard = ({ posts }) => {
         {selectedPost && (
             <div id="postModal" className='modal'>
                 <div className="modal-content">
+                    <span>Visitas: {selectedPost.views}</span>
                     <span className="like-btn" id="like-btn"> </span>
                     <span className="close-btn" onClick={closeModal}>&times;</span>
                     <p id="modal-id">{selectedPost.id}</p>
