@@ -17,6 +17,7 @@ import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
 import Post from './pages/Post/Post.jsx';
 import RawgAPI from './pages/RawgAPI/RawgAPI.jsx';
+import User from './pages/User/User.jsx';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path='/register' element={<Register />} />
             <Route path='/post' element={<Post />} />
             <Route path='/rawgAPI' element={<RawgAPI />} />
+            <Route path='/user' element={<User />} />
           </Routes>
         </div>
         <Footer />

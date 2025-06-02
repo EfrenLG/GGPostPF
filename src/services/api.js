@@ -18,7 +18,7 @@ const userService = {
     registerUser: (userData) => api.post('/auth/register', userData),
     emailUser: (userData) => api.post('/email/send-email', userData),
     loginUser: (userData) => api.post('/auth/login', userData),
-    getUser: () => api.get('/api/user/data'),
+    getUser: (id) => api.get(`/api/user/data/${id}`),
 
     //SERVICES POSTS
     getPosts: () => api.get('/api/post/all'),
