@@ -18,6 +18,7 @@ const User = () => {
         try {
             const dataUserR = await userService.getUser(userId);
 
+            console.log(dataUserR);
             setDataUser(dataUserR.data.usuario);
             setDataPost(dataUserR.data.post);
 
