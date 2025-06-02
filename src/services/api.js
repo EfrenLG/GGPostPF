@@ -23,6 +23,7 @@ const userService = {
     //SERVICES POSTS
     getPosts: () => api.get('/api/post/all'),
     viewPost: (idPost) => api.put('/api/post/view', idPost),
+    likePost: (dataPost) => api.put('/api/post/like', dataPost),
     editPost: (postData) => api.put('/api/post/edit', postData),
     deletePost: (idPost) => api.delete(`/api/post/delete/${idPost}`),
 

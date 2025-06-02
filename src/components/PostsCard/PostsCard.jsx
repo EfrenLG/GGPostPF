@@ -45,6 +45,16 @@ const PostsCard = ({ posts }) => {
         await userService.viewPost(dataPost);
     };
 
+    const sendLike = async (idPost, idUser) => {
+
+        const postData = {
+            'idPost': idPost,
+            'idUser': idUser
+        };
+
+        await userService.likePost(postData);
+    };
+
     /*const editPost = async () => {
 
 
@@ -88,11 +98,19 @@ const PostsCard = ({ posts }) => {
                     <span>Visitas: {selectedPost.views}</span>
                     {like === true ? (
                         <>
-                            <i className="fa fa-heart" style={{ color: '#ff0000' }}></i> Likes: {selectedPost.likes.length}
+                            <i className="fa fa-heart" style={{ color: '#ff0000' }}
+                                onClick={() => {
+                                    setLike(false),
+                                        sendLike(selectedPost._id, userId)
+                                }}></i> Likes: {selectedPost.likes.length}
                         </>
                     ) : (
                         <>
-                            <i className="fa-regular fa-heart"></i> Likes: {selectedPost.likes.length}
+                            <i className="fa-regular fa-heart"
+                                onClick={() => {
+                                    setLike(true),
+                                        sendLike(selectedPost._id, userId)
+                                }}></i> Likes: {selectedPost.likes.length}
                         </>
                     )}
                     <span className="like-btn" id="like-btn"> </span>
