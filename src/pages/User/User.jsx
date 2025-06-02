@@ -13,28 +13,30 @@ const User = () => {
     const userId = localStorage.getItem('userId');
     const userIcon = localStorage.getItem('userIcon');
 
-    useEffect(() => {
-        dataUserAPI(userId);
-    }, []);
-
     const dataUserAPI = async (userId) => {
 
         try {
             const dataUserR = await userService.getUser(userId);
 
-            console.log(dataUserR);
             setDataUser(dataUserR.data.usuario);
             setDataPost(dataUserR.data.post);
-
 
         } catch (error) {
 
             if (error.response.data.error === 'Acceso no autorizado') {
                 navigate('/')
-            }
+            };
             console.log('Error cargando los post', error);
         };
     };
+
+    useEffect(() => {
+        if (userId) {
+            dataUserAPI(userId);
+        } else {
+            navigate('/');
+        }
+    }, []);
 
     const icon = userIcon ? userIcon : 'default.png';
 
