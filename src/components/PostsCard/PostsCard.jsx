@@ -26,6 +26,7 @@ const PostsCard = ({ posts }) => {
         if (selectedPost && selectedPost.likes) {
             const hasLiked = selectedPost.likes.some((likeId) => likeId === userId);
             setLike(hasLiked);
+            setLikes(selectedPost.likes.length);
         }
     }, [selectedPost, userId]);
 
@@ -33,10 +34,8 @@ const PostsCard = ({ posts }) => {
         setselectedPost(post);
     };
 
-    const viewLike = (likes, operation) => {
-
-        const cont = operation === 'sum' ? likes + 1 : likes - 1;
-        return cont;
+    const viewLike = (operation) => {
+        setLikes(prevLikes => operation === 'sum' ? prevLikes + 1 : prevLikes - 1);
     };
 
     const closeModal = () => {
@@ -101,7 +100,6 @@ const PostsCard = ({ posts }) => {
 
         {selectedPost && (
             <div id="postModal" className='modal'>
-                {setLikes(selectedPost.likes.length)}
                 <div className="modal-content">
                     <span>Visitas: {selectedPost.views}</span>
                     {like === true ? (
@@ -110,7 +108,7 @@ const PostsCard = ({ posts }) => {
                                 onClick={() => {
                                     setLike(false),
                                         sendLike(selectedPost._id, userId),
-                                        viewLike(selectedPost.likes.length, 'res')
+                                        viewLike('res');
                                 }}></i> Likes: {likes}
                         </>
                     ) : (
@@ -119,7 +117,7 @@ const PostsCard = ({ posts }) => {
                                 onClick={() => {
                                     setLike(true),
                                         sendLike(selectedPost._id, userId),
-                                        viewLike(selectedPost.likes.length, 'sum')
+                                        viewLike('sum');
                                 }}></i> Likes: {likes}
                         </>
                     )}
