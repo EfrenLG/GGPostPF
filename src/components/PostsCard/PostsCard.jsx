@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import userService from '../../services/api';
 import './PostsCard.css';
 
@@ -8,7 +8,7 @@ const PostsCard = ({ posts }) => {
     const userId = localStorage.getItem('userId');
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
-    const [like, setLike] = useState(true);
+    const [like, setLike] = useState(false);
 
     const filterPosts = posts.filter(post => {
 
@@ -21,12 +21,12 @@ const PostsCard = ({ posts }) => {
         return categorias.some(cat => cat.toLowerCase().includes(seeker));
     });
 
-    const results = posts.likes?.some((like) => like.includes(userId));
-
-    if (!results) {
-
-        setLike(false);
-    };
+    useEffect(() => {
+        if (selectedPost && selectedPost.likes) {
+            const hasLiked = selectedPost.likes.some((likeId) => likeId === userId);
+            setLike(hasLiked);
+        }
+    }, [selectedPost, userId]);
 
     const handlePostClick = (post) => {
         setselectedPost(post);
