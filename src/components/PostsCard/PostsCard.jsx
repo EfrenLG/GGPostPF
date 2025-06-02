@@ -54,10 +54,10 @@ const PostsCard = ({ posts }) => {
                     />
                     <input type="text" id="modal-title" value={selectedPost.tittle} disabled />
                     <input type="text" id="modal-description" value={selectedPost.description} disabled />
-                    {username != 'admin' && (
+                    {username === 'admin' && (
                         <>
                             <button type="button" className="edit-btn" id="editPost">Editar</button>
-                            <button className="delete-btn" id="deletePost" onClick={deletePost(selectedPost.id)}>Eliminar</button>
+                            <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost.id)}>Eliminar</button>
                         </>
                     )};
                 </div>
