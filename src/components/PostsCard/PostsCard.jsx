@@ -21,7 +21,7 @@ const PostsCard = ({ posts }) => {
         return categorias.some(cat => cat.toLowerCase().includes(seeker));
     });
 
-    const results = posts.likes.some((like) => like.includes(userId));
+    const results = posts.likes?.some((like) => like.includes(userId));
 
     if (!results) {
 
