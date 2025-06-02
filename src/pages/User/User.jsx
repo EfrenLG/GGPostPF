@@ -78,7 +78,7 @@ const User = () => {
                 </div>
 
                 <div className="tab-content user_posts">
-                    <PostsCard post={dataPost} />
+                    <PostsCard posts={dataPost} />
                 </div>
                 
                 <div className="tab-content add_posts">
