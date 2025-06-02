@@ -5,8 +5,10 @@ import './PostsCard.css';
 const PostsCard = ({ posts }) => {
 
     const username = localStorage.getItem('username');
+    const userId = localStorage.getItem('userId');
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
+    const [like, setLike] = useState(true);
 
     const filterPosts = posts.filter(post => {
 
@@ -19,6 +21,13 @@ const PostsCard = ({ posts }) => {
         return categorias.some(cat => cat.toLowerCase().includes(seeker));
     });
 
+    const results = posts.likes.some((like) => like.includes(userId));
+
+    if (!results) {
+
+        setLike(false);
+    };
+
     const handlePostClick = (post) => {
         setselectedPost(post);
     };
@@ -29,10 +38,10 @@ const PostsCard = ({ posts }) => {
 
     const sendView = async (idPost) => {
 
-        const dataPost ={
+        const dataPost = {
             'idPost': idPost
         };
-        
+
         await userService.viewPost(dataPost);
     };
 
@@ -77,6 +86,15 @@ const PostsCard = ({ posts }) => {
             <div id="postModal" className='modal'>
                 <div className="modal-content">
                     <span>Visitas: {selectedPost.views}</span>
+                    {like === true ? (
+                        <>
+                            <i className="fa fa-heart" style={{ color: '#ff0000' }}></i> Likes: {selectedPost.likes.length}
+                        </>
+                    ) : (
+                        <>
+                            <i className="fa-regular fa-heart"></i> Likes: {selectedPost.likes.length}
+                        </>
+                    )}
                     <span className="like-btn" id="like-btn"> </span>
                     <span className="close-btn" onClick={closeModal}>&times;</span>
                     <p id="modal-id">{selectedPost._id}</p>
