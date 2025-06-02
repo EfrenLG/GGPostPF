@@ -44,7 +44,7 @@ const PostsCard = ({ posts }) => {
         </div>
 
         {selectedPost && (
-            <div id="postModal" className='modal hidden'>
+            <div id="postModal" className='modal'>
                 <div className="modal-content">
                     <span className="close-btn" onClick={closeModal}>&times;</span>
                     <p id="modal-id">{selectedPost.id}</p>
