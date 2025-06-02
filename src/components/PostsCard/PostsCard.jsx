@@ -28,6 +28,7 @@ const PostsCard = ({ posts }) => {
     };
 
     const sendView = async (idPost) => {
+        
         await userService.viewPost(idPost);
     };
 
@@ -44,7 +45,7 @@ const PostsCard = ({ posts }) => {
     return (<>
 
         <div className='seeker'>
-            <input type="text" id="buscador" value={seeker} onChange={(e) => setSeeker(e.target.value)} />
+            <input type="text" id="buscador" placeholder='Introduzca un #...' value={seeker} onChange={(e) => setSeeker(e.target.value)} />
             <div id="userPosts" className="posts-container"></div>
         </div>
 
@@ -53,7 +54,7 @@ const PostsCard = ({ posts }) => {
                 <div className="post-card" key={post._id}
                     onClick={() => {
                         handlePostClick(post);
-                        post.id !== username ? sendView(post.id) : false;
+                        post._id !== username ? sendView(post._id) : false;
                     }}>
                     <img
                         src={`https://ggpostb.onrender.com/post/${post.file}`}
@@ -74,7 +75,7 @@ const PostsCard = ({ posts }) => {
                     <span>Visitas: {selectedPost.views}</span>
                     <span className="like-btn" id="like-btn"> </span>
                     <span className="close-btn" onClick={closeModal}>&times;</span>
-                    <p id="modal-id">{selectedPost.id}</p>
+                    <p id="modal-id">{selectedPost._id}</p>
                     <img
                         id="modal-img"
                         src={`https://ggpostb.onrender.com/post/${selectedPost.file}`}
@@ -86,7 +87,7 @@ const PostsCard = ({ posts }) => {
                     {username === 'admin' && (
                         <>
                             <button type="button" className="edit-btn" id="editPost">Editar</button>
-                            <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost.id)}>Eliminar</button>
+                            <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
                         </>
                     )}
                 </div>
