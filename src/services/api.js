@@ -8,7 +8,7 @@ const api = axios.create({
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json'
-    }, 
+    },
     withCredentials: true
 
 });
@@ -19,7 +19,12 @@ const userService = {
     emailUser: (userData) => api.post('/email/send-email', userData),
     loginUser: (userData) => api.post('/auth/login', userData),
     getUser: () => api.get('/api/user/data'),
+
+    //SERVICES POSTS
     getPosts: () => api.get('/api/post/all'),
+    editPost: (postData) => api.delete('/api/post/edit', postData),
+    deletePost: (idPost) => api.delete(`/api/post/delete/${idPost}`),
+
 };
 
 export default userService;

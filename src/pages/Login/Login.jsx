@@ -27,6 +27,7 @@ const Login = () => {
             const loginUserR = await userService.loginUser(userData);
 
             localStorage.setItem('userId', loginUserR.data.user.id);
+            localStorage.setItem('username', loginUserR.data.user.username);
             localStorage.setItem('userIcon', loginUserR.data.user.icon);
 
             navigate('/post');
