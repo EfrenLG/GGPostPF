@@ -43,12 +43,16 @@ const PostsCard = ({ posts }) => {
             const hasLiked = selectedPost.likes.some((likeId) => likeId === userId);
             setLike(hasLiked);
             setLikes(selectedPost.likes.length);
-
-            setSelectedTitle(selectedPost.tittle || '');
-                setSelectedDescription(selectedPost.description || '');
-                setSelectedCategorie(selectedPost.categories || '');
         }
     }, [selectedPost, userId]);
+
+    useEffect(() => {
+        if (selectedPost) {
+            setSelectedTitle(selectedPost.tittle || '');
+            setSelectedDescription(selectedPost.description || '');
+            setSelectedCategorie(selectedPost.categories || '');
+        }
+    }, [selectedPost]);
 
     const handlePostClick = (post) => {
         setselectedPost(post);
