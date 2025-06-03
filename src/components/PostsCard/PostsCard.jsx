@@ -18,27 +18,33 @@ const PostsCard = ({ posts }) => {
     const [selectedDescription, setSelectedDescription] = useState(null);
     const [selectedCategorie, setSelectedCategorie] = useState(null);
     const resultURL = url();
-
+    const navigate = useNavigate();
+    
     //CHAT
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const wsRef = useRef(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (!selectedPost) return;
 
         const ws = new WebSocket('wss://ggpostb.onrender.com');
-        wsRef.current = ws;  // <--- Guarda la referencia
+        wsRef.current = ws;
 
         ws.onopen = () => {
-            console.log('Conectado al WebSocket');
+            console.log('WebSocket conectado');
+            // Unirse a la sala del post
+            ws.send(JSON.stringify({ type: 'join', postId: selectedPost._id }));
         };
 
         ws.onmessage = (event) => {
-            const messageData = JSON.parse(event.data);
-            // Añade el mensaje al estado aquí si quieres
-            setMessages(prev => [...prev, messageData]);
+            const data = JSON.parse(event.data);
+
+            if (data.type === 'history') {
+                setMessages(data.messages);
+            } else if (data.type === 'message') {
+                setMessages((prev) => [...prev, data]);
+            }
         };
 
         ws.onerror = (error) => {
@@ -51,7 +57,8 @@ const PostsCard = ({ posts }) => {
 
         return () => {
             ws.close();
-            wsRef.current = null; // limpia la referencia al cerrar
+            wsRef.current = null;
+            setMessages([]); // limpiar mensajes al cambiar de post
         };
     }, [selectedPost]);
 
@@ -59,16 +66,15 @@ const PostsCard = ({ posts }) => {
         if (!newMessage.trim()) return;
 
         if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            const messageData = {
-                postId: selectedPost._id,
-                user: username,
-                message: newMessage,
-                timestamp: new Date().toISOString()
-            };
-            wsRef.current.send(JSON.stringify(messageData));
+            wsRef.current.send(
+                JSON.stringify({
+                    type: 'message',
+                    postId: selectedPost._id,
+                    user: username,
+                    message: newMessage,
+                })
+            );
             setNewMessage('');
-        } else {
-            console.error('WebSocket no está abierto');
         }
     };
 
