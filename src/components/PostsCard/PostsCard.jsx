@@ -11,7 +11,16 @@ const PostsCard = ({ posts }) => {
     const [seeker, setSeeker] = useState('');
     const [like, setLike] = useState(false);
     const [likes, setLikes] = useState(0);
+    const [disabledV, setDisabled] = useState(true);
+    const resultURL = url();
 
+    useEffect(() => {
+        if (resultURL === 'user') {
+            setDisabled(false);
+        } else {
+            setDisabled(true);
+        }
+    }, [resultURL]);
     const filterPosts = posts.filter(post => {
 
         if (!seeker) {
@@ -129,11 +138,11 @@ const PostsCard = ({ posts }) => {
                         id="modal-img"
                         src={`https://ggpostb.onrender.com/post/${selectedPost.file}`}
                     />
-                    <input type="text" id="modal-title" value={selectedPost.tittle} disabled />
-                    <input type="text" id="modal-description" value={selectedPost.description} disabled />
-                    <input type="text" id="modal-categories" value={selectedPost.categories} disabled />
+                    <input type="text" id="modal-title" value={selectedPost.tittle} disabled={disabledV} />
+                    <input type="text" id="modal-description" value={selectedPost.description} disabled={disabledV} />
+                    <input type="text" id="modal-categories" value={selectedPost.categories} disabled={disabledV} />
 
-                    {username === 'admin' && (
+                    {username === 'admin' || resultURL === 'user' && (
                         <>
                             <button type="button" className="edit-btn" id="editPost">Editar</button>
                             <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
