@@ -185,7 +185,6 @@ const PostsCard = ({ posts }) => {
                         src={`https://ggpostb.onrender.com/post/${selectedPost.file}`}
                     />
                     <input type="text" id="modal-title"
-                        value={selectedPost.tittle}
                         onChange={(e) => setSelectedTitle(e.target.value)}
                         required
                     />
