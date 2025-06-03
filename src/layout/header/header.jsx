@@ -1,17 +1,19 @@
 import './header.css';
 import { url } from '../../functions/url.js';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 const Header = () => {
+  const { icon } = useContext(UserContext);
 
     let header = '';
     let logo = '';
     const navigate = useNavigate();
     const resultURL = url();
 
-    const userIcon = localStorage.getItem('userIcon');
 
-    const icon = userIcon ? userIcon : 'default.png';
+    const iconUser = icon ? icon : 'default.png';
 
     if (resultURL !== 'post' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
 
@@ -36,7 +38,7 @@ const Header = () => {
             <div className="header-right">
                 <div className="profile-icon">
                     <img
-                        src={`https://ggpostb.onrender.com/icons/${icon}`}
+                        src={`https://ggpostb.onrender.com/icons/${iconUser}`}
                         alt="Perfil"
                         id="profile-image"
                         className="profile-img"

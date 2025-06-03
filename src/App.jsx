@@ -1,4 +1,5 @@
 import React from 'react';
+import { UserProvider } from "./context/UserContext";
 
 // Librerías de terceros
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -22,19 +23,21 @@ import User from './pages/User/User.jsx';
 function App() {
   return (
     <Router>
-      <div className='layout-wrapper'>
-        <Header />
-        <div className='main-content'>
-          <Routes>
-            <Route path='/' element={<Login />} />
-            <Route path='/register' element={<Register />} />
-            <Route path='/post' element={<Post />} />
-            <Route path='/rawgAPI' element={<RawgAPI />} />
-            <Route path='/user' element={<User />} />
-          </Routes>
+      <UserProvider>
+        <div className='layout-wrapper'>
+          <Header />
+          <div className='main-content'>
+            <Routes>
+              <Route path='/' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route path='/post' element={<Post />} />
+              <Route path='/rawgAPI' element={<RawgAPI />} />
+              <Route path='/user' element={<User />} />
+            </Routes>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
+      </UserProvider>
     </Router>
   );
 };

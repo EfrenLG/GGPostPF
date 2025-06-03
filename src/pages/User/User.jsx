@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../services/api';
 import PostsCard from '../../components/PostsCard/PostsCard';
+import { useContext } from "react";
+import { UserContext } from "../../context/UserContext";
 
 const User = () => {
 
@@ -12,8 +14,9 @@ const User = () => {
     const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
 
+    const { icon, setIcon } = useContext(UserContext);
+
     const userId = localStorage.getItem('userId');
-    const userIcon = localStorage.getItem('userIcon');
 
     const dataUserAPI = async (userId) => {
 
@@ -64,10 +67,9 @@ const User = () => {
 
         await userService.saveIconUser(formData2);
 
-window.location.reload();
-};
-
-    const icon = userIcon ? userIcon : 'default.png';
+        localStorage.setItem("userIcon", selectedFile.name);
+        setIcon(selectedFile.name);
+    };
 
     return (
         <section className="user-panel">
