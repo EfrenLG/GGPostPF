@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import userService from '../../services/api';
 import './PostsCard.css';
+import { url } from '../../functions/url';
 
 const PostsCard = ({ posts }) => {
 
@@ -83,7 +84,7 @@ const PostsCard = ({ posts }) => {
                 <div className="post-card" key={post._id}
                     onClick={() => {
                         handlePostClick(post);
-                        post._id !== username ? sendView(post._id) : false;
+                        post._id !== userId ? sendView(post._id) : false;
                     }}>
                     <img
                         src={`https://ggpostb.onrender.com/post/${post.file}`}
