@@ -3,6 +3,7 @@ import userService from '../../services/api';
 import './PostsCard.css';
 import { url } from '../../functions/url';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 const PostsCard = ({ posts }) => {
 
@@ -18,7 +19,51 @@ const PostsCard = ({ posts }) => {
     const [selectedCategorie, setSelectedCategorie] = useState(null);
     const resultURL = url();
 
+    //CHAT
+    const [messages, setMessages] = useState([]);
+    const [newMessage, setNewMessage] = useState('');
+    const wsRef = useRef(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!selectedPost) return;
+
+        const ws = new WebSocket('wss://ggpostb.onrender.com');
+
+        ws.onopen = () => {
+            console.log('Conectado al WebSocket');
+        };
+
+        ws.onmessage = (event) => {
+            const messageData = JSON.parse(event.data);
+            // Añadir mensaje al estado (esto ya lo preparé si usas el nuevo componente con chat)
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket cerrado');
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [selectedPost]);
+
+
+    const handleSendMessage = () => {
+        if (!newMessage.trim()) return;
+        const messageData = {
+            postId: selectedPost._id,
+            user: username,
+            message: newMessage,
+            timestamp: new Date().toISOString()
+        };
+        wsRef.current.send(JSON.stringify(messageData));
+        setNewMessage('');
+    };
 
     useEffect(() => {
         if (resultURL === 'user') {
@@ -211,6 +256,29 @@ const PostsCard = ({ posts }) => {
                             <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
                         </>
                     )}
+                    <div className="chat-container">
+                        <div className="chat-header">
+                            <h1>Chat del post</h1>
+                        </div>
+                        <div className="chat-messages" id="messages">
+                            {messages.map((msg, index) => (
+                                <div key={index} className="chat-message">
+                                    <strong>{msg.user}: </strong>{msg.message}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="chat-input">
+                            <input
+                                type="text"
+                                id="messageInput"
+                                placeholder="Escribe un mensaje..."
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                            />
+                            <button id="sendButton" onClick={handleSendMessage}>Enviar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         )}
