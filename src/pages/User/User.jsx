@@ -12,6 +12,9 @@ const User = () => {
     const [dataPost, setDataPost] = useState([]);
     const [selectedTab, setSelectedTab] = useState('datos');
     const [selectedFile, setSelectedFile] = useState(null);
+    const [selectedTitle, setSelectedTitle] = useState(null);
+    const [selectedDescription, setSelectedDescription] = useState(null);
+
     const navigate = useNavigate();
 
     const { icon, setIcon } = useContext(UserContext);
@@ -69,6 +72,29 @@ const User = () => {
 
         localStorage.setItem("userIcon", selectedFile.name);
         setIcon(selectedFile.name);
+    };
+
+    const handleSubmitPost = async (e) => {
+        e.preventDefault();
+
+        if (!selectedFile) {
+            alert("No se ha seleccionado ninguna imagen.");
+            return;
+        };
+
+        const formData = {
+            'idUser': userId,
+            'file': selectedFile.name,
+            'tittle': selectedTitle,
+            'description': selectedDescription,
+        };
+
+        await userService.updateIconUser(formData);
+
+        const formData2 = new FormData();
+        formData2.append("file", selectedFile);
+
+        await userService.saveIconUser(formData2);
     };
 
     return (
@@ -140,9 +166,9 @@ const User = () => {
             </div>
 
             <div className="tab-content add_posts">
-                <form className="post-form" id="post-form">
+                <form className="post-form" id="post-form" onSubmit={(e) => handleSubmitPost(e)}>
                     <div className="post-image-wrapper">
-                        <input type="file" id="post-pic" accept="image/*" />
+                        <input type="file" id="post-pic" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} />
                         <label htmlFor="post-pic" className="post-image-label">
                             <img src="" alt="Imagen del post" id="imagePost" className="post-image" />
                         </label>
@@ -150,13 +176,13 @@ const User = () => {
 
                     <div className="form-group">
                         <label htmlFor="tittle">Título del post</label>
-                        <input type="text" id="tittle" required />
+                        <input type="text" id="tittle" required onChange={(e) => setSelectedTitle(e.target)} />
                         <p id="mess-titt"></p>
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="description">Descripción del post</label>
-                        <input type="text" id="description" required />
+                        <input type="text" id="description" required onChange={(e) => setSelectedDescription(e.target)} />
                         <p id="mess-des"></p>
                     </div>
 
