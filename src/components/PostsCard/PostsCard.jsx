@@ -43,6 +43,10 @@ const PostsCard = ({ posts }) => {
             const hasLiked = selectedPost.likes.some((likeId) => likeId === userId);
             setLike(hasLiked);
             setLikes(selectedPost.likes.length);
+
+            setSelectedTitle(selectedPost.tittle || '');
+                setSelectedDescription(selectedPost.description || '');
+                setSelectedCategorie(selectedPost.categories || '');
         }
     }, [selectedPost, userId]);
 
@@ -148,12 +152,6 @@ const PostsCard = ({ posts }) => {
 
         {selectedPost && (
             <div id="postModal" className='modal'>
-                {(
-                    setSelectedTitle(selectedPost.tittle || ''),
-                    setSelectedDescription(selectedPost.description || ''),
-                    setSelectedCategorie(selectedPost.categories || '')
-                )}
-                
                 <div className="modal-content">
                     <span>Visitas: {selectedPost.views}</span>
                     {like === true ? (
