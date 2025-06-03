@@ -91,7 +91,7 @@ const PostsCard = ({ posts }) => {
             await userService.editPost(dataPost);
 
             window.location.reload();
-            } catch (error) {
+        } catch (error) {
 
             if (error.response.data.error === 'Acceso no autorizado') {
                 navigate('/')
@@ -148,6 +148,12 @@ const PostsCard = ({ posts }) => {
 
         {selectedPost && (
             <div id="postModal" className='modal'>
+                {(
+                    setSelectedTitle(selectedPost.tittle || ''),
+                    setSelectedDescription(selectedPost.description || ''),
+                    setSelectedCategorie(selectedPost.categories || '')
+                )}
+                
                 <div className="modal-content">
                     <span>Visitas: {selectedPost.views}</span>
                     {like === true ? (
@@ -177,21 +183,21 @@ const PostsCard = ({ posts }) => {
                         src={`https://ggpostb.onrender.com/post/${selectedPost.file}`}
                     />
                     <input type="text" id="modal-title"
-                        value={selectedPost.tittle}
+                        value={setSelectedTitle}
                         disabled={disabledV}
                         onChange={(e) => setSelectedTitle(e.target.value)}
                         required
                     />
 
                     <input type="text" id="modal-description"
-                        value={selectedPost.description}
+                        value={setSelectedDescription}
                         disabled={disabledV}
                         onChange={(e) => setSelectedDescription(e.target.value)}
                         required
                     />
 
                     <input type="text" id="modal-categories"
-                        value={selectedPost.categories}
+                        value={setSelectedCategorie}
                         disabled={disabledV}
                         onChange={(e) => setSelectedCategorie(e.target.value)}
                         required
