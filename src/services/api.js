@@ -20,8 +20,12 @@ const userService = {
     loginUser: (userData) => api.post('/auth/login', userData),
     getUser: (id) => api.get(`/api/user/${id}`),
     updateIconUser: (userData) => api.put('/api/user/icon', userData),
-    saveIconUser: (userData) => api.post('/api/icon/upload/icon', userData),
-    
+    saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }),
+
     //SERVICES POSTS
     getPosts: () => api.get('/api/post/all'),
     viewPost: (idPost) => api.put('/api/post/view', idPost),
