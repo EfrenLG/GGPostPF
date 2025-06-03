@@ -19,7 +19,9 @@ const userService = {
     emailUser: (userData) => api.post('/email/send-email', userData),
     loginUser: (userData) => api.post('/auth/login', userData),
     getUser: (id) => api.get(`/api/user/${id}`),
-
+    updateIconUser: (userData) => api.put('/api/user/icon', userData),
+    saveIconUser: (userData) => api.post('/api/icon/upload/icon', userData),
+    
     //SERVICES POSTS
     getPosts: () => api.get('/api/post/all'),
     viewPost: (idPost) => api.put('/api/post/view', idPost),

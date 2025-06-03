@@ -9,6 +9,7 @@ const User = () => {
     const [dataUser, setDataUser] = useState([]);
     const [dataPost, setDataPost] = useState([]);
     const [selectedTab, setSelectedTab] = useState('datos');
+    const [selectedFile, setSelectedFile] = useState(null);
     const navigate = useNavigate();
 
     const userId = localStorage.getItem('userId');
@@ -38,6 +39,27 @@ const User = () => {
             navigate('/');
         }
     }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!selectedFile) {
+            alert("No se ha seleccionado ninguna imagen.");
+            return;
+        };
+
+        const formData = new FormData();
+        formData.append("id", userId);
+        formData.append("file", selectedFile.name);
+
+        await userService.updateIconUser(formData);
+
+        const formData2 = new FormData();
+        formData.append("id", userId);
+        formData.append("file", selectedFile);
+
+        await userService.updateIconUser(formData2);
+    };
 
     const icon = userIcon ? userIcon : 'default.png';
 
@@ -82,9 +104,9 @@ const User = () => {
             <label htmlFor="tab-close_session">Cerrar Sesión</label>
 
             <div className="tab-content datos">
-                <form className="profile-form" id="profile-form">
+                <form className="profile-form" id="profile-form" onSubmit={(e) => handleSubmit(e)}>
                     <div className="profile-image-wrapper">
-                        <input type="file" id="profile-pic" accept="image/*" />
+                        <input type="file" id="profile-pic" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} />
                         <label htmlFor="profile-pic" className="profile-image-label">
                             <img src={`https://ggpostb.onrender.com/icons/${icon}`} alt="Imagen de perfil" id="changeIcon"
                                 className="profile-image" />
@@ -93,12 +115,12 @@ const User = () => {
 
                     <div className="form-group">
                         <label htmlFor={dataUser.username}>Nombre de usuario</label>
-                        <input type="text" id={dataUser.username} value={dataUser.username} />
+                        <input type="text" id={dataUser.username} value={dataUser.username} disabled />
                     </div>
 
                     <div className="form-group">
                         <label htmlFor={dataUser.email}>Correo electrónico</label>
-                        <input type="email" id={dataUser.email} value={dataUser.email} />
+                        <input type="email" id={dataUser.email} value={dataUser.email} disabled />
                     </div>
 
                     <button type="submit" className="btn-save-image">Guardar imagen</button>
