@@ -277,7 +277,7 @@ const PostsCard = ({ posts }) => {
                         <div className="chat-messages" id="messages">
                             {messages.map((msg, index) => (
                                 <div key={index} className="chat-message">
-                                    <strong>{username.user}: </strong>{msg.message}
+                                    <strong>{msg.username}: </strong>{msg.message}
                                 </div>
                             ))}
                         </div>
