@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import userService from '../../services/api';
 import './PostsCard.css';
 import { url } from '../../functions/url';
+import { useNavigate } from 'react-router-dom';
 
 const PostsCard = ({ posts }) => {
 
@@ -12,7 +13,12 @@ const PostsCard = ({ posts }) => {
     const [like, setLike] = useState(false);
     const [likes, setLikes] = useState(0);
     const [disabledV, setDisabled] = useState(true);
+    const [selectedTitle, setSelectedTitle] = useState(null);
+    const [selectedDescription, setSelectedDescription] = useState(null);
+    const [selectedCategorie, setSelectedCategorie] = useState(null);
     const resultURL = url();
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (resultURL === 'user') {
@@ -71,14 +77,46 @@ const PostsCard = ({ posts }) => {
         await userService.likePost(postData);
     };
 
-    /*const editPost = async () => {
+    const editPost = async (idPost) => {
 
+        const dataPost = {
+            'idPost': idPost,
+            'tittlePost': selectedTitle,
+            'descriptionPost': selectedDescription,
+            'categoriesPost': selectedCategorie
+        };
 
-    };*/
+        try {
+
+            await userService.editPost(dataPost);
+
+            window.location.reload();
+            } catch (error) {
+
+            if (error.response.data.error === 'Acceso no autorizado') {
+                navigate('/')
+            };
+            console.log('Error cargando los post', error);
+        };
+
+    };
 
     const deletePost = async (idPost) => {
+        const confirmed = confirm('Va a eliminar un post, desea seguir?');
+        if (!confirmed) return;
 
-        await userService.deletePost(idPost);
+        try {
+
+            await userService.deletePost(idPost);
+            window.location.reload();
+
+        } catch (error) {
+            if (error.response.data.error === 'Acceso no autorizado') {
+                navigate('/')
+            };
+            console.error("Error eliminando el post:", error);
+            alert("No se pudo eliminar el post. Inténtalo de nuevo.");
+        };
     };
 
     return (<>
@@ -138,13 +176,30 @@ const PostsCard = ({ posts }) => {
                         id="modal-img"
                         src={`https://ggpostb.onrender.com/post/${selectedPost.file}`}
                     />
-                    <input type="text" id="modal-title" value={selectedPost.tittle} disabled={disabledV} />
-                    <input type="text" id="modal-description" value={selectedPost.description} disabled={disabledV} />
-                    <input type="text" id="modal-categories" value={selectedPost.categories} disabled={disabledV} />
+                    <input type="text" id="modal-title"
+                        value={selectedPost.tittle}
+                        disabled={disabledV}
+                        onChange={(e) => setSelectedTitle(e.target.value)}
+                        required
+                    />
+
+                    <input type="text" id="modal-description"
+                        value={selectedPost.description}
+                        disabled={disabledV}
+                        onChange={(e) => setSelectedDescription(e.target.value)}
+                        required
+                    />
+
+                    <input type="text" id="modal-categories"
+                        value={selectedPost.categories}
+                        disabled={disabledV}
+                        onChange={(e) => setSelectedCategorie(e.target.value)}
+                        required
+                    />
 
                     {username === 'admin' || resultURL === 'user' && (
                         <>
-                            <button type="button" className="edit-btn" id="editPost">Editar</button>
+                            <button type="button" className="edit-btn" id="editPost" onClick={() => editPost(selectedPost._id)}>Editar</button>
                             <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
                         </>
                     )}

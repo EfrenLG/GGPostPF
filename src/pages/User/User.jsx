@@ -61,17 +61,24 @@ const User = () => {
             "id": userId,
             "file": selectedFile.name
         };
+        try {
+            await userService.updateIconUser(formData);
 
-        await userService.updateIconUser(formData);
+            const formData2 = new FormData();
+            formData2.append("id", userId);
+            formData2.append("file", selectedFile);
 
-        const formData2 = new FormData();
-        formData2.append("id", userId);
-        formData2.append("file", selectedFile);
+            await userService.saveIconUser(formData2);
 
-        await userService.saveIconUser(formData2);
+            localStorage.setItem("userIcon", selectedFile.name);
+            setIcon(selectedFile.name);
+        } catch (error) {
 
-        localStorage.setItem("userIcon", selectedFile.name);
-        setIcon(selectedFile.name);
+            if (error.response.data.error === 'Acceso no autorizado') {
+                navigate('/')
+            };
+            console.log('Error cargando los post', error);
+        };
     };
 
     const handleSubmitPost = async (e) => {
@@ -89,12 +96,22 @@ const User = () => {
             'description': selectedDescription,
         };
 
-        await userService.newPost(formData);
+        try {
+            await userService.newPost(formData);
 
-        const formData2 = new FormData();
-        formData2.append("file", selectedFile);
+            const formData2 = new FormData();
+            formData2.append("file", selectedFile);
 
-        await userService.newImagePost(formData2);
+            await userService.newImagePost(formData2);
+
+            window.location.reload();
+        } catch (error) {
+
+            if (error.response.data.error === 'Acceso no autorizado') {
+                navigate('/')
+            };
+            console.log('Error cargando los post', error);
+        };
     };
 
     return (
