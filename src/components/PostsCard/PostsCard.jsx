@@ -84,10 +84,7 @@ const PostsCard = ({ posts }) => {
                 <div className="post-card" key={post._id}
                     onClick={() => {
                         handlePostClick(post);
-                        console.log(post.userId);
-                                                console.log(userId);
-
-                        //post.userId !== userId ? sendView(post._id) : false;
+                        post.idUser !== userId ? sendView(post._id) : false;
                     }}>
                     <img
                         src={`https://ggpostb.onrender.com/post/${post.file}`}
