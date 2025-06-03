@@ -89,12 +89,12 @@ const User = () => {
             'description': selectedDescription,
         };
 
-        await userService.updateIconUser(formData);
+        await userService.newPost(formData);
 
         const formData2 = new FormData();
         formData2.append("file", selectedFile);
 
-        await userService.saveIconUser(formData2);
+        await userService.newImagePost(formData2);
     };
 
     return (
