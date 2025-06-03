@@ -185,19 +185,21 @@ const PostsCard = ({ posts }) => {
                         src={`https://ggpostb.onrender.com/post/${selectedPost.file}`}
                     />
                     <input type="text" id="modal-title"
+                        value={selectedTitle}
+                        disabled={disabledV}
                         onChange={(e) => setSelectedTitle(e.target.value)}
                         required
                     />
 
                     <input type="text" id="modal-description"
-                        value={setSelectedDescription}
+                        value={selectedDescription}
                         disabled={disabledV}
                         onChange={(e) => setSelectedDescription(e.target.value)}
                         required
                     />
 
                     <input type="text" id="modal-categories"
-                        value={setSelectedCategorie}
+                        value={selectedCategorie}
                         disabled={disabledV}
                         onChange={(e) => setSelectedCategorie(e.target.value)}
                         required
