@@ -63,7 +63,9 @@ const User = () => {
         formData2.append("file", selectedFile);
 
         await userService.saveIconUser(formData2);
-    };
+
+window.location.reload();
+};
 
     const icon = userIcon ? userIcon : 'default.png';
 
