@@ -1,6 +1,7 @@
 import './header.css';
 import { url } from '../../functions/url.js';
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 const Header = () => {
 
@@ -9,9 +10,23 @@ const Header = () => {
     const navigate = useNavigate();
     const resultURL = url();
 
-    const userIcon = localStorage.getItem('userIcon');
+    const [icon, setIcon] = useState(localStorage.getItem("userIcon") || "default.png");
 
-    const icon = userIcon ? userIcon : 'default.png';
+    useEffect(() => {
+
+        const handleStorageChange = () => {
+            const updatedIcon = localStorage.getItem("userIcon") || "default.png";
+            setIcon(updatedIcon);
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+            window.removeEventListener("userIconUpdated", handleStorageChange);
+        };
+    }, []);
+
 
     if (resultURL !== 'post' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
 

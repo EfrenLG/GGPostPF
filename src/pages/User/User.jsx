@@ -58,11 +58,9 @@ const User = () => {
 
         await userService.updateIconUser(formData);
 
-        const formData2 = {
-
-            "id": userId,
-            "file": selectedFile
-        };
+        const formData2 = new FormData();
+        formData2.append("id", userId);
+        formData2.append("file", selectedFile);
 
         await userService.saveIconUser(formData2);
     };
