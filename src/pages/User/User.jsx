@@ -59,7 +59,7 @@ const User = () => {
         const formData2 = {
 
             "id": userId,
-            "file": selectedFile.name
+            "file": selectedFile
         };
 
         await userService.saveIconUser(formData2);
