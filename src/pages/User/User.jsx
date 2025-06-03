@@ -23,6 +23,8 @@ const User = () => {
             setDataUser(dataUserR.data.usuario);
             setDataPost(dataUserR.data.post);
 
+            localStorage.setItem('userIcon', dataUserR.data.usuario.icon);
+
         } catch (error) {
 
             if (error.response.data.error === 'Acceso no autorizado') {
