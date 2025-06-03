@@ -176,13 +176,13 @@ const User = () => {
 
                     <div className="form-group">
                         <label htmlFor="tittle">Título del post</label>
-                        <input type="text" id="tittle" required onChange={(e) => setSelectedTitle(e.target)} />
+                        <input type="text" id="tittle" required onChange={(e) => setSelectedTitle(e.target.value)} />
                         <p id="mess-titt"></p>
                     </div>
 
                     <div className="form-group">
                         <label htmlFor="description">Descripción del post</label>
-                        <input type="text" id="description" required onChange={(e) => setSelectedDescription(e.target)} />
+                        <input type="text" id="description" required onChange={(e) => setSelectedDescription(e.target.value)} />
                         <p id="mess-des"></p>
                     </div>
 
