@@ -62,7 +62,7 @@ const User = () => {
             "file": selectedFile.name
         };
 
-        await userService.updateIconUser(formData2);
+        await userService.saveIconUser(formData2);
     };
 
     const icon = userIcon ? userIcon : 'default.png';
