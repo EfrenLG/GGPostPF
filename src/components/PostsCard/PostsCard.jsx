@@ -19,7 +19,7 @@ const PostsCard = ({ posts }) => {
     const [selectedCategorie, setSelectedCategorie] = useState(null);
     const resultURL = url();
     const navigate = useNavigate();
-    
+
     //CHAT
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
@@ -277,7 +277,7 @@ const PostsCard = ({ posts }) => {
                         <div className="chat-messages" id="messages">
                             {messages.map((msg, index) => (
                                 <div key={index} className="chat-message">
-                                    <strong>{msg.user}: </strong>{msg.message}
+                                    <strong>{username.user}: </strong>{msg.message}
                                 </div>
                             ))}
                         </div>
