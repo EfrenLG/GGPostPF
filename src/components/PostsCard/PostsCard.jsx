@@ -29,6 +29,7 @@ const PostsCard = ({ posts }) => {
         if (!selectedPost) return;
 
         const ws = new WebSocket('wss://ggpostb.onrender.com');
+        wsRef.current = ws;  // <--- Guarda la referencia
 
         ws.onopen = () => {
             console.log('Conectado al WebSocket');
@@ -36,7 +37,8 @@ const PostsCard = ({ posts }) => {
 
         ws.onmessage = (event) => {
             const messageData = JSON.parse(event.data);
-            // Añadir mensaje al estado (esto ya lo preparé si usas el nuevo componente con chat)
+            // Añade el mensaje al estado aquí si quieres
+            setMessages(prev => [...prev, messageData]);
         };
 
         ws.onerror = (error) => {
@@ -49,21 +51,27 @@ const PostsCard = ({ posts }) => {
 
         return () => {
             ws.close();
+            wsRef.current = null; // limpia la referencia al cerrar
         };
     }, [selectedPost]);
 
-
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
-        const messageData = {
-            postId: selectedPost._id,
-            user: username,
-            message: newMessage,
-            timestamp: new Date().toISOString()
-        };
-        wsRef.current.send(JSON.stringify(messageData));
-        setNewMessage('');
+
+        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+            const messageData = {
+                postId: selectedPost._id,
+                user: username,
+                message: newMessage,
+                timestamp: new Date().toISOString()
+            };
+            wsRef.current.send(JSON.stringify(messageData));
+            setNewMessage('');
+        } else {
+            console.error('WebSocket no está abierto');
+        }
     };
+
 
     useEffect(() => {
         if (resultURL === 'user') {
