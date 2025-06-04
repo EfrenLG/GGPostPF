@@ -79,10 +79,12 @@ const User = () => {
             formData2.append("id", userId);
             formData2.append("file", selectedFile);
 
-            await userService.saveIconUser(formData2);
+            const response = await userService.saveIconUser(formData2);
 
-            localStorage.setItem("userIcon", selectedFile.name);
-            setIcon(selectedFile.name);
+            const imageUrl = response.data.imageUrl;
+
+            localStorage.setItem("userIcon", imageUrl);
+            setIcon(imageUrl);
         } catch (error) {
 
             if (error.response.data.error === 'Acceso no autorizado') {
