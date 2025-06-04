@@ -24,7 +24,8 @@ const userService = {
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
-        }
+        },
+        withCredentials: true
     }),
 
     //SERVICES POSTS
@@ -37,7 +38,8 @@ const userService = {
     newImagePost: (formData) => api.post('/api/icon/upload/post', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
-        }
+        },
+        withCredentials: true
     }),
 };
 
