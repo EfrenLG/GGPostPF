@@ -53,9 +53,17 @@ const RawgAPI = () => {
 
     const navigate = useNavigate();
 
-    const username = localStorage.getItem('username');
+    useEffect(() => {
+        const username = localStorage.getItem('username');
 
-    !username ? navigate('/') : console.log('Acceso permitido');
+        if (!username) {
+            navigate('/');
+        } else {
+            console.log('Acceso permitido');
+            setShowCard(true);
+        }
+    }, [navigate]);
+
 
     setShowCard(true);
 
