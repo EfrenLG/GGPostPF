@@ -84,7 +84,7 @@ const User = () => {
             const formData = {
 
                 "id": userId,
-                "file": selectedFile.name
+                "file": imageUrl
             };
             await userService.updateIconUser(formData);
 
@@ -175,7 +175,7 @@ const User = () => {
                     <div className="profile-image-wrapper">
                         <input type="file" id="profile-pic" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} />
                         <label htmlFor="profile-pic" className="profile-image-label">
-                            <img src={`https://ggpostb.onrender.com/icons/${icon}`} alt="Imagen de perfil" id="changeIcon"
+                            <img src={`${icon}`} alt="Imagen de perfil" id="changeIcon"
                                 className="profile-image" />
                         </label>
                     </div>
