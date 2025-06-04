@@ -19,7 +19,7 @@ const Header = () => {
     const navigate = useNavigate();
     const resultURL = url();
 
-    const iconUser = icon ? icon : '../../../public/images/default.png';
+    const iconUser = icon ? icon : '../images/default.png';
 
     if (resultURL !== 'post' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
 
