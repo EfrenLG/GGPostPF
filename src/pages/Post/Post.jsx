@@ -1,13 +1,24 @@
+// React y hooks
 import { useEffect, useState } from 'react';
-import userService from '../../services/api';
-import './Post.css';
+
+// Navegación
 import { useNavigate } from 'react-router-dom';
+
+// Estilos
+import './Post.css';
+
+// Servicios
+import userService from '../../services/api';
+
+// Componentes
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
 import PostsCard from '../../components/PostsCard/PostsCard';
+
 
 const Post = () => {
 
     const [dataPost, setDataPost] = useState([]);
+    
     const navigate = useNavigate();
 
     useEffect(() => {

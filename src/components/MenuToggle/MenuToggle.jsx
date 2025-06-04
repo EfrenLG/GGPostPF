@@ -1,5 +1,8 @@
-import './MenuToggle.css';
+// Navegación
 import { useNavigate } from 'react-router-dom';
+
+// Estilos
+import './MenuToggle.css';
 
 const MenuToggle = () => {
 

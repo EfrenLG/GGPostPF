@@ -1,3 +1,4 @@
+// Axios
 import axios from 'axios';
 
 const URL_API = 'https://ggpostb.onrender.com';
@@ -28,16 +29,16 @@ const userService = {
 
     //SERVICES POSTS
     getPosts: () => api.get('/api/post/all'),
+    viewPost: (idPost) => api.put('/api/post/view', idPost),
+    likePost: (dataPost) => api.put('/api/post/like', dataPost),
+    editPost: (postData) => api.put('/api/post/edit', postData),
+    deletePost: (idPost) => api.delete(`/api/post/delete/${idPost}`),
     newPost: (dataPost) => api.post('/api/post/register', dataPost),
     newImagePost: (formData) => api.post('/api/icon/upload/post', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
     }),
-    viewPost: (idPost) => api.put('/api/post/view', idPost),
-    likePost: (dataPost) => api.put('/api/post/like', dataPost),
-    editPost: (postData) => api.put('/api/post/edit', postData),
-    deletePost: (idPost) => api.delete(`/api/post/delete/${idPost}`),
 };
 
 export default userService;

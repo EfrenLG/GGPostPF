@@ -43,7 +43,3 @@ function App() {
 };
 
 export default App;
-
-/*
-  <Router path='*' element={<NotFound />} />
-*/

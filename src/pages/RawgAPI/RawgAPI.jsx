@@ -1,5 +1,14 @@
+// React
 import { useEffect, useState } from 'react';
+
+// Navegación
+import { useNavigate } from 'react-router-dom';
+
+// Componentes
+import ChargeCard from '../../components/ChargeCard/ChargeCard';
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
+
+// Estilos
 import './RawgAPI.css';
 
 const platformMap = {
@@ -35,10 +44,20 @@ const reversePlatformMap = Object.fromEntries(
 );
 
 const RawgAPI = () => {
+
     const [games, setGames] = useState([]);
     const [selectedPlatform, setSelectedPlatform] = useState('all');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showCard, setShowCard] = useState(false);
+
+    const navigate = useNavigate();
+
+    const username = localStorage.getItem('username');
+
+    !username ? navigate('/') : console.log('Acceso permitido');
+
+    setShowCard(true);
 
     const apiKey = '209ae7c8c9374be192ecd7bec599b2e6';
 
@@ -73,6 +92,8 @@ const RawgAPI = () => {
 
     return (
         <>
+            {showCard && <ChargeCard text=' ' />}
+
             <MenuToggle />
 
             <div className="post-content">

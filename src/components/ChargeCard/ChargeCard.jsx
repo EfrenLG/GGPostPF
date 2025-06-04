@@ -1,4 +1,7 @@
+// React
 import React, { useEffect, useState } from 'react';
+
+// Estilos
 import './ChargeCard.css';
 
 const ChargeCard = ({ text }) => {
@@ -21,7 +24,7 @@ const ChargeCard = ({ text }) => {
                 {loanding ? (
                     <p>...Cargando</p>
                 ) : (
-                    <p className='succes'>✅ {text}</p>
+                    <p className='succes'>{text}</p>
                 )}
             </div>
         </div>

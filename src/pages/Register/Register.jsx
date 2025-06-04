@@ -1,12 +1,24 @@
-import { useForm } from 'react-hook-form';
+// React
 import { useState } from 'react';
+
+// Librerías de terceros
 import { yupResolver } from '@hookform/resolvers/yup';
-import schema from './schemaValidations';
-import './Register.css';
-import FormCard from '../../components/FormCard/FormCard'
-import ChargeCard from '../../components/ChargeCard/ChargeCard'
-import userService from '../../services/api';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+// Estilos
+import './Register.css';
+
+// Componentes
+import ChargeCard from '../../components/ChargeCard/ChargeCard';
+import FormCard from '../../components/FormCard/FormCard';
+
+// Servicios
+import userService from '../../services/api';
+
+// Validaciones
+import schema from './schemaValidations';
+
 
 const Register = () => {
 
@@ -20,11 +32,14 @@ const Register = () => {
     });
 
     const onSubmit = async (data) => {
+
         const userData = {
             'username': data.username,
             'email': data.email
         };
+
         try {
+
             const checkUserR = await userService.checkUser(userData);
             let hasError = false;
 
@@ -72,7 +87,7 @@ const Register = () => {
     return (
         <div className="page-wrapper">
 
-            {showCard && <ChargeCard text='Usuario creado'/>}
+            {showCard && <ChargeCard text='✅ Usuario creado' />}
 
             <FormCard
                 title='Registro'

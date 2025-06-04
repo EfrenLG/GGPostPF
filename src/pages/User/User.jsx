@@ -1,10 +1,21 @@
-import './User.css';
-import { useState, useEffect } from 'react';
+// React
+import { useEffect, useState } from 'react';
+
+// React Router
 import { useNavigate } from 'react-router-dom';
-import userService from '../../services/api';
-import PostsCard from '../../components/PostsCard/PostsCard';
+
+// Context
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext";
+
+// Componentes
+import PostsCard from '../../components/PostsCard/PostsCard';
+
+// Servicios
+import userService from '../../services/api';
+
+// Estilos
+import './User.css';
 
 const User = () => {
 

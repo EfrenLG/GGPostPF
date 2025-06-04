@@ -1,9 +1,15 @@
-import { useState, useEffect } from 'react';
-import userService from '../../services/api';
-import './PostsCard.css';
-import { url } from '../../functions/url';
+// React
+import { useState, useEffect, useRef } from 'react';
+
+// React Router
 import { useNavigate } from 'react-router-dom';
-import { useRef } from 'react';
+
+// Servicios y funciones
+import userService from '../../services/api';
+import { url } from '../../functions/url';
+
+// Estilos
+import './PostsCard.css';
 
 const PostsCard = ({ posts }) => {
 
@@ -17,6 +23,7 @@ const PostsCard = ({ posts }) => {
     const [selectedTitle, setSelectedTitle] = useState(null);
     const [selectedDescription, setSelectedDescription] = useState(null);
     const [selectedCategorie, setSelectedCategorie] = useState(null);
+
     const resultURL = url();
     const navigate = useNavigate();
 
@@ -33,7 +40,7 @@ const PostsCard = ({ posts }) => {
 
         ws.onopen = () => {
             console.log('WebSocket conectado');
-            // Unirse a la sala del post
+
             ws.send(JSON.stringify({ type: 'join', postId: selectedPost._id }));
         };
 
@@ -58,7 +65,7 @@ const PostsCard = ({ posts }) => {
         return () => {
             ws.close();
             wsRef.current = null;
-            setMessages([]); // limpiar mensajes al cambiar de post
+            setMessages([]);
         };
     }, [selectedPost]);
 
@@ -86,16 +93,6 @@ const PostsCard = ({ posts }) => {
             setDisabled(true);
         }
     }, [resultURL]);
-    const filterPosts = posts.filter(post => {
-
-        if (!seeker) {
-            return true;
-        };
-
-        const categorias = post.categories.split(',');
-
-        return categorias.some(cat => cat.toLowerCase().includes(seeker));
-    });
 
     useEffect(() => {
         if (selectedPost && selectedPost.likes) {
@@ -125,13 +122,24 @@ const PostsCard = ({ posts }) => {
         setselectedPost(null);
     };
 
+    // Servicios
     const sendView = async (idPost) => {
 
         const dataPost = {
             'idPost': idPost
         };
 
-        await userService.viewPost(dataPost);
+        try {
+
+            await userService.viewPost(dataPost);
+
+        } catch (error) {
+
+            if (error.response.data.error === 'Acceso no autorizado') {
+                navigate('/')
+            };
+            console.log('Error cargando los post', error);
+        };
     };
 
     const sendLike = async (idPost, idUser) => {
@@ -141,7 +149,17 @@ const PostsCard = ({ posts }) => {
             'userId': idUser
         };
 
-        await userService.likePost(postData);
+        try {
+
+            await userService.likePost(postData);
+
+        } catch (error) {
+
+            if (error.response.data.error === 'Acceso no autorizado') {
+                navigate('/')
+            };
+            console.log('Error cargando los post', error);
+        };
     };
 
     const editPost = async (idPost) => {
@@ -165,7 +183,6 @@ const PostsCard = ({ posts }) => {
             };
             console.log('Error cargando los post', error);
         };
-
     };
 
     const deletePost = async (idPost) => {
@@ -185,6 +202,18 @@ const PostsCard = ({ posts }) => {
             alert("No se pudo eliminar el post. Inténtalo de nuevo.");
         };
     };
+
+
+    const filterPosts = posts.filter(post => {
+
+        if (!seeker) {
+            return true;
+        };
+
+        const categorias = post.categories.split(',');
+
+        return categorias.some(cat => cat.toLowerCase().includes(seeker));
+    });
 
     return (<>
 
