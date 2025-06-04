@@ -92,7 +92,7 @@ const RawgAPI = () => {
 
     return (
         <>
-            {showCard && <ChargeCard text=' ' />}
+            {showCard && <ChargeCard text='✅ Juegos cargados' />}
 
             <MenuToggle />
 
