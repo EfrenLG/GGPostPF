@@ -229,7 +229,7 @@ const PostsCard = ({ posts }) => {
                         post.idUser !== userId ? sendView(post._id) : false;
                     }}>
                     <img
-                        src={`https://ggpostb.onrender.com/post/${post.file}`}
+                        src={`${post.file}`}
                         alt={post.file}
                         className="post-image"
                     />
@@ -269,7 +269,7 @@ const PostsCard = ({ posts }) => {
                     <p id="modal-id">{selectedPost._id}</p>
                     <img
                         id="modal-img"
-                        src={`https://ggpostb.onrender.com/post/${selectedPost.file}`}
+                        src={`${selectedPost.file}`}
                     />
                     <input type="text" id="modal-title"
                         value={selectedTitle}

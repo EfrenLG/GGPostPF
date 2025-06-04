@@ -59,7 +59,8 @@ const User = () => {
         }
     }, []);
 
-    let imageUrl = '';
+    let imageUrlIcon = '';
+    let imageUrlPost = '';
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -76,15 +77,15 @@ const User = () => {
 
             const response = await userService.saveIconUser(formData2);
 
-            imageUrl = response.data.imageUrl;
+            imageUrlIcon = response.data.imageUrl;
 
-            localStorage.setItem("userIcon", imageUrl);
-            setIcon(imageUrl);
+            localStorage.setItem("userIcon", imageUrlIcon);
+            setIcon(imageUrlIcon);
 
             const formData = {
 
                 "id": userId,
-                "file": imageUrl
+                "file": imageUrlIcon
             };
             await userService.updateIconUser(formData);
 
@@ -105,20 +106,22 @@ const User = () => {
             return;
         };
 
-        const formData = {
-            'idUser': userId,
-            'file': selectedFile.name,
-            'tittle': selectedTitle,
-            'description': selectedDescription,
-        };
-
         try {
-            await userService.newPost(formData);
-
             const formData2 = new FormData();
             formData2.append("file", selectedFile);
 
-            await userService.newImagePost(formData2);
+            const response = await userService.newImagePost(formData2);
+
+            imageUrlPost = response.data.imageUrl;
+
+            const formData = {
+                'idUser': userId,
+                'file': imageUrlPost,
+                'tittle': selectedTitle,
+                'description': selectedDescription,
+            };
+
+            await userService.newPost(formData);
 
             window.location.reload();
         } catch (error) {
