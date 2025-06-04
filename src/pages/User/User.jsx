@@ -62,6 +62,8 @@ const User = () => {
     let imageUrlIcon = '';
     let imageUrlPost = '';
 
+    const iconUser = icon !== 'default.png' ? icon : '../images/default.png';
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -178,7 +180,7 @@ const User = () => {
                     <div className="profile-image-wrapper">
                         <input type="file" id="profile-pic" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} />
                         <label htmlFor="profile-pic" className="profile-image-label">
-                            <img src={`${icon}`} alt="Imagen de perfil" id="changeIcon"
+                            <img src={`${iconUser}`} alt="Imagen de perfil" id="changeIcon"
                                 className="profile-image" />
                         </label>
                     </div>
