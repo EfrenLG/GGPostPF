@@ -85,7 +85,6 @@ const PostsCard = ({ posts }) => {
         }
     };
 
-
     useEffect(() => {
         if (resultURL === 'user') {
             setDisabled(false);
@@ -293,7 +292,7 @@ const PostsCard = ({ posts }) => {
                         required
                     />
 
-                    {username === 'admin' || resultURL === 'user' && (
+                    {(username === 'admin' || resultURL === 'user') && (
                         <>
                             <button type="button" className="edit-btn" id="editPost" onClick={() => editPost(selectedPost._id)}>Editar</button>
                             <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
