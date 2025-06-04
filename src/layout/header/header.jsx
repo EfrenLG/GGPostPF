@@ -12,14 +12,15 @@ import { UserContext } from "../../context/UserContext";
 import { url } from '../../functions/url.js';
 
 const Header = () => {
-  const { icon } = useContext(UserContext);
+    const { icon } = useContext(UserContext);
 
     let header = '';
     let logo = '';
     const navigate = useNavigate();
     const resultURL = url();
 
-    const iconUser = icon ? icon : '/images/default.png';
+    const iconUser = icon !== 'default.png' ? icon : '../images/default.png';
+
 
     if (resultURL !== 'post' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
 
