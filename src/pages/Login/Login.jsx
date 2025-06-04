@@ -19,12 +19,17 @@ import FormCard from '../../components/FormCard/FormCard';
 // Servicios
 import userService from '../../services/api';
 
+// Contexto
+import { UserContext } from '../../context/UserContext';
+
 const Login = () => {
 
     const [password, setPassword] = useState('');
     const [showCard, setShowCard] = useState(false);
 
     const navigate = useNavigate();
+
+    const { setIcon } = useContext(UserContext);
 
     const { register, handleSubmit, formState: { errors }, setError } = useForm({
         resolver: yupResolver(schema)
@@ -45,6 +50,7 @@ const Login = () => {
             localStorage.setItem('userId', loginUserR.data.user.id);
             localStorage.setItem('username', loginUserR.data.user.username);
             localStorage.setItem('userIcon', loginUserR.data.user.icon);
+            setIcon(loginUserR.data.user.icon);
 
             navigate('/post');
 

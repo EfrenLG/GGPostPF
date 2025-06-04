@@ -1,8 +1,15 @@
+// Estilos
 import './header.css';
-import { url } from '../../functions/url.js';
-import { useNavigate } from 'react-router-dom';
+
+// React y librerías de terceros
 import { useContext } from "react";
+import { useNavigate } from 'react-router-dom';
+
+// Contextos
 import { UserContext } from "../../context/UserContext";
+
+// Funciones/utilidades
+import { url } from '../../functions/url.js';
 
 const Header = () => {
   const { icon } = useContext(UserContext);
@@ -11,7 +18,6 @@ const Header = () => {
     let logo = '';
     const navigate = useNavigate();
     const resultURL = url();
-
 
     const iconUser = icon ? icon : 'default.png';
 
