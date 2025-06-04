@@ -100,8 +100,6 @@ const RawgAPI = () => {
 
     return (
         <>
-            {showCard && <ChargeCard text='✅ Juegos cargados' />}
-
             <MenuToggle />
 
             <div className="post-content">
