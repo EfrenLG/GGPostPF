@@ -1,5 +1,10 @@
+// React
 import { useEffect, useState } from 'react';
+
+// Componentes
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
+
+// Estilos
 import './RawgAPI.css';
 
 const platformMap = {
