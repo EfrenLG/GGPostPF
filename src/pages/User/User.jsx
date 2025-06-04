@@ -59,6 +59,8 @@ const User = () => {
         }
     }, []);
 
+    let imageUrl = '';
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -67,23 +69,25 @@ const User = () => {
             return;
         };
 
-        const formData = {
-
-            "id": userId,
-            "file": selectedFile.name
-        };
         try {
-            await userService.updateIconUser(formData);
 
             const formData2 = new FormData();
             formData2.append('file', selectedFile);
-            
+
             const response = await userService.saveIconUser(formData2);
 
-            const imageUrl = response.data.imageUrl;
+            imageUrl = response.data.imageUrl;
 
             localStorage.setItem("userIcon", imageUrl);
             setIcon(imageUrl);
+
+            const formData = {
+
+                "id": userId,
+                "file": selectedFile.name
+            };
+            await userService.updateIconUser(formData);
+
         } catch (error) {
 
             if (error.response.data.error === 'Acceso no autorizado') {
