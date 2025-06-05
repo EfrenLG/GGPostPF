@@ -89,9 +89,6 @@ header {
 
 
 @media (max-width: 576px) {
-    .header-content {
-        flex-direction: column;
-    }
 
     .header-logo {
         height: 60px;
