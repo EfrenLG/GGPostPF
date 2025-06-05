@@ -1,12 +1,93 @@
-# React + Vite
+# GGPost 🎮📝
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**GGPost** (God Game Post) es una plataforma social para amantes de los videojuegos. Los usuarios pueden publicar contenido, comentar, reaccionar y descubrir los títulos más valorados en diferentes consolas.
 
-Currently, two official plugins are available:
+## 🧩 Descripción del Proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+GGPost nace con la idea de ofrecer un espacio donde los gamers puedan:
 
-## Expanding the ESLint configuration
+- Publicar opiniones, noticias o comentarios sobre videojuegos.
+- Interactuar con otros usuarios mediante likes y comentarios.
+- Descubrir los juegos más valorados por consola.
+- Gestionar su perfil personal y sus publicaciones.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🚀 Funcionalidades Principales
+
+### 🔐 Autenticación
+
+- **Registro** con validación de nombre de usuario y correo electrónico únicos.
+- Envío de un correo de bienvenida tras el registro.
+- **Login** con verificación contra la base de datos.
+- Generación de un **token JWT** guardado en cookies (`httpOnly`, `secure`, `sameSite: 'none'`).
+- Las rutas protegidas requieren un token válido, si expira redirige automáticamente al login.
+
+---
+
+### 🏠 Página Principal (Post)
+
+- Visualización de todos los post subidos por los usuarios.
+- Cada post muestra:
+  - Imagen
+  - Título
+  - Descripción
+  - Categorías
+- Al hacer clic se abre un **modal** con:
+  - Visitas (cada visita se guarda si no es del propio usuario)
+  - Likes
+  - Comentarios
+- **Buscador** para filtrar por categoría.
+- Likes y comentarios se guardan en la base de datos para mantener la interacción.
+
+---
+
+### 🎮 Juegos Mejor Valorados
+
+- Información extraída desde la **API de RAWG**.
+- Filtro por consola para facilitar la búsqueda.
+- Interfaz moderna y visualmente atractiva.
+
+---
+
+### 👤 Perfil de Usuario
+
+- Visualización de los **datos del usuario** (nombre y correo) – no modificables.
+- Subida y edición del **icono de usuario** (almacenado en **Cloudinary**).
+- Secciones dentro del perfil:
+  - **Mis Post**:
+    - Búsqueda por categoría
+    - Edición (título, descripción, categoría)
+    - Eliminación de post
+    - Like y comentarios
+  - **Crear Post**:
+    - Subida de imagen, título y descripción
+  - **Cerrar Sesión**
+
+---
+
+### 🛠️ Funciones Administrativas
+
+- Un usuario **admin** tiene la capacidad de:
+  - Eliminar cualquier post
+  - Editar cualquier post desde la vista general
+
+---
+
+## 🧪 Tecnologías Usadas
+
+### ⚙️ Frontend
+- **React.js** (estructura basada en componentes)
+- **CSS** puro para estilos
+- Dos Layouts principales
+- Rutas definidas y gestionadas desde `App.jsx`
+
+### 🔧 Backend
+- **Node.js** + **Express.js**
+- **MongoDB** como base de datos principal
+- **Mongoose** para los modelos
+- **Multer + Cloudinary** para gestión de imágenes
+- **jsonwebtoken** para autenticación
+- Rutas protegidas por middleware que valida el token
+- Cada ruta está asociada a funciones con sus respectivas validaciones
+
