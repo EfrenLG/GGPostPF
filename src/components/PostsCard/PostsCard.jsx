@@ -202,17 +202,16 @@ const PostsCard = ({ posts }) => {
         };
     };
 
-
     const filterPosts = posts.filter(post => {
+        if (!seeker) return true;
 
-        if (!seeker) {
-            return true;
-        };
+        if (!post.categories || typeof post.categories !== 'string') return false;
 
         const categorias = post.categories.split(',');
 
-        return categorias.some(cat => cat.toLowerCase().includes(seeker));
+        return categorias.some(cat => cat.toLowerCase().includes(seeker.toLowerCase()));
     });
+
 
     return (<>
 
