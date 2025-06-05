@@ -293,3 +293,24 @@
 .chat-input button:hover {
   background: #0056b3;
 }
+
+@media (max-width: 1024px) {
+  .post-card {
+    flex: 1 1 calc(33.333% - 16px); /* 3 por fila */
+    max-width: calc(33.333% - 16px);
+  }
+}
+
+@media (max-width: 768px) {
+  .post-card {
+    flex: 1 1 calc(50% - 16px); /* 2 por fila */
+    max-width: calc(50% - 16px);
+  }
+}
+
+@media (max-width: 480px) {
+  .post-card {
+    flex: 1 1 100%; /* 1 por fila */
+    max-width: 100%;
+  }
+}
