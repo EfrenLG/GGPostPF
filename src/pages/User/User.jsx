@@ -135,6 +135,15 @@ const User = () => {
         };
     };
 
+    const closeSesion = () => {
+
+        localStorage.removeItem('userIcon');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('username');
+
+        navigate('/');
+    };
+
     return (
         <section className="user-panel">
             <h2>Panel de Usuario</h2>
@@ -172,6 +181,7 @@ const User = () => {
                 id="tab-close_session"
                 checked={selectedTab === 'close_session'}
                 onChange={() => setSelectedTab('close_session')}
+                onClick={() => closeSesion()}
             />
             <label htmlFor="tab-close_session">Cerrar Sesión</label>
 
