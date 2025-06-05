@@ -33,11 +33,12 @@
   gap: 16px;
   justify-content: center;
 
-    border: 1px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 12px;
   padding: 20px;
   background: #fff;
-
+  max-width: 75%;
+  margin: 0 auto;
 }
 
 .post-card {
