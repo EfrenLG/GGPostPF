@@ -69,7 +69,7 @@ header {
 
 @media (max-width: 599px) {
     .header-content {
-        flex-direction: row;
+        flex-direction: row !important;
         justify-content: space-between;
         text-align: left;
     }
@@ -90,6 +90,12 @@ header {
 
 @media (max-width: 576px) {
 
+        .header-content {
+        flex-direction: row !important;
+        justify-content: space-between;
+        text-align: left;
+    }
+    
     .header-logo {
         height: 60px;
         margin-bottom: 0.5rem;
