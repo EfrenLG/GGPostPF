@@ -33,13 +33,11 @@
   gap: 16px;
   justify-content: center;
 
-  border: 1px solid #ccc;
+    border: 1px solid #ccc;
   border-radius: 12px;
   padding: 20px;
   background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
-  max-width: 1200px;
+
 }
 
 .post-card {
@@ -67,6 +65,7 @@
   padding: 10px;
 }
 
+/* Modal General */
 .modal {
   position: fixed;
   inset: 0;
@@ -79,11 +78,13 @@
   overflow-y: auto;
 }
 
+/* Modal Oculto y ID */
 .modal.hidden,
 #modal-id {
   display: none;
 }
 
+/* Contenido del Modal */
 .modal-content {
   background-color: #fff;
   width: 100%;
@@ -95,6 +96,7 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
+/* Animación de entrada */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -115,6 +117,8 @@
   margin-bottom: 1rem;
 }
 
+
+/* Botón Cerrar */
 .close-btn {
   position: sticky;
   top: 1rem;
@@ -131,6 +135,7 @@
   transform: scale(1.2);
 }
 
+/* Imagen del Post */
 #modal-img {
   width: 100%;
   border-radius: 8px;
@@ -139,6 +144,7 @@
   max-height: 400px;
 }
 
+/* Inputs de texto */
 #modal-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -164,6 +170,7 @@
   background-color: #fff;
 }
 
+/* Iconos de like */
 .fa-heart,
 .fa-regular.fa-heart {
   font-size: 20px;
@@ -178,6 +185,7 @@
   transform: scale(1.2);
 }
 
+/* Like y visitas */
 .modal-content span {
   display: inline-block;
   margin: 10px 5px;
@@ -185,6 +193,7 @@
   color: #555;
 }
 
+/* Botones Editar y Eliminar */
 .edit-btn,
 .delete-btn {
   padding: 10px 20px;
@@ -213,6 +222,7 @@
 .delete-btn:hover {
   background-color: #c82333;
 }
+
 
 .chat-container {
   background: #f4f6f9;
@@ -250,6 +260,7 @@
   color: #2c3e50;
 }
 
+/* Ajuste en input y botón */
 .chat-input {
   display: flex;
   margin-top: 10px;
@@ -280,22 +291,4 @@
 
 .chat-input button:hover {
   background: #0056b3;
-}
-
-@media (max-width: 1024px) {
-  .post-card {
-    flex: 1 1 calc(33.33% - 16px);
-  }
-}
-
-@media (max-width: 768px) {
-  .post-card {
-    flex: 1 1 calc(50% - 16px);
-  }
-}
-
-@media (max-width: 480px) {
-  .post-card {
-    flex: 1 1 100%;
-  }
 }

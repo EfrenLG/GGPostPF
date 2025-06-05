@@ -217,7 +217,6 @@ const PostsCard = ({ posts }) => {
 
         <div className='seeker'>
             <input type="text" id="buscador" placeholder='Introduzca un #...' value={seeker} onChange={(e) => setSeeker(e.target.value)} />
-            <div id="userPosts" className="posts-container"></div>
         </div>
 
         <div id="userPosts" className="posts-container">
