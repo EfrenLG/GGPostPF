@@ -243,28 +243,31 @@ const PostsCard = ({ posts }) => {
         {selectedPost && (
             <div id="postModal" className='modal'>
                 <div className="modal-content">
-                    <span>Visitas: {selectedPost.views}</span>
-                    {like === true ? (
-                        <>
-                            <i className="fa fa-heart" style={{ color: '#ff0000' }}
-                                onClick={() => {
-                                    setLike(false),
-                                        sendLike(selectedPost._id, userId),
-                                        viewLike('res');
-                                }}></i> Likes: {likes}
-                        </>
-                    ) : (
-                        <>
-                            <i className="fa-regular fa-heart"
-                                onClick={() => {
-                                    setLike(true),
-                                        sendLike(selectedPost._id, userId),
-                                        viewLike('sum');
-                                }}></i> Likes: {likes}
-                        </>
-                    )}
-                    <span className="like-btn" id="like-btn"> </span>
-                    <span className="close-btn" onClick={closeModal}>&times;</span>
+                    <div className="post-meta">
+
+                        <span>Visitas: {selectedPost.views}</span>
+                        {like === true ? (
+                            <>
+                                <i className="fa fa-heart" style={{ color: '#ff0000' }}
+                                    onClick={() => {
+                                        setLike(false),
+                                            sendLike(selectedPost._id, userId),
+                                            viewLike('res');
+                                    }}></i> Likes: {likes}
+                            </>
+                        ) : (
+                            <>
+                                <i className="fa-regular fa-heart"
+                                    onClick={() => {
+                                        setLike(true),
+                                            sendLike(selectedPost._id, userId),
+                                            viewLike('sum');
+                                    }}></i> Likes: {likes}
+                            </>
+                        )}
+                        <span className="like-btn" id="like-btn"> </span>
+                        <span className="close-btn" onClick={closeModal}>&times;</span>
+                    </div>
                     <p id="modal-id">{selectedPost._id}</p>
                     <img
                         id="modal-img"
