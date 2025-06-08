@@ -2,6 +2,16 @@
 
 **GGPost** (God Game Post) es una plataforma social para amantes de los videojuegos. Los usuarios pueden publicar contenido, comentar, reaccionar y descubrir los títulos más valorados en diferentes consolas.
 
+---
+
+# 🌐 Despliegue
+
+- Frontend desplegado en Vercel
+
+- Backend desplegado en Render
+
+---
+
 ## 🧩 Descripción del Proyecto
 
 GGPost nace con la idea de ofrecer un espacio donde los gamers puedan:
