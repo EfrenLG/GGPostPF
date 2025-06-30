@@ -13,7 +13,7 @@ const FormCard = ({ title, onSubmit, register, errors, fields, buttons, password
 
     return (
 
-        <div className="container">
+        <div className="containerLR">
 
             <h2>{title}</h2>
 

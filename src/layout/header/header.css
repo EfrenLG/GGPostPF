@@ -1,13 +1,12 @@
 header {
-    background: linear-gradient(to right, var(--accent-blue), var(--soft-purple));
-    color: var(--bone-white);
+    background: var(--layout);
     padding: 1rem 2rem;
 }
 
 .header-content {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: row;
     gap: 1rem;
     text-align: center;
@@ -16,7 +15,7 @@ header {
 }
 
 .header-logo {
-    height: 80px;
+    height: 60px;
     width: auto;
     flex-shrink: 0;
 }
@@ -25,6 +24,7 @@ header {
     font-size: 2rem;
     margin: 0;
     flex-grow: 1;
+    text-align: center;
 }
 
 .header-right {
@@ -37,7 +37,6 @@ header {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #ccc;
     overflow: hidden;
 }
 
@@ -47,10 +46,35 @@ header {
     object-fit: cover;
 }
 
+.theme-toggle-btn {
+    background-color: var(--buton-css);
+    color: var(--body);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--buton-hover);
+    transform: scale(1.05);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.98);
+}
+
+/* Media Queries */
+
 @media (max-width: 700px) {
     .header-content {
-        flex-direction: row;
+        display: flex;
+        flex-direction: row !important;
         justify-content: space-between;
+        align-items: center;
         text-align: left;
     }
 
@@ -62,49 +86,11 @@ header {
         order: 1;
     }
 
-    .header-right {
-        order: 2;
-    }
-}
-
-@media (max-width: 599px) {
-    .header-content {
-        flex-direction: row !important;
-        justify-content: space-between;
-        text-align: left;
-    }
-
-    .header-title {
-        display: none;
-    }
-
-    .header-logo {
-        order: 1;
+    .theme-toggle-btn {
+        order: 2; 
     }
 
     .header-right {
-        order: 2;
-    }
-}
-
-
-@media (max-width: 576px) {
-
-        .header-content {
-        flex-direction: row !important;
-        justify-content: space-between;
-        text-align: left;
-    }
-    
-    .header-logo {
-        height: 60px;
-        margin-bottom: 0.5rem;
-        order: 1;
-    }
-
-    .header-title {
-        font-size: 1.5rem;
-        text-align: center;
-        order: 2;
+        order: 3;
     }
 }

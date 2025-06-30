@@ -2,7 +2,7 @@
 import './header.css';
 
 // React y librerías de terceros
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 // Contextos
@@ -56,14 +56,31 @@ const Header = () => {
         );
     };
 
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem('theme') || 'light';
+    });
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
+    };
+
     return (
         <header>
             <div className="header-content">
-                {logo}
+                <div className="header-logo">{logo}</div>
 
-                <h1 className="header-title">GGPost – Noticias, clips y gloria gamer</h1>
+                <div className="header-right">
+                    {header}
 
-                {header}
+                    <button onClick={toggleTheme} className="theme-toggle-btn">
+                        {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+                    </button>
+                </div>
             </div>
         </header>
     );

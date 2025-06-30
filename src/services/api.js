@@ -1,7 +1,7 @@
 // Axios
 import axios from 'axios';
 
-const URL_API = 'https://ggpostb.onrender.com';
+const URL_API = import.meta.env.VITE_URL_API;
 
 const api = axios.create({
 

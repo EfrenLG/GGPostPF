@@ -1,6 +1,6 @@
 footer {
-  background-color: var(--accent-blue);
-  color: var(--bone-white);
+  background-color: var(--layout);
+  color: var(--text);
   padding: 1.5rem 1rem;
   font-size: 0.9rem;
   box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);

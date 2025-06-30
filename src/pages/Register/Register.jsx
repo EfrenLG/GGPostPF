@@ -34,7 +34,7 @@ const Register = () => {
     const onSubmit = async (data) => {
 
         const userData = {
-            'username': data.username,
+            'username': data.username.trim().toLowerCase(),
             'email': data.email
         };
 
@@ -64,7 +64,7 @@ const Register = () => {
             setShowCard(true);
 
             const registerData = {
-                'username': data.username,
+                'username': data.username.trim().toLowerCase(),
                 'email': data.email,
                 'password': data.password
             };
@@ -73,7 +73,7 @@ const Register = () => {
 
             if (registerUserR) {
 
-                const emailUserR = await userService.emailUser(userData)
+                await userService.emailUser(userData)
 
                 navigate('/');
             };
