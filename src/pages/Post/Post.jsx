@@ -18,12 +18,15 @@ import PostsCard from '../../components/PostsCard/PostsCard';
 const Post = () => {
 
     const [dataPost, setDataPost] = useState([]);
-    
+    const [dataUser, setDataUser] = useState([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
         loadPost();
     }, []);
+
+    const userId = localStorage.getItem('userId');
 
     const loadPost = async () => {
 
@@ -31,6 +34,10 @@ const Post = () => {
             const getPostsR = await userService.getPosts();
 
             setDataPost(getPostsR.data.posts);
+
+            const dataUserR = await userService.getUser(userId);
+
+            setDataUser(dataUserR.data.usuario);
 
         } catch (error) {
 
@@ -44,7 +51,7 @@ const Post = () => {
     return (
         <>
             <MenuToggle />
-            <PostsCard posts={dataPost} usuario={''}/>
+            <PostsCard posts={dataPost} usuario={dataUser} />
         </>
     );
 };
