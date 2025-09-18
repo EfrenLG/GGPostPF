@@ -11,7 +11,7 @@ import { url } from '../../functions/url';
 // Estilos
 import './PostsCard.css';
 
-const PostsCard = ({ posts }) => {
+const PostsCard = ({ posts, usuario }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
@@ -219,19 +219,23 @@ const PostsCard = ({ posts }) => {
                             }
                         }}
                     >
-                        <div className="post-header">
-                            <img src={post.avatar} alt="avatar" className="avatar" />
-                            <span className="author-name">{post.username}</span>
-                            <button id={post.idUser}
-                                className="follow-button"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleFollow(post.idUser);
-                                }}
-                            >
-                                Seguir
-                            </button>
-                        </div>
+                        {usuario._id == post.idUser && (
+                            <div className="post-header">
+
+                                <img src={post.avatar} alt="avatar" className="avatar" />
+                                <span className="author-name">{post.username}</span>
+                                <button id={post.idUser}
+                                    className="follow-button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleFollow(post.idUser);
+                                    }}
+                                >
+                                    Seguir
+                                </button>
+                            </div>
+                        )}
+
 
                         <img src={post.file} alt={post.tittle} className="post-image-card" />
 
@@ -247,16 +251,16 @@ const PostsCard = ({ posts }) => {
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 sendLike(post._id, userId);
-                                                post.likes = post.likes.filter(id => id !== userId); 
-                                                setLikesData(prev => ({ ...prev })); 
+                                                post.likes = post.likes.filter(id => id !== userId);
+                                                setLikesData(prev => ({ ...prev }));
                                             }}></i>
                                     ) : (
                                         <i className="fa-regular fa-heart"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 sendLike(post._id, userId);
-                                                post.likes = [...(post.likes || []), userId]; 
-                                                setLikesData(prev => ({ ...prev })); 
+                                                post.likes = [...(post.likes || []), userId];
+                                                setLikesData(prev => ({ ...prev }));
                                             }}></i>
                                     )}
                                     <span className="like-number">{post.likes?.length || 0}</span>

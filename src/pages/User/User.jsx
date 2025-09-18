@@ -300,7 +300,7 @@ const User = () => {
                     </div>
                 )}
 
-                <PostsCard posts={dataPost} />
+                <PostsCard posts={dataPost} usuario={dataUser} />
             </section>
 
         </section>
