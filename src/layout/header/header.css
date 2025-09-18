@@ -86,11 +86,11 @@ header {
         order: 1;
     }
 
-    .theme-toggle-btn {
-        order: 2; 
+    .header-right {
+        order: 2;
     }
 
-    .header-right {
+    .theme-toggle-btn {
         order: 3;
     }
 }

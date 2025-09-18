@@ -17,8 +17,7 @@ const PostsCard = ({ posts }) => {
     const userId = localStorage.getItem('userId');
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
-    const [like, setLike] = useState(false);
-    const [likes, setLikes] = useState(0);
+    const [likesData, setLikesData] = useState({});
     const [disabledV, setDisabled] = useState(true);
     const [selectedTitle, setSelectedTitle] = useState(null);
     const [selectedDescription, setSelectedDescription] = useState(null);
@@ -94,14 +93,6 @@ const PostsCard = ({ posts }) => {
     }, [resultURL]);
 
     useEffect(() => {
-        if (selectedPost && selectedPost.likes) {
-            const hasLiked = selectedPost.likes.some((likeId) => likeId === userId);
-            setLike(hasLiked);
-            setLikes(selectedPost.likes.length);
-        }
-    }, [selectedPost, userId]);
-
-    useEffect(() => {
         if (selectedPost) {
             setSelectedTitle(selectedPost.tittle || '');
             setSelectedDescription(selectedPost.description || '');
@@ -111,10 +102,6 @@ const PostsCard = ({ posts }) => {
 
     const handlePostClick = (post) => {
         setselectedPost(post);
-    };
-
-    const viewLike = (operation) => {
-        setLikes(prevLikes => operation === 'sum' ? prevLikes + 1 : prevLikes - 1);
     };
 
     const closeModal = () => {
@@ -219,6 +206,142 @@ const PostsCard = ({ posts }) => {
             <input type="text" id="buscador" placeholder='Introduzca un #...' value={seeker} onChange={(e) => setSeeker(e.target.value)} />
         </div>
 
+        <div className="post-wrapper">
+            <div id="userPosts" className="posts-container">
+                {filterPosts.map((post) => (
+
+                    <div className="post-card" key={post._id}
+                        onClick={(e) => {
+                            const isFollowButton = e.target.closest('.follow-button');
+                            if (!isFollowButton) {
+                                handlePostClick(post);
+                                post.idUser !== userId && sendView(post._id);
+                            }
+                        }}
+                    >
+                        <div className="post-header">
+                            <img src={post.avatar} alt="avatar" className="avatar" />
+                            <span className="author-name">{post.username}</span>
+                            <button id={post.idUser}
+                                className="follow-button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleFollow(post.idUser);
+                                }}
+                            >
+                                Seguir
+                            </button>
+                        </div>
+
+                        <img src={post.file} alt={post.tittle} className="post-image-card" />
+
+                        <div className="post-title">{post.tittle}</div>
+                        <div className="post-description">{post.description}</div>
+
+                        <div className="post-footer">
+                            <span className="views-count">{post.views} vistas</span>
+                            <span className="likes-count">
+                                <span className="likes-count">
+                                    {post.likes?.includes(userId) ? (
+                                        <i className="fa fa-heart" style={{ color: '#ff0000' }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                sendLike(post._id, userId);
+                                                post.likes = post.likes.filter(id => id !== userId); 
+                                                setLikesData(prev => ({ ...prev })); 
+                                            }}></i>
+                                    ) : (
+                                        <i className="fa-regular fa-heart"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                sendLike(post._id, userId);
+                                                post.likes = [...(post.likes || []), userId]; 
+                                                setLikesData(prev => ({ ...prev })); 
+                                            }}></i>
+                                    )}
+                                    <span className="like-number">{post.likes?.length || 0}</span>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+
+
+        {selectedPost && (
+            <div id="postModal" className='modal'>
+                <div className="modal-content">
+                    <div className="post-meta">
+
+                        <span className="close-btn" onClick={closeModal}>&times;</span>
+                    </div>
+                    <p id="modal-id">{selectedPost._id}</p>
+                    <img
+                        id="modal-img"
+                        src={`${selectedPost.file}`}
+                    />
+                    <input type="text" id="modal-title"
+                        value={selectedTitle}
+                        disabled={disabledV}
+                        onChange={(e) => setSelectedTitle(e.target.value)}
+                        required
+                    />
+
+                    <input type="text" id="modal-description"
+                        value={selectedDescription}
+                        disabled={disabledV}
+                        onChange={(e) => setSelectedDescription(e.target.value)}
+                        required
+                    />
+
+                    <input type="text" id="modal-categories"
+                        value={selectedCategorie}
+                        disabled={disabledV}
+                        onChange={(e) => setSelectedCategorie(e.target.value)}
+                        required
+                    />
+
+                    {(username === 'admin' || resultURL === 'user') && (
+                        <>
+                            <button type="button" className="edit-btn" id="editPost" onClick={() => editPost(selectedPost._id)}>Editar</button>
+                            <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
+                        </>
+                    )}
+                    <div className="chat-container">
+                        <div className="chat-header">
+                            <h1>Chat del post</h1>
+                        </div>
+                        <div className="chat-messages" id="messages">
+                            {messages.map((msg, index) => (
+                                <div key={index} className="chat-message">
+                                    <strong>{msg.username}: </strong>{msg.message}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="chat-input">
+                            <input
+                                type="text"
+                                id="messageInput"
+                                placeholder="Escribe un mensaje..."
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                            />
+                            <button id="sendButton" onClick={handleSendMessage}>Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+    </>
+    );
+};
+
+export default PostsCard;
+
+/*
         <div id="userPosts" className="posts-container">
             {filterPosts.map((post) => (
                 <div className="post-card" key={post._id}
@@ -229,7 +352,7 @@ const PostsCard = ({ posts }) => {
                     <img
                         src={`${post.file}`}
                         alt={post.file}
-                        className="post-image"
+                        className="post-image-card"
                     />
                     <div className="post-details">
                         <h3>{post.tittle}</h3>
@@ -325,8 +448,4 @@ const PostsCard = ({ posts }) => {
                 </div>
             </div>
         )}
-    </>
-    );
-};
-
-export default PostsCard;
+*/
