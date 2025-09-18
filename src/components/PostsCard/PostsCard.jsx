@@ -219,7 +219,7 @@ const PostsCard = ({ posts, usuario }) => {
                             }
                         }}
                     >
-                        {usuario._id == post.idUser && (
+                        {usuario._id != post.idUser && (
                             <div className="post-header">
 
                                 <img src={post.avatar} alt="avatar" className="avatar" />
