@@ -41,6 +41,9 @@ const userService = {
         },
         withCredentials: true
     }),
+
+    //SERVICE OPENAI
+    chatWithAI: (message) => api.post('/api/chat', { message }),
 };
 
 export default userService;

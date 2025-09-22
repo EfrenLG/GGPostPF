@@ -1,19 +1,27 @@
+// React
 import { useState } from "react";
 
-const URL_API = import.meta.env.VITE_URL_API;
+// Servicios y funciones
+import userService from "../../services/api";
 
 function ChatGPT() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
-    const res = await fetch(URL_API, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message }),
-    });
-    const data = await res.json();
-    setReply(data.reply);
+    if (!message.trim()) return;
+
+    setLoading(true);
+    try {
+      const { data } = await userService.chatWithAI(message);
+      setReply(data.reply);
+    } catch (error) {
+      console.error("Error al comunicar con IA:", error);
+      setReply("Hubo un error al obtener la respuesta de la IA 😢");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -24,8 +32,14 @@ function ChatGPT() {
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Escribe tu mensaje..."
       />
-      <button onClick={sendMessage}>Enviar</button>
-      {reply && <p><strong>IA:</strong> {reply}</p>}
+      <button onClick={sendMessage} disabled={loading}>
+        {loading ? "Enviando..." : "Enviar"}
+      </button>
+      {reply && (
+        <p>
+          <strong>IA:</strong> {reply}
+        </p>
+      )}
     </div>
   );
 }
