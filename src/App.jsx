@@ -14,6 +14,7 @@ import Header from './layout/header/header.jsx';
 import Footer from './layout/footer/footer.jsx';
 
 import AdRefreshOnRouteChange from './components/AdRefreshOnRouteChange/AdRefreshOnRouteChange.jsx';
+import ChatGPT from './components/ChatGPT/ChatGPT.jsx';
 
 // Páginas
 import Login from './pages/Login/Login.jsx';
@@ -38,6 +39,7 @@ function App() {
               <Route path='/user' element={<User />} />
             </Routes>
           </div>
+          <ChatGPT />
           <Footer />
         </div>
       </UserProvider>
