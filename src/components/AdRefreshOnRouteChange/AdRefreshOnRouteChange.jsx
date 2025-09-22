@@ -16,3 +16,5 @@ function AdRefreshOnRouteChange() {
 
   return null;
 }
+
+export default AdRefreshOnRouteChange;
