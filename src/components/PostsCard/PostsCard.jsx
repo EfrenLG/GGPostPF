@@ -8,8 +8,17 @@ import { useNavigate } from 'react-router-dom';
 import userService from '../../services/api';
 import { url } from '../../functions/url';
 
+// Componentes
+import AdBanner from '../AdBanner/AdBanner';
+
 // Estilos
 import './PostsCard.css';
+
+// Variables
+
+const adClient = import.meta.env.VITE_ADSLOT;
+const adSlot = import.meta.env.VITE_ADCLIENT;
+
 
 const PostsCard = ({ posts, usuario }) => {
 
@@ -208,71 +217,75 @@ const PostsCard = ({ posts, usuario }) => {
 
         <div className="post-wrapper">
             <div id="userPosts" className="posts-container">
-                {filterPosts.map((post) => (
+                {filterPosts.map((post, index) => (
+                    <React.Fragment key={post._id}>
 
-                    <div className="post-card" key={post._id}
-                        onClick={(e) => {
-                            const isFollowButton = e.target.closest('.follow-button');
-                            if (!isFollowButton) {
-                                handlePostClick(post);
-                                post.idUser !== userId && sendView(post._id);
-                            }
-                        }}
-                    >
-                        {usuario._id != post.idUser && (
-                            <div className="post-header">
+                        <div className="post-card" key={post._id}
+                            onClick={(e) => {
+                                const isFollowButton = e.target.closest('.follow-button');
+                                if (!isFollowButton) {
+                                    handlePostClick(post);
+                                    post.idUser !== userId && sendView(post._id);
+                                }
+                            }}
+                        >
+                            {usuario._id != post.idUser && (
+                                <div className="post-header">
 
-                                <img src={post.avatar} alt="avatar" className="avatar" />
-                                <span className="author-name">{post.username}</span>
-                                <button id={post.idUser}
-                                    className="follow-button"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleFollow(post.idUser);
-                                    }}
-                                >
-                                    Seguir
-                                </button>
-                            </div>
-                        )}
+                                    <img src={post.avatar} alt="avatar" className="avatar" />
+                                    <span className="author-name">{post.username}</span>
+                                    <button id={post.idUser}
+                                        className="follow-button"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleFollow(post.idUser);
+                                        }}
+                                    >
+                                        Seguir
+                                    </button>
+                                </div>
+                            )}
 
 
-                        <img src={post.file} alt={post.tittle} className="post-image-card" />
+                            <img src={post.file} alt={post.tittle} className="post-image-card" />
 
-                        <div className="post-title">{post.tittle}</div>
-                        <div className="post-description">{post.description}</div>
+                            <div className="post-title">{post.tittle}</div>
+                            <div className="post-description">{post.description}</div>
 
-                        <div className="post-footer">
-                            <span className="views-count">{post.views} vistas</span>
-                            <span className="likes-count">
+                            <div className="post-footer">
+                                <span className="views-count">{post.views} vistas</span>
                                 <span className="likes-count">
-                                    {post.likes?.includes(userId) ? (
-                                        <i className="fa fa-heart" style={{ color: '#ff0000' }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                sendLike(post._id, userId);
-                                                post.likes = post.likes.filter(id => id !== userId);
-                                                setLikesData(prev => ({ ...prev }));
-                                            }}></i>
-                                    ) : (
-                                        <i className="fa-regular fa-heart"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                sendLike(post._id, userId);
-                                                post.likes = [...(post.likes || []), userId];
-                                                setLikesData(prev => ({ ...prev }));
-                                            }}></i>
-                                    )}
-                                    <span className="like-number">{post.likes?.length || 0}</span>
+                                    <span className="likes-count">
+                                        {post.likes?.includes(userId) ? (
+                                            <i className="fa fa-heart" style={{ color: '#ff0000' }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    sendLike(post._id, userId);
+                                                    post.likes = post.likes.filter(id => id !== userId);
+                                                    setLikesData(prev => ({ ...prev }));
+                                                }}></i>
+                                        ) : (
+                                            <i className="fa-regular fa-heart"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    sendLike(post._id, userId);
+                                                    post.likes = [...(post.likes || []), userId];
+                                                    setLikesData(prev => ({ ...prev }));
+                                                }}></i>
+                                        )}
+                                        <span className="like-number">{post.likes?.length || 0}</span>
+                                    </span>
                                 </span>
-                            </span>
+                            </div>
                         </div>
-                    </div>
+
+                        {(index + 1) % 5 === 0 && (
+                            <AdBanner adClient={adClient} adSlot={adSlot} style={{ margin: '20px 0' }} />
+                        )}
+                    </React.Fragment>
                 ))}
             </div>
         </div>
-
-
 
         {selectedPost && (
             <div id="postModal" className='modal'>

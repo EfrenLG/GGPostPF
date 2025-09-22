@@ -13,6 +13,8 @@ import './App.css';
 import Header from './layout/header/header.jsx';
 import Footer from './layout/footer/footer.jsx';
 
+import AdRefreshOnRouteChange from './components/AdRefreshOnRouteChange/AdRefreshOnRouteChange.jsx';
+
 // Páginas
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
@@ -26,6 +28,7 @@ function App() {
       <UserProvider>
         <div className='layout-wrapper'>
           <Header />
+          <AdRefreshOnRouteChange />
           <div className='main-content'>
             <Routes>
               <Route path='/' element={<Login />} />
