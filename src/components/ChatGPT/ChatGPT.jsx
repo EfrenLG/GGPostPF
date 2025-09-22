@@ -28,22 +28,18 @@ function ChatGPT() {
   };
 
   return (
-    <div>
+    <div className="chat-container">
       <h2>Asistente IA</h2>
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Actualmente deshabilitado..."
+        placeholder="En mantenimiento..."
         disabled
       />
       <button onClick={sendMessage} disabled={loading}>
         {loading ? "Enviando..." : "Enviar"}
       </button>
-      {reply && (
-        <p>
-          <strong>IA:</strong> {reply}
-        </p>
-      )}
+      {reply && <div className="chat-reply">{reply}</div>}
     </div>
   );
 }
