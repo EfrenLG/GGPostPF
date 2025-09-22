@@ -4,6 +4,9 @@ import { useState } from "react";
 // Servicios y funciones
 import userService from "../../services/api";
 
+// Estilos
+import './ChatGPT.css';
+
 function ChatGPT() {
   const [message, setMessage] = useState("");
   const [reply, setReply] = useState("");
@@ -30,7 +33,8 @@ function ChatGPT() {
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Escribe tu mensaje..."
+        placeholder="Actualmente deshabilitado..."
+        disabled
       />
       <button onClick={sendMessage} disabled={loading}>
         {loading ? "Enviando..." : "Enviar"}
