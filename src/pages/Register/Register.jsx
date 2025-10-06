@@ -73,9 +73,9 @@ const Register = () => {
 
             if (registerUserR) {
 
-                await userService.emailUser(userData)
-
                 navigate('/');
+
+                await userService.emailUser(userData)
             };
 
         } catch (error) {

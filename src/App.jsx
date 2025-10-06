@@ -39,7 +39,7 @@ function App() {
               <Route path='/user' element={<User />} />
             </Routes>
           </div>
-          <ChatGPT />
+          {/*<ChatGPT />*/}
           <Footer />
         </div>
       </UserProvider>
