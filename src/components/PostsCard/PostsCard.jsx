@@ -44,7 +44,9 @@ const PostsCard = ({ posts, usuario }) => {
     useEffect(() => {
         if (!selectedPost) return;
 
-        const ws = new WebSocket('wss://ggpostpb-lhys.onrender.com');
+        const URL_API = import.meta.env.VITE_URL_API;
+
+        const ws = new WebSocket(URL_API);
         wsRef.current = ws;
 
         ws.onopen = () => {
