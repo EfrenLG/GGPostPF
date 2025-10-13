@@ -31,7 +31,7 @@ const Post = () => {
                 const res = await userService.checkToken(); 
 
                 if (res.data.message === 'Token válido') {   
-                    loadPost();                      
+                    console.log('Token válido');
                 } else {
                     navigate('/');                            
                 }
