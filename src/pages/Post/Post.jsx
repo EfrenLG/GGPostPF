@@ -25,23 +25,27 @@ const Post = () => {
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
-        
+
         const verifyToken = async () => {
             try {
-                const res = await userService.checkToken(); 
+                const res = await userService.checkToken();
 
-                if (res.data.message === 'Token válido') {   
+                if (res.data.message === 'Token válido') {
                     console.log('Token válido');
                 } else {
-                    navigate('/');                            
+                    navigate('/');
                 }
             } catch (err) {
-                navigate('/'); 
+                navigate('/');
             }
         };
 
         verifyToken();
     }, [navigate]);
+
+    useEffect(() => {
+        loadPost();
+    }, []);
 
     const loadPost = async () => {
 
