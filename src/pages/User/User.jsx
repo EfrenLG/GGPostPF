@@ -14,7 +14,6 @@ import ChargeCard from '../../components/ChargeCard/ChargeCard';
 
 // Servicios
 import userService from '../../services/api';
-import Cookies from 'js-cookie';
 
 // Estilos
 import './User.css';
@@ -59,15 +58,23 @@ const User = () => {
     };
 
     useEffect(() => {
+        
+        const verifyToken = async () => {
+            try {
+                const res = await userService.checkToken(); 
 
-        const token = Cookies.get('token');
+                if (res.data.message === 'Token válido') {   
+                    dataUserAPI(userId);                      
+                } else {
+                    navigate('/');                            
+                }
+            } catch (err) {
+                navigate('/'); 
+            }
+        };
 
-        if (token) {
-            dataUserAPI(userId);
-        } else {
-            navigate('/');
-        }
-    }, []);
+        verifyToken();
+    }, [navigate, userId]);
 
     useEffect(() => {
 

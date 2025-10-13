@@ -9,7 +9,6 @@ import './Post.css';
 
 // Servicios
 import userService from '../../services/api';
-import Cookies from 'js-cookie';
 
 // Componentes
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
@@ -23,20 +22,26 @@ const Post = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-
-        const token = Cookies.get('token');
-
-        if (!token) {
-            navigate('/');
-        }
-    }, []);
-
-    useEffect(() => {
-        loadPost();
-    }, []);
-
     const userId = localStorage.getItem('userId');
+
+    useEffect(() => {
+        
+        const verifyToken = async () => {
+            try {
+                const res = await userService.checkToken(); 
+
+                if (res.data.message === 'Token válido') {   
+                    loadPost();                      
+                } else {
+                    navigate('/');                            
+                }
+            } catch (err) {
+                navigate('/'); 
+            }
+        };
+
+        verifyToken();
+    }, [navigate]);
 
     const loadPost = async () => {
 

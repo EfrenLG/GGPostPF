@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
 
 // Servicios
-import Cookies from 'js-cookie';
+import userService from '../../services/api';
 
 // Estilos
 import './RawgAPI.css';
@@ -56,13 +56,23 @@ const RawgAPI = () => {
     const apiKey = import.meta.env.API_KEY;;
 
     useEffect(() => {
+        
+        const verifyToken = async () => {
+            try {
+                const res = await userService.checkToken(); 
 
-        const token = Cookies.get('token');
+                if (res.data.message === 'Token válido') {   
+                    console.log('Token válido');
+                } else {
+                    navigate('/');                            
+                }
+            } catch (err) {
+                navigate('/'); 
+            }
+        };
 
-        if (!token) {
-            navigate('/');
-        }
-    }, []);
+        verifyToken();
+    }, [navigate]);
 
     const fetchGames = async (platformId = null) => {
         try {

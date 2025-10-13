@@ -15,7 +15,11 @@ const api = axios.create({
 });
 
 const userService = {
-    checkUser: (userData) => api.post('/auth/check', userData),
+    //SERVICE TOKEN CONTROL
+    checkToken: () => api.post('/api/verify'),
+
+    //SERVICE USER
+    checkUser: (userData) => api.get('/auth/check', userData),
     registerUser: (userData) => api.post('/auth/register', userData),
     emailUser: (userData) => api.post('/email/send-email', userData),
     loginUser: (userData) => api.post('/auth/login', userData),
