@@ -233,7 +233,7 @@ const PostsCard = ({ posts, usuario }) => {
                             }}
                         >
                             {usuario._id != post.idUser && (
-                                <div className="post-header">
+                                {/*<div className="post-header">
 
                                     <img src={post.avatar} alt="avatar" className="avatar" />
                                     <span className="author-name">{post.username}</span>
@@ -246,7 +246,7 @@ const PostsCard = ({ posts, usuario }) => {
                                     >
                                         Seguir
                                     </button>
-                                </div>
+                                </div>*/}
                             )}
 
 

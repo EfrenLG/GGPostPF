@@ -9,6 +9,7 @@ import './Post.css';
 
 // Servicios
 import userService from '../../services/api';
+import Cookies from 'js-cookie';
 
 // Componentes
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
@@ -21,6 +22,15 @@ const Post = () => {
     const [dataUser, setDataUser] = useState([]);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+
+        const token = Cookies.get('token');
+
+        if (!token) {
+            navigate('/');
+        }
+    }, []);
 
     useEffect(() => {
         loadPost();
@@ -41,9 +51,6 @@ const Post = () => {
 
         } catch (error) {
 
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            }
             console.log('Error cargando los post', error);
         };
     };

@@ -1,8 +1,14 @@
 // React
 import { useEffect, useState } from 'react';
 
+// React Router
+import { useNavigate } from 'react-router-dom';
+
 // Componentes
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
+
+// Servicios
+import Cookies from 'js-cookie';
 
 // Estilos
 import './RawgAPI.css';
@@ -45,7 +51,18 @@ const RawgAPI = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const apiKey = '209ae7c8c9374be192ecd7bec599b2e6';
+    const navigate = useNavigate();
+
+    const apiKey = import.meta.env.API_KEY;;
+
+    useEffect(() => {
+
+        const token = Cookies.get('token');
+
+        if (!token) {
+            navigate('/');
+        }
+    }, []);
 
     const fetchGames = async (platformId = null) => {
         try {
