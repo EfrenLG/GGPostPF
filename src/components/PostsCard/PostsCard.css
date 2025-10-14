@@ -28,7 +28,7 @@
 }
 
 .post-wrapper {
-  background: linear-gradient(135deg, #15161a, #1C1C1C);
+  background: linear-gradient(135deg, var(--layout), var(--body));
   padding: 2rem;
   display: flex;
   justify-content: center;
@@ -44,7 +44,7 @@
 }
 
 .post-card {
-  background-color: white;
+  background-color: var(--body);
   border-radius: 20px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   padding: 1rem;
