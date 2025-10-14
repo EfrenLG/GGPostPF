@@ -32,6 +32,8 @@ const Post = () => {
 
                 if (res.data.message === 'Token válido') {
                     console.log('Token válido');
+                    loadPost(userId);
+
                 } else {
                     navigate('/');
                 }
@@ -43,11 +45,7 @@ const Post = () => {
         verifyToken();
     }, [navigate]);
 
-    useEffect(() => {
-        loadPost();
-    }, []);
-
-    const loadPost = async () => {
+    const loadPost = async (userId) => {
 
         try {
             const getPostsR = await userService.getPosts();
@@ -57,6 +55,8 @@ const Post = () => {
             const dataUserR = await userService.getUser(userId);
 
             setDataUser(dataUserR.data.usuario);
+
+            console.log({ dataUser, dataPost });
 
         } catch (error) {
 
