@@ -28,7 +28,7 @@
 }
 
 .post-wrapper {
-  background: linear-gradient(135deg, var(--layout), var(--body));
+  background-color: var(--layout);
   padding: 2rem;
   display: flex;
   justify-content: center;
@@ -117,7 +117,7 @@
 
 .post-description {
   font-size: 1rem;
-  color: #555;
+  color: var(--text);
 }
 
 .post-footer {
@@ -125,7 +125,7 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.95rem;
-  color: #666;
+  color: var(--text);
 }
 
 .likes-count {
