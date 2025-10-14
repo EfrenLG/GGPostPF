@@ -291,7 +291,9 @@ const PostsCard = ({ posts, usuario }) => {
         </div>
 
         {selectedPost && (
-            <div id="postModal" className='modal'>
+            <div id="postModal" className='modal' onClick={(e) => {
+                if (e.target.classList.contains('modal')) closeModal();
+            }}>
                 <div className="modal-content">
                     <div className="post-meta">
 
