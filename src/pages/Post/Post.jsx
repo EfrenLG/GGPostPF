@@ -18,7 +18,7 @@ import PostsCard from '../../components/PostsCard/PostsCard';
 const Post = () => {
 
     const [dataPost, setDataPost] = useState([]);
-    const [dataUser, setDataUser] = useState([]);
+    const [dataUser, setDataUser] = useState({});
 
     const navigate = useNavigate();
 
