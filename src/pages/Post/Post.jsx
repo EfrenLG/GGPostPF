@@ -18,7 +18,7 @@ import PostsCard from '../../components/PostsCard/PostsCard';
 const Post = () => {
 
     const [dataPost, setDataPost] = useState([]);
-    const [dataUsers, setDataUsers] = useState({});
+    const [dataUsers, setDataUsers] = useState([]);
 
     const navigate = useNavigate();
 
@@ -52,9 +52,9 @@ const Post = () => {
 
             setDataPost(getPostsR.data.posts);
 
-            const dataUsers = await userService.getUsers();
+            const getUsersR = await userService.getUsers();
 
-            setDataUsers(dataUsers.data.usuario);
+            setDataUsers(getUsersR.data);
 
             console.log({ dataUsers, dataPost });
 

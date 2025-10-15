@@ -34,7 +34,6 @@ const PostsCard = ({ posts, usuarios }) => {
     const [selectedDescription, setSelectedDescription] = useState(null);
     const [selectedCategorie, setSelectedCategorie] = useState(null);
 
-    console.log(usuariosD);
     const resultURL = url();
     const navigate = useNavigate();
 
