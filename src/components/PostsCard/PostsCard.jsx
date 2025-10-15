@@ -44,8 +44,9 @@ const PostsCard = ({ posts, usuarios }) => {
     const wsRef = useRef(null);
 
     useEffect(() => {
-        
-        setUsuariosD(usuarios);
+        if (Array.isArray(usuarios)) {
+            setUsuariosD(usuarios);
+        }
     }), [usuarios];
 
     useEffect(() => {
