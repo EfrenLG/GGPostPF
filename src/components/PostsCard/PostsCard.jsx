@@ -21,7 +21,7 @@ const adClient = import.meta.env.VITE_ADSLOT;
 const adSlot = import.meta.env.VITE_ADCLIENT;
 
 
-const PostsCard = ({ posts, usuario }) => {
+const PostsCard = ({ posts, usuarios }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
@@ -232,7 +232,7 @@ const PostsCard = ({ posts, usuario }) => {
                                 }
                             }}
                         >
-                            {/*usuario._id != post.idUser && (
+                            {/*usuarios._id != post.idUser && (
                                 {<div className="post-header">
 
                                     <img src={post.avatar} alt="avatar" className="avatar" />

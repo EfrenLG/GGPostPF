@@ -18,7 +18,7 @@ import PostsCard from '../../components/PostsCard/PostsCard';
 const Post = () => {
 
     const [dataPost, setDataPost] = useState([]);
-    const [dataUser, setDataUser] = useState({});
+    const [dataUsers, setDataUsers] = useState({});
 
     const navigate = useNavigate();
 
@@ -45,18 +45,18 @@ const Post = () => {
         verifyToken();
     }, [navigate]);
 
-    const loadPost = async (userId) => {
+    const loadPost = async () => {
 
         try {
             const getPostsR = await userService.getPosts();
 
             setDataPost(getPostsR.data.posts);
 
-            const dataUserR = await userService.getUser(userId);
+            const dataUsers = await userService.getUsers();
 
-            setDataUser(dataUserR.data.usuario);
+            setDataUsers(dataUsers.data.usuario);
 
-            console.log({ dataUser, dataPost });
+            console.log({ dataUsers, dataPost });
 
         } catch (error) {
 
@@ -67,7 +67,7 @@ const Post = () => {
     return (
         <>
             <MenuToggle />
-            <PostsCard posts={dataPost} usuario={dataUser} />
+            <PostsCard posts={dataPost} usuarios={dataUsers} />
         </>
     );
 };
