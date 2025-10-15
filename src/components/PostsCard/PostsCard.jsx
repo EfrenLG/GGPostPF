@@ -25,7 +25,7 @@ const PostsCard = ({ posts, usuarios }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
-    const [usuarios, setUsuarios] = useState([]);
+    const [usuariosD, setUsuariosD] = useState([usuarios]);
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
     const [likesData, setLikesData] = useState({});
@@ -234,7 +234,7 @@ const PostsCard = ({ posts, usuarios }) => {
                         >
 
                             <div className="post-header">
-                                <img src={usuarios.find(u => u.id === post.idUser)?.icon || '/default-icon.png'} alt='icon' className='icon' ></img>
+                                <img src={usuariosD.find(u => u.id === post.idUser)?.icon || '/default-icon.png'} alt='icon' className='icon' ></img>
                                 <span className="author-name">{post.username}</span>
                                 <button id={post.idUser}
                                     className="follow-button"
