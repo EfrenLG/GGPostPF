@@ -201,6 +201,7 @@ const PostsCard = ({ posts, usuarios }) => {
         };
     };
 
+
     const filterPosts = posts.filter(post => {
         if (!seeker) return true;
 
@@ -208,9 +209,10 @@ const PostsCard = ({ posts, usuarios }) => {
 
         const categorias = post.categories.split(',');
 
+        const userPost = usuarios.find(u => u.id === post.idUser);
+
         return categorias.some(cat => cat.toLowerCase().includes(seeker.toLowerCase()));
     });
-
 
     return (<>
 
@@ -232,20 +234,20 @@ const PostsCard = ({ posts, usuarios }) => {
                                 }
                             }}
                         >
-                                <div className="post-header">
 
-                                    <img src={usuarios.icon} alt="icon" className="icon" />
-                                    <span className="author-name">{post.username}</span>
-                                    <button id={post.idUser}
-                                        className="follow-button"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleFollow(post.idUser);
-                                        }}
-                                    >
-                                        Seguir
-                                    </button>
-                                </div>
+                            <div className="post-header">
+                                <img src={usuarios.find(u => u.id === post.idUser)?.icon ||  '/default-icon.png'} ></img>
+                                <span className="author-name">{post.username}</span>
+                                <button id={post.idUser}
+                                    className="follow-button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleFollow(post.idUser);
+                                    }}
+                                >
+                                    Seguir
+                                </button>
+                            </div>
 
                             <img src={post.file} alt={post.tittle} className="post-image-card" />
 
