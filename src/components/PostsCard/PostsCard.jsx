@@ -25,6 +25,7 @@ const PostsCard = ({ posts, usuarios }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
+    const [usuarios, setUsuarios] = useState([]);
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
     const [likesData, setLikesData] = useState({});
@@ -201,15 +202,12 @@ const PostsCard = ({ posts, usuarios }) => {
         };
     };
 
-
     const filterPosts = posts.filter(post => {
         if (!seeker) return true;
 
         if (!post.categories || typeof post.categories !== 'string') return false;
 
         const categorias = post.categories.split(',');
-
-        const userPost = usuarios.find(u => u.id === post.idUser);
 
         return categorias.some(cat => cat.toLowerCase().includes(seeker.toLowerCase()));
     });
@@ -236,7 +234,7 @@ const PostsCard = ({ posts, usuarios }) => {
                         >
 
                             <div className="post-header">
-                                <img src={usuarios.find(u => u.id === post.idUser)?.icon ||  '/default-icon.png'} ></img>
+                                <img src={usuarios.find(u => u.id === post.idUser)?.icon || '/default-icon.png'} alt='icon' className='icon' ></img>
                                 <span className="author-name">{post.username}</span>
                                 <button id={post.idUser}
                                     className="follow-button"
