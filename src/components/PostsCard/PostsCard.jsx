@@ -238,23 +238,24 @@ const PostsCard = ({ posts, usuarios }) => {
                                 }
                             }}
                         >
-
-                            <div className="post-header">
-                                <img src={usuariosD.find(u => u.id === post.idUser)?.icon} alt='icon' className='icon' ></img>
-                                <span className="author-name">{post.username}</span>
-                                {post.idUser !== userId &&(
-                                    <button id={post.idUser}
-                                        className="follow-button"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleFollow(post.idUser);
-                                        }}
-                                    >
-                                        Seguir
-                                    </button>
-                                )}
-                            </div>
-
+                            {resultURL !== 'user' && (
+                                <div className="post-header">
+                                    <img src={usuariosD.find(u => u.id === post.idUser)?.icon} alt='icon' className='icon' id={post.idUser} ></img>
+                                    <span className="author-name">{post.username}</span>
+                                    {post.idUser !== userId && (
+                                        <button id={post.idUser}
+                                            className="follow-button"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleFollow(post.idUser);
+                                            }}
+                                        >
+                                            Seguir
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                            
                             <img src={post.file} alt={post.tittle} className="post-image-card" />
 
                             <div className="post-title">{post.tittle}</div>
