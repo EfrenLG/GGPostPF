@@ -232,10 +232,10 @@ const PostsCard = ({ posts, usuarios }) => {
                                 }
                             }}
                         >
-                            {/*usuarios._id != post.idUser && (
-                                {<div className="post-header">
+                            {usuarios.id != post.idUser && (
+                                <div className="post-header">
 
-                                    <img src={post.avatar} alt="avatar" className="avatar" />
+                                    <img src={usuarios.icon} alt="icon" className="icon" />
                                     <span className="author-name">{post.username}</span>
                                     <button id={post.idUser}
                                         className="follow-button"
@@ -246,9 +246,8 @@ const PostsCard = ({ posts, usuarios }) => {
                                     >
                                         Seguir
                                     </button>
-                                </div>}
-                            )*/}
-
+                                </div>
+                            )}
 
                             <img src={post.file} alt={post.tittle} className="post-image-card" />
 
