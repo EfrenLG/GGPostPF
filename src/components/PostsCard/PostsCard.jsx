@@ -25,7 +25,7 @@ const PostsCard = ({ posts, usuarios }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
-    const [usuariosD, setUsuariosD] = useState(usuarios);
+    const [usuariosD, setUsuariosD] = useState([]);
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
     const [likesData, setLikesData] = useState({});
@@ -42,6 +42,11 @@ const PostsCard = ({ posts, usuarios }) => {
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const wsRef = useRef(null);
+
+    useEffect(() => {
+        
+        setUsuariosD(usuarios);
+    }), [usuarios];
 
     useEffect(() => {
         if (!selectedPost) return;
