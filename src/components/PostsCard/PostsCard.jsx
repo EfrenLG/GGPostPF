@@ -232,7 +232,6 @@ const PostsCard = ({ posts, usuarios }) => {
                                 }
                             }}
                         >
-                            {usuarios.id != post.idUser && (
                                 <div className="post-header">
 
                                     <img src={usuarios.icon} alt="icon" className="icon" />
@@ -247,7 +246,6 @@ const PostsCard = ({ posts, usuarios }) => {
                                         Seguir
                                     </button>
                                 </div>
-                            )}
 
                             <img src={post.file} alt={post.tittle} className="post-image-card" />
 
