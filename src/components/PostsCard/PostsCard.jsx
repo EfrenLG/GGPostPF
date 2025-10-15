@@ -34,6 +34,7 @@ const PostsCard = ({ posts, usuarios }) => {
     const [selectedDescription, setSelectedDescription] = useState(null);
     const [selectedCategorie, setSelectedCategorie] = useState(null);
 
+    console.log(usuariosD);
     const resultURL = url();
     const navigate = useNavigate();
 
@@ -234,7 +235,7 @@ const PostsCard = ({ posts, usuarios }) => {
                         >
 
                             <div className="post-header">
-                                <img src={usuariosD.find(u => u.id === post.idUser)?.icon || '/default-icon.png'} alt='icon' className='icon' ></img>
+                                <img src={usuariosD.find(u => u.id === post.idUser)?.icon} alt='icon' className='icon' ></img>
                                 <span className="author-name">{post.username}</span>
                                 <button id={post.idUser}
                                     className="follow-button"
