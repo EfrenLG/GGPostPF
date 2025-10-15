@@ -25,7 +25,7 @@ const PostsCard = ({ posts, usuarios }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
-    const [usuariosD, setUsuariosD] = useState([usuarios]);
+    const [usuariosD, setUsuariosD] = useState(usuarios);
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
     const [likesData, setLikesData] = useState({});
