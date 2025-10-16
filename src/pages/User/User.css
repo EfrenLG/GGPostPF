@@ -1,30 +1,17 @@
-/* ========================================================= */
-/* 🎨 BANNER SUPERIOR DEL PERFIL DE USUARIO */
-/* ========================================================= */
 .user-profile-banner {
   background: linear-gradient(to right, var(--h123), var(--buton-hover));
-  /* Fondo degradado */
   padding: 40px 20px;
-  /* Espaciado interno */
   color: white;
-  /* Texto blanco */
   width: 100%;
-  /* Ocupa todo el ancho */
   position: relative;
   margin-top: 0;
   min-height: 20vh;
-  /* Altura mínima del banner */
   box-sizing: border-box;
-  /* Incluye padding en el tamaño total */
 }
 
-/* ========================================================= */
-/* 🧱 CONTENEDOR PRINCIPAL DEL PERFIL */
-/* ========================================================= */
 .profile-container {
   max-width: 1200px;
   margin: 0 auto;
-  /* Centrado */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,14 +19,10 @@
   gap: 30px;
 }
 
-/* ========================================================= */
-/* 🖼️ FOTO DE PERFIL */
-/* ========================================================= */
 .profile-pic-wrapper {
   width: 160px;
   height: 160px;
   border-radius: 50%;
-  /* Foto circular */
   overflow: hidden;
   cursor: pointer;
   border: 4px solid white;
@@ -49,7 +32,6 @@
 
 .profile-pic-wrapper:hover {
   transform: scale(1.05);
-  /* Zoom al pasar el ratón */
 }
 
 .profile-pic {
@@ -58,9 +40,6 @@
   object-fit: cover;
 }
 
-/* ========================================================= */
-/* 🧮 CONTADOR DE PUBLICACIONES */
-/* ========================================================= */
 .posts-count {
   text-align: center;
 }
@@ -68,18 +47,13 @@
 .posts-count h3 {
   margin: 0;
   font-size: 3rem;
-  /* Número grande */
 }
 
 .posts-count p {
   margin: 0;
   font-size: 1.1rem;
-  /* Descripción pequeña */
 }
 
-/* ========================================================= */
-/* 👤 DATOS DEL USUARIO */
-/* ========================================================= */
 .user-data {
   display: flex;
   flex-direction: column;
@@ -87,9 +61,7 @@
   font-size: 1.1rem;
 }
 
-/* ========================================================= */
-/* 💬 MODAL PARA CAMBIAR FOTO DE PERFIL */
-/* ========================================================= */
+/* Modal */
 
 .modal-title {
   font-size: 1.8rem;
@@ -102,12 +74,10 @@
   margin-bottom: 1.5rem;
 }
 
-/* Input real oculto */
 .file-input {
   display: none;
 }
 
-/* Botón personalizado para seleccionar imagen */
 .custom-file-label {
   display: inline-block;
   padding: 10px 20px;
@@ -123,9 +93,7 @@
   background: #5a2fa6;
 }
 
-/* ========================================================= */
-/* 🖼️ PREVISUALIZACIÓN DE IMAGEN EN EL MODAL */
-/* ========================================================= */
+/* Image preview */
 .modal-image-preview {
   margin: 1rem 0 2rem;
   display: flex;
@@ -141,7 +109,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* Botón para guardar nueva imagen */
 .btn-save-image {
   padding: 12px 24px;
   background: #356cc9;
@@ -158,9 +125,6 @@
   background: #274a94;
 }
 
-/* ========================================================= */
-/* 🌑 FONDO OSCURO DETRÁS DEL MODAL */
-/* ========================================================= */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -175,7 +139,6 @@
   animation: fadeIn 0.3s ease;
 }
 
-/* Contenedor del contenido del modal */
 .modal-content {
   background: var(--layout);
   padding: 30px 40px;
@@ -186,10 +149,6 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.3s ease;
 }
-
-/* ========================================================= */
-/* 🧾 FORMULARIO PARA NUEVAS PUBLICACIONES */
-/* ========================================================= */
 
 .post-title {
   text-align: left;
@@ -215,9 +174,7 @@
   cursor: pointer;
 }
 
-/* ========================================================= */
-/* 🎞️ ANIMACIONES DEL MODAL */
-/* ========================================================= */
+/* Animaciones */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -240,9 +197,6 @@
   }
 }
 
-/* ========================================================= */
-/* 📝 FORMULARIO PARA CREAR POST */
-/* ========================================================= */
 .post-form {
   display: flex;
   flex-direction: column;
@@ -255,20 +209,18 @@
   margin: 2rem auto;
 }
 
-/* Contenedor para imagen del post */
 .post-image-wrapper {
   position: relative;
   width: 420px;
   max-width: 500px;
+  height: auto;
   aspect-ratio: 4 / 3;
 }
 
-/* Input oculto */
 .post-image-wrapper input[type="file"] {
   display: none;
 }
 
-/* Label que actúa como botón de subir imagen */
 .post-image-label {
   display: flex;
   align-items: center;
@@ -289,7 +241,6 @@
   border-color: var(--soft-purple);
 }
 
-/* Imagen cargada en el post */
 .post-image {
   width: 100%;
   height: 100%;
@@ -297,9 +248,7 @@
   display: block;
 }
 
-/* ========================================================= */
-/* 📋 CAMPOS DEL FORMULARIO */
-/* ========================================================= */
+
 .form-group {
   width: 100%;
   max-width: 500px;
@@ -332,9 +281,6 @@
   box-shadow: 0 0 4px rgba(76, 154, 255, 0.4);
 }
 
-/* ========================================================= */
-/* 💾 BOTÓN PARA GUARDAR PUBLICACIÓN */
-/* ========================================================= */
 .btn-save-post {
   padding: 0.75rem 1.5rem;
   margin-top: 1.2rem;
@@ -348,29 +294,21 @@
   color: white;
 }
 
-/* ========================================================= */
-/* ⚠️ MENSAJES DE ERROR */
-/* ========================================================= */
 .mess-titt,
 .mess-des {
   color: red;
 }
 
-/* ========================================================= */
-/* 📰 SECCIÓN DE PUBLICACIONES DEL USUARIO */
-/* ========================================================= */
 .user-profile-post {
   margin: 1rem auto;
 }
 
-/* Encabezado de la lista de posts */
 .post-header {
   display: flex;
   justify-content: center;
   margin-bottom: 1.5rem;
 }
 
-/* Contenedor interno del encabezado */
 .post-header-inner {
   display: flex;
   justify-content: space-between;
@@ -386,7 +324,6 @@
   margin: 0;
 }
 
-/* Botón "Crear nueva publicación" */
 .post-header-inner button {
   background: var(--buton-send);
   color: #fff;
@@ -398,13 +335,11 @@
   transition: background 0.3s;
 }
 
+
 .post-header button:hover {
   background-color: var(--buton-hover);
 }
 
-/* ========================================================= */
-/* 📱 ADAPTACIÓN RESPONSIVE */
-/* ========================================================= */
 @media (max-width: 600px) {
   .post-header-inner {
     flex-direction: column;
@@ -417,9 +352,6 @@
   }
 }
 
-/* ========================================================= */
-/* 🚪 BOTÓN DE CIERRE DE SESIÓN */
-/* ========================================================= */
 .logout-button-wrapper {
   display: flex;
   justify-content: flex-end;
@@ -427,12 +359,10 @@
   margin-top: 1rem;
 }
 
-/* Radio oculto */
 .logout-button-wrapper input[type="radio"] {
   display: none;
 }
 
-/* Botón estilizado para cerrar sesión */
 .logout-label {
   background: linear-gradient(135deg, #ff4e50, #f9d423);
   color: #fff;
