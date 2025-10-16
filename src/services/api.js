@@ -19,7 +19,7 @@ const userService = {
     checkToken: () => api.get('/api/verify'),
 
     //SERVICE USER
-    checkUser: (userData) => api.get('/auth/check', userData),
+    checkUser: (userData) => api.post('/auth/check', userData),
     registerUser: (userData) => api.post('/auth/register', userData),
     emailUser: (userData) => api.post('/email/send-email', userData),
     loginUser: (userData) => api.post('/auth/login', userData),
