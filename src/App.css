@@ -1,3 +1,6 @@
+/* ========================= */
+/* 🟢 RESETEO GLOBAL         */
+/* ========================= */
 body,
 html {
   margin: 0;
@@ -7,12 +10,18 @@ html {
   width: 100vw;
 }
 
+/* ========================= */
+/* 🟢 WRAPPER PRINCIPAL       */
+/* ========================= */
 .layout-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
+/* ========================= */
+/* 🟢 CONTENIDO PRINCIPAL     */
+/* ========================= */
 .main-content {
   flex: 1;
   display: block;

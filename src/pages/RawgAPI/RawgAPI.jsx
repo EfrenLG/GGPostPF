@@ -53,7 +53,7 @@ const RawgAPI = () => {
 
     const navigate = useNavigate();
 
-    const apiKey = import.meta.env.API_KEY;;
+    const apiKey = import.meta.env.VITE_API_KEY;;
 
     useEffect(() => {
         

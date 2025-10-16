@@ -1,8 +1,14 @@
+/* ========================= */
+/* 🟢 HEADER PRINCIPAL       */
+/* ========================= */
 header {
     background: var(--layout);
     padding: 1rem 2rem;
 }
 
+/* ========================= */
+/* 🟢 CONTENIDO DEL HEADER    */
+/* ========================= */
 .header-content {
     display: flex;
     align-items: center;
@@ -14,12 +20,18 @@ header {
     flex-wrap: wrap;
 }
 
+/* ========================= */
+/* 🟢 LOGO DEL HEADER         */
+/* ========================= */
 .header-logo {
     height: 60px;
     width: auto;
     flex-shrink: 0;
 }
 
+/* ========================= */
+/* 🟢 TÍTULO DEL HEADER       */
+/* ========================= */
 .header-title {
     font-size: 2rem;
     margin: 0;
@@ -27,12 +39,18 @@ header {
     text-align: center;
 }
 
+/* ========================= */
+/* 🟢 SECCIÓN DERECHA DEL HEADER */
+/* ========================= */
 .header-right {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
+/* ========================= */
+/* 🟢 ICONO DE PERFIL         */
+/* ========================= */
 .profile-icon {
     width: 50px;
     height: 50px;
@@ -46,6 +64,9 @@ header {
     object-fit: cover;
 }
 
+/* ========================= */
+/* 🟢 BOTÓN DE CAMBIO DE TEMA */
+/* ========================= */
 .theme-toggle-btn {
     background-color: var(--buton-css);
     color: var(--body);
@@ -67,8 +88,9 @@ header {
     transform: scale(0.98);
 }
 
-/* Media Queries */
-
+/* ========================= */
+/* 📱 MEDIA QUERIES          */
+/* ========================= */
 @media (max-width: 700px) {
     .header-content {
         display: flex;

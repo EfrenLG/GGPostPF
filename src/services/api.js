@@ -11,10 +11,10 @@ const api = axios.create({
         'Content-Type': 'application/json'
     },
     withCredentials: true
-
 });
 
 const userService = {
+
     //SERVICE TOKEN CONTROL
     checkToken: () => api.get('/api/verify'),
 

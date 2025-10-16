@@ -1,3 +1,7 @@
+/* ========================= */
+/* 📄 CONTENEDOR PRINCIPAL   */
+/* ========================= */
+
 .page-wrapper {
     display: flex;
     justify-content: center;
@@ -6,7 +10,11 @@
     padding: 2rem;
 }
 
+/* ========================= */
+/* 📱 ADAPTACIÓN A MÓVILES   */
+/* ========================= */
 @media (max-width: 576px) {
+
     .container {
         padding: 1.5rem;
     }

@@ -1,3 +1,6 @@
+/* ========================= */
+/* 🟢 FOOTER PRINCIPAL       */
+/* ========================= */
 footer {
   background-color: var(--layout);
   color: var(--text);
@@ -6,6 +9,9 @@ footer {
   box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
 }
 
+/* ========================= */
+/* 🟢 CONTENIDO DEL FOOTER    */
+/* ========================= */
 .footer-content {
   display: flex;
   flex-direction: column;
@@ -13,6 +19,9 @@ footer {
   gap: 0.75rem;
 }
 
+/* ========================= */
+/* 🟢 TEXTO DEL FOOTER        */
+/* ========================= */
 .footer-content p {
   margin: 0;
   font-weight: 400;

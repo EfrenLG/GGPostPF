@@ -1,278 +1,179 @@
+/* =============================== */
+/* 🎮 MENU TOGGLE - ESTILO PREMIUM */
+/* =============================== */
+
 .menu-container {
-    display: block;
-    width: 100%;
-    position: relative;
+  position: relative;
+  z-index: 1200;
 }
 
+/* =============================== */
+/* BOTÓN DE MENÚ */
+/* =============================== */
 .menu-button {
-    display: block; /* asegúrate de esto */
-    width: fit-content; /* o un ancho fijo */
-    margin: 1rem auto;  /* opcional, para centrar */
-    top: 80px;      /* justo debajo del header */
-    left: 0;
-    z-index: 1100;
-    width: 150px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background-color: var(--accent-blue);
-    color: var(--bone-white);
-    border-radius: 4px;
-    user-select: none; /* opcional, evita selección al clicar */
+  display: inline-block;
+  margin: 1.2rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--layout);
+  background: linear-gradient(135deg, var(--buton-send), var(--accent-magenta));
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  user-select: none;
 }
 
+.menu-button:hover {
+  background: linear-gradient(135deg, var(--buton-hover), var(--h123));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
 
+.menu-button:active {
+  transform: scale(0.97);
+}
+
+/* =============================== */
+/* OVERLAY */
+/* =============================== */
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 1000;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  display: none;
+  z-index: 1000;
+  transition: opacity 0.3s ease;
 }
 
+/* =============================== */
+/* MENÚ LATERAL */
+/* =============================== */
 .side-menu {
-    position: fixed;
-    top: 112px;
-    left: -60%;
-    width: 25%;
-    height: calc(100% - 166px);
-    background-color: var(--accent-blue);
-    padding: 2rem 1rem;
-    color: var(--bone-white);
-    transition: left 0.3s ease;
-    z-index: 1002;
-    border-top-right-radius: 12px;
-    border-bottom-right-radius: 12px;
-    overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 260px;
+  height: 100%;
+  background: var(--layout);
+  color: var(--text);
+  padding: 2rem 1.5rem;
+  border-right: 2px solid var(--h123);
+  box-shadow: 4px 0 18px rgba(0, 0, 0, 0.15);
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1002;
+  overflow-y: auto;
 }
 
-.side-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+/* TEMA OSCURO */
+[data-theme='dark'] .side-menu {
+  background: #1b1b1f;
+  border-right: 2px solid var(--buton-hover);
+}
+
+/* =============================== */
+/* NAVEGACIÓN INTERNA */
+/* =============================== */
+.side-menu nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .side-menu li {
-    margin: 1.5rem 0;
-}
-
-.side-menu li,
-.side-menu li a {
-  cursor: pointer;
+  margin: 1.4rem 0;
 }
 
 .side-menu a {
-    position: relative;
-    color: var(--bone-white);
-    text-decoration: none;
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding-left: 6px;
+  transition: all 0.3s ease;
 }
 
-.side-menu a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0%;
-    height: 2px;
-    background-color: #B8A9F5;
-    transition: width 0.3s ease;
+.side-menu a::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 0;
+  background: linear-gradient(180deg, var(--buton-send), var(--accent-magenta));
+  border-radius: 4px;
+  transition: height 0.3s ease;
 }
 
 .side-menu a:hover {
-    color: #B8A9F5;
+  color: var(--h123);
+  transform: translateX(4px);
 }
 
-.side-menu a:hover::after {
-    width: 100%;
+.side-menu a:hover::before {
+  height: 60%;
 }
 
-#menu-toggle:checked~.side-menu {
-    left: 0;
+/* =============================== */
+/* ACTIVACIÓN */
+/* =============================== */
+#menu-toggle:checked ~ .side-menu {
+  left: 0;
+}
+
+#menu-toggle:checked ~ .overlay {
+  display: block;
+  opacity: 1;
 }
 
 #menu-toggle:checked ~ .menu-button {
   display: none;
 }
 
-#menu-toggle:checked~.overlay {
-    display: block;
-}
-
+/* =============================== */
+/* RESPONSIVE */
+/* =============================== */
 @media (max-width: 1024px) {
-    .side-menu {
-        width: 25%;
-        left: -45%;
-    }
-
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
+  .side-menu {
+    width: 240px;
+  }
 }
 
-@media (max-width: 784px) {
-    .side-menu {
-        width: 35%;
-        left: -80%;
-        top: 178px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
+@media (max-width: 768px) {
+  .menu-button {
+    font-size: 1.1rem;
+    margin: 1rem;
+  }
 
-    .side-menu a {
-        font-size: 1rem;
-    }
+  .side-menu {
+    width: 70%;
+    max-width: 280px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
+  }
 
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
+  .side-menu a {
+    font-size: 1rem;
+  }
 }
 
-@media (max-width: 688px) {
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 232px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
+@media (max-width: 480px) {
+  .menu-button {
+    width: 100%;
+    text-align: center;
+    margin: 1rem auto;
+    font-size: 1.1rem;
+  }
 
-    .side-menu a {
-        font-size: 1rem;
-    }
-
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
-}
-
-@media (max-width: 684px) {
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 232px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
-
-    .side-menu a {
-        font-size: 1rem;
-    }
-
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
-}
-
-@media (max-width: 622px) {
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 271px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
-
-    .side-menu a {
-        font-size: 1rem;
-    }
-
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
-}
-
-@media (max-width: 600px) {
-    .side-menu {
-        width: 25%;
-        left: -80%;
-        top: 210px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
-
-    .side-menu a {
-        font-size: 1rem;
-    }
-
-    #menu-toggle:checked~.side-menu {
-        left: 0;
-    }
-}
-
-@media (max-width: 599px) {
-    .header-content {
-        flex-direction: column;
-    }
-
-    .header-logo {
-        height: 60px;
-        margin-bottom: 0.5rem;
-    }
-
-    .header-title {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 210px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .header-content {
-        flex-direction: column;
-    }
-
-    .header-logo {
-        height: 60px;
-        margin-bottom: 0.5rem;
-    }
-
-    .header-title {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 210px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
-}
-
-@media (max-width: 482px) {
-    .header-content {
-        flex-direction: column;
-    }
-
-    .header-logo {
-        height: 60px;
-        margin-bottom: 0.5rem;
-    }
-
-    .header-title {
-        font-size: 1.5rem;
-        text-align: center;
-    }
-
-    .side-menu {
-        width: 40%;
-        left: -80%;
-        top: 240px;
-        height: calc(100% - 264px);
-        padding: 1.5rem 1rem;
-    }
+  .side-menu {
+    width: 85%;
+  }
 }
