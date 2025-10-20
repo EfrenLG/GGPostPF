@@ -259,23 +259,23 @@ const PostsCard = ({ posts, usuarios }) => {
                             <img src={post.file} alt={post.tittle} className="post-image-card" />
 
                             <div className="post-title">{post.tittle}</div>
-                            <div className="post-description">
-                                {post.description.length > 100 ? (
-                                    <>
-                                        {post.description.slice(0, 100)}...
-                                        <span
-                                            className="ver-mas"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handlePostClick(post);
-                                                post.idUser !== userId && sendView(post._id);
-                                            }}
-                                        >
-                                            Ver más
-                                        </span>
-                                    </>
-                                ) : (
-                                    post.description
+                            <div className="post-description-container">
+                                <div className="post-description">
+                                    {post.description.length > 100
+                                        ? post.description.slice(0, 100) + "..."
+                                        : post.description}
+                                </div>
+                                {post.description.length > 100 && (
+                                    <span
+                                        className="ver-mas"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handlePostClick(post);
+                                            post.idUser !== userId && sendView(post._id);
+                                        }}
+                                    >
+                                        Ver más
+                                    </span>
                                 )}
                             </div>
 

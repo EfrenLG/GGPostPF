@@ -122,31 +122,36 @@
   color: #333;
 }
 
+.post-description-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .post-description {
   font-size: 1rem;
   color: var(--text);
-  max-height: 3.6em; 
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; 
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  position: relative;
+  max-height: 3.6em;
 }
 
 .ver-mas {
   color: #007bff;
   cursor: pointer;
   font-weight: 500;
-  margin-left: 5px;
+  margin-top: 4px;
   transition: color 0.2s ease;
+  align-self: flex-end;
 }
 
 .ver-mas:hover {
   color: #0056b3;
   text-decoration: underline;
 }
-
 
 .post-footer {
   display: flex;
