@@ -125,7 +125,28 @@
 .post-description {
   font-size: 1rem;
   color: var(--text);
+  max-height: 3.6em; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
+  position: relative;
 }
+
+.ver-mas {
+  color: #007bff;
+  cursor: pointer;
+  font-weight: 500;
+  margin-left: 5px;
+  transition: color 0.2s ease;
+}
+
+.ver-mas:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
 
 .post-footer {
   display: flex;
