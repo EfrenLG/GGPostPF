@@ -255,7 +255,7 @@ const PostsCard = ({ posts, usuarios }) => {
                                     )}
                                 </div>
                             )}
-                            
+
                             <img src={post.file} alt={post.tittle} className="post-image-card" />
 
                             <div className="post-title">{post.tittle}</div>
@@ -317,7 +317,8 @@ const PostsCard = ({ posts, usuarios }) => {
                         required
                     />
 
-                    <input type="text" id="modal-description"
+                    <textarea
+                        id="modal-description"
                         value={selectedDescription}
                         disabled={disabledV}
                         onChange={(e) => setSelectedDescription(e.target.value)}
