@@ -52,7 +52,7 @@ const Login = () => {
             localStorage.setItem('userIcon', loginUserR.data.user.icon);
             setIcon(loginUserR.data.user.icon);
 
-            navigate('/post');
+            navigate('/posts');
 
         } catch (error) {
             console.error("Error al verificar el usuario:", error);

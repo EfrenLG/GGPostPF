@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Estilos
-import './Post.css';
+import './Posts.css';
 
 // Servicios
 import userService from '../../services/api';
@@ -15,7 +15,7 @@ import MenuToggle from '../../components/MenuToggle/MenuToggle';
 import PostsCard from '../../components/PostsCard/PostsCard';
 
 
-const Post = () => {
+const Posts = () => {
 
     const [dataPost, setDataPost] = useState([]);
     const [dataUsers, setDataUsers] = useState([]);
@@ -72,4 +72,4 @@ const Post = () => {
     );
 };
 
-export default Post;
+export default Posts;

@@ -19,7 +19,7 @@ import ChatGPT from './components/ChatGPT/ChatGPT.jsx';
 // Páginas
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
-import Post from './pages/Post/Post.jsx';
+import Posts from './pages/Posts/Posts.jsx';
 import RawgAPI from './pages/RawgAPI/RawgAPI.jsx';
 import User from './pages/User/User.jsx';
 
@@ -34,7 +34,7 @@ function App() {
             <Routes>
               <Route path='/' element={<Login />} />
               <Route path='/register' element={<Register />} />
-              <Route path='/post' element={<Post />} />
+              <Route path='/posts' element={<Posts />} />
               <Route path='/rawgAPI' element={<RawgAPI />} />
               <Route path='/user' element={<User />} />
             </Routes>
