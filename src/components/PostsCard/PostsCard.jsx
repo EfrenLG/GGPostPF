@@ -122,6 +122,7 @@ const PostsCard = ({ posts, usuarios }) => {
 
     const handlePostClick = (post) => {
         setselectedPost(post);
+        navigate('/post/' + selectedPost._id);
     };
     /*
         const closeModal = () => {
@@ -314,11 +315,6 @@ const PostsCard = ({ posts, usuarios }) => {
                 ))}
             </div>
         </div>
-
-        {selectedPost && (() => {
-            // <PostCard postId={selectedPost._id} postFile={selectedPost.file} postTitle={selectedPost.tittle} postDescription={selectedPost.description} postCategories={selectedPost.categories} />
-            navigate('/post');
-        })}
     </>
     );
 };
