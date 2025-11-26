@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // Estilos
-import './Posts.css';
+import './Post.css';
 
 // Servicios
 import userService from '../../services/api';
