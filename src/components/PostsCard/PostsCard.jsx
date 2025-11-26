@@ -29,18 +29,18 @@ const PostsCard = ({ posts, usuarios }) => {
     const [usuariosD, setUsuariosD] = useState([]);
     const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
-    /*const [likesData, setLikesData] = useState({});
+    const [likesData, setLikesData] = useState({});
     const [disabledV, setDisabled] = useState(true);
     const [selectedTitle, setSelectedTitle] = useState(null);
     const [selectedDescription, setSelectedDescription] = useState(null);
-    const [selectedCategorie, setSelectedCategorie] = useState(null);*/
+    const [selectedCategorie, setSelectedCategorie] = useState(null);
 
     const resultURL = url();
     const navigate = useNavigate();
 
     //CHAT
-   /* const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');*/
+    /* const [messages, setMessages] = useState([]);
+     const [newMessage, setNewMessage] = useState('');*/
     const wsRef = useRef(null);
 
     useEffect(() => {
@@ -87,22 +87,22 @@ const PostsCard = ({ posts, usuarios }) => {
             setMessages([]);
         };
     }, [selectedPost]);
-/*
-    const handleSendMessage = () => {
-        if (!newMessage.trim()) return;
-
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.send(
-                JSON.stringify({
-                    type: 'message',
-                    postId: selectedPost._id,
-                    user: username,
-                    message: newMessage,
-                })
-            );
-            setNewMessage('');
-        }
-    };*/
+    /*
+        const handleSendMessage = () => {
+            if (!newMessage.trim()) return;
+    
+            if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
+                wsRef.current.send(
+                    JSON.stringify({
+                        type: 'message',
+                        postId: selectedPost._id,
+                        user: username,
+                        message: newMessage,
+                    })
+                );
+                setNewMessage('');
+            }
+        };*/
 
     useEffect(() => {
         if (resultURL === 'user') {
@@ -123,10 +123,10 @@ const PostsCard = ({ posts, usuarios }) => {
     const handlePostClick = (post) => {
         setselectedPost(post);
     };
-/*
-    const closeModal = () => {
-        setselectedPost(null);
-    };*/
+    /*
+        const closeModal = () => {
+            setselectedPost(null);
+        };*/
 
     // Servicios
     const sendView = async (idPost) => {
@@ -167,47 +167,47 @@ const PostsCard = ({ posts, usuarios }) => {
             console.log('Error cargando los post', error);
         };
     };
-/*
-    const editPost = async (idPost) => {
-
-        const dataPost = {
-            'idPost': idPost,
-            'tittlePost': selectedTitle,
-            'descriptionPost': selectedDescription,
-            'categoriesPost': selectedCategorie
-        };
-
-        try {
-
-            await userService.editPost(dataPost);
-
-            window.location.reload();
-        } catch (error) {
-
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
+    /*
+        const editPost = async (idPost) => {
+    
+            const dataPost = {
+                'idPost': idPost,
+                'tittlePost': selectedTitle,
+                'descriptionPost': selectedDescription,
+                'categoriesPost': selectedCategorie
             };
-            console.log('Error cargando los post', error);
-        };
-    };
-
-    const deletePost = async (idPost) => {
-        const confirmed = confirm('Va a eliminar un post, desea seguir?');
-        if (!confirmed) return;
-
-        try {
-
-            await userService.deletePost(idPost);
-            window.location.reload();
-
-        } catch (error) {
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
+    
+            try {
+    
+                await userService.editPost(dataPost);
+    
+                window.location.reload();
+            } catch (error) {
+    
+                if (error.response.data.error === 'Acceso no autorizado') {
+                    navigate('/')
+                };
+                console.log('Error cargando los post', error);
             };
-            console.error("Error eliminando el post:", error);
-            alert("No se pudo eliminar el post. Inténtalo de nuevo.");
         };
-    };*/
+    
+        const deletePost = async (idPost) => {
+            const confirmed = confirm('Va a eliminar un post, desea seguir?');
+            if (!confirmed) return;
+    
+            try {
+    
+                await userService.deletePost(idPost);
+                window.location.reload();
+    
+            } catch (error) {
+                if (error.response.data.error === 'Acceso no autorizado') {
+                    navigate('/')
+                };
+                console.error("Error eliminando el post:", error);
+                alert("No se pudo eliminar el post. Inténtalo de nuevo.");
+            };
+        };*/
 
     const filterPosts = posts.filter(post => {
         if (!seeker) return true;
@@ -315,10 +315,10 @@ const PostsCard = ({ posts, usuarios }) => {
             </div>
         </div>
 
-        {selectedPost && (() => { 
-           // <PostCard postId={selectedPost._id} postFile={selectedPost.file} postTitle={selectedPost.tittle} postDescription={selectedPost.description} postCategories={selectedPost.categories} />
-            navigate('/post'); 
-            })}
+        {selectedPost && (() => {
+            // <PostCard postId={selectedPost._id} postFile={selectedPost.file} postTitle={selectedPost.tittle} postDescription={selectedPost.description} postCategories={selectedPost.categories} />
+            navigate('/post');
+        })}
     </>
     );
 };
