@@ -11,10 +11,9 @@ import { url } from '../../functions/url';
 
 // Componentes
 import AdBanner from '../AdBanner/AdBanner';
-import PostCard from '../../components/PostCard/PostCard';
 
 // Estilos
-import './PostsCard.css';
+import './PostCard.css';
 
 // Variables
 
@@ -22,7 +21,7 @@ const adClient = import.meta.env.VITE_ADSLOT;
 const adSlot = import.meta.env.VITE_ADCLIENT;
 
 
-const PostsCard = ({ posts, usuarios }) => {
+const PostCard = ({ post, file, tittle, description, categories }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
@@ -323,7 +322,7 @@ const PostsCard = ({ posts, usuarios }) => {
     );
 };
 
-export default PostsCard;
+export default PostCard;
 
 /*
             <div id="postModal" className='modal' onClick={(e) => {

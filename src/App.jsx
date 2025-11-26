@@ -20,6 +20,7 @@ import ChatGPT from './components/ChatGPT/ChatGPT.jsx';
 import Login from './pages/Login/Login.jsx';
 import Register from './pages/Register/Register.jsx';
 import Posts from './pages/Posts/Posts.jsx';
+import Post from './pages/Post/Post.jsx';
 import RawgAPI from './pages/RawgAPI/RawgAPI.jsx';
 import User from './pages/User/User.jsx';
 
