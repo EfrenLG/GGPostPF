@@ -36,6 +36,7 @@ function App() {
               <Route path='/' element={<Login />} />
               <Route path='/register' element={<Register />} />
               <Route path='/posts' element={<Posts />} />
+              <Route path='/post/:id' element={<Post />} />
               <Route path='/rawgAPI' element={<RawgAPI />} />
               <Route path='/user' element={<User />} />
             </Routes>
