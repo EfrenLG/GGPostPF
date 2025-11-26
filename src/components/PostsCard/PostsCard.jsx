@@ -316,7 +316,7 @@ const PostsCard = ({ posts, usuarios }) => {
         </div>
 
         {selectedPost && (() => { 
-            <PostCard postId={selectedPost._id} postFile={selectedPost.file} postTitle={selectedPost.tittle} postDescription={selectedPost.description} postCategories={selectedPost.categories} />
+           // <PostCard postId={selectedPost._id} postFile={selectedPost.file} postTitle={selectedPost.tittle} postDescription={selectedPost.description} postCategories={selectedPost.categories} />
             navigate('/post'); 
             })}
     </>

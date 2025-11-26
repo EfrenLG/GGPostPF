@@ -12,7 +12,7 @@ import userService from '../../services/api';
 
 // Componentes
 import MenuToggle from '../../components/MenuToggle/MenuToggle';
-import PostsCard from '../../components/PostsCard/PostsCard';
+import PostCard from '../../components/PostCard/PostCard';
 
 
 const Post = () => {
@@ -67,9 +67,9 @@ const Post = () => {
     return (
         <>
             <MenuToggle />
-            <PostsCard posts={dataPost} usuarios={dataUsers} />
+            <PostCard posts={dataPost} usuarios={dataUsers} />
         </>
     );
 };
 
-export default Posts;
+export default Post;
