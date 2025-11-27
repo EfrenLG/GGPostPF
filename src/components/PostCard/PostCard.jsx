@@ -21,7 +21,7 @@ const adClient = import.meta.env.VITE_ADSLOT;
 const adSlot = import.meta.env.VITE_ADCLIENT;
 
 
-const PostCard = ({ post, file, tittle, description, categories }) => {
+const PostCard = ({ post, user }) => {
 
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
