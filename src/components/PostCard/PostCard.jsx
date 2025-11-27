@@ -87,75 +87,81 @@ const PostCard = ({ post, user }) => {
     return (
         <div className="post-page">
 
-            <div className="post-header-section">
-                <img src={user.icon} className="post-user-icon" alt="user icon" />
-                <div className="post-user-info">
-                    <h2>{user.username}</h2>
+            {/* Top User Bar */}
+            <div className="post-header">
+                <img src={user.icon} className="post-user-avatar" alt="user avatar" />
+
+                <div className="post-user-block">
+                    <h3>{user.username}</h3>
                     <span className="post-date">{post.date}</span>
-                    {post.idUser !== userId && (
-                        <button id={post.idUser}
-                            className="follow-button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleFollow(post.idUser);
-                            }}
-                        >
-                            Seguir
-                        </button>
-                    )}
                 </div>
+
+                {post.idUser !== userId && (
+                    <button className="follow-btn" onClick={() => handleFollow(post.idUser)}>
+                        Seguir
+                    </button>
+                )}
             </div>
 
-            <img src={post.file} alt={post.tittle} className="post-image-full" />
+            {/* Full Media */}
+            <div className="post-media-container">
+                <img src={post.file} alt={post.tittle} className="post-media" />
+            </div>
 
-            <div className="post-content">
+            {/* Post Body */}
+            <div className="post-body">
                 <h1 className="post-title">{post.tittle}</h1>
                 <p className="post-description">{post.description}</p>
 
-                <div className="post-likes">
-                    {post.likes?.includes(userId) ? (
-                        <i className="fa fa-heart" style={{ color: '#ff0000' }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                sendLike(post._id, userId);
-                                post.likes = post.likes.filter(id => id !== userId);
-                                setLikesData(prev => ({ ...prev }));
-                            }}></i>
-                    ) : (
-                        <i className="fa-regular fa-heart"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                sendLike(post._id, userId);
-                                post.likes = [...(post.likes || []), userId];
-                                setLikesData(prev => ({ ...prev }));
-                            }}></i>
-                    )}
-                    <span className="like-number">{post.likes?.length || 0}</span>
-                </div>
+                <div className="post-actions">
+                    <div className="likes-handler" onClick={() => sendLike(post._id, userId)}>
+                        {post.likes?.includes(userId) ? (
+                            <i className="fa fa-heart" style={{ color: '#ff0000' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    sendLike(post._id, userId);
+                                    post.likes = post.likes.filter(id => id !== userId);
+                                    setLikesData(prev => ({ ...prev }));
+                                }}></i>
+                        ) : (
+                            <i className="fa-regular fa-heart"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    sendLike(post._id, userId);
+                                    post.likes = [...(post.likes || []), userId];
+                                    setLikesData(prev => ({ ...prev }));
+                                }}></i>
+                        )}
+                        <span className="like-number">{post.likes?.length || 0}</span>
+                    </div>
 
-                <div className="post-categories">
-                    {post.categories?.split(",").map(cat => (
-                        <span key={cat} className="cat-tag">#{cat.trim()}</span>
-                    ))}
+                    <div className="categories-container">
+                        {post.categories?.split(",").map(cat => (
+                            <span key={cat} className="category-tag">
+                                #{cat.trim()}
+                            </span>
+                        ))}
+                    </div>
                 </div>
             </div>
 
-            <div className="chat-section">
-                <h2>Comentarios</h2>
+            {/* Comments Section */}
+            <div className="comments-section">
+                <h3>Comentarios</h3>
 
-                <div className="chat-messages">
-                    {messages.length === 0 && (
-                        <p className="no-msg">Todavía no hay mensajes</p>
+                <div className="comments-box">
+                    {messages.length === 0 ? (
+                        <p className="no-comments">Sé el primero en comentar</p>
+                    ) : (
+                        messages.map((msg, i) => (
+                            <div key={i} className="comment">
+                                <strong>{msg.username}:</strong> {msg.message}
+                            </div>
+                        ))
                     )}
-
-                    {messages.map((msg, i) => (
-                        <div key={i} className="chat-message">
-                            <strong>{username}:</strong> {msg.message}
-                        </div>
-                    ))}
                 </div>
 
-                <div className="chat-input-box">
+                <div className="comment-input">
                     <input
                         type="text"
                         placeholder="Escribe un comentario..."
@@ -168,6 +174,7 @@ const PostCard = ({ post, user }) => {
             </div>
         </div>
     );
+
 };
 
 export default PostCard;
