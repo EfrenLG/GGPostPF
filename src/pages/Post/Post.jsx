@@ -62,7 +62,7 @@ const Post = () => {
     return (
         <>
             <MenuToggle />
-            <PostCard post={dataPost} usuario={dataUser} />
+            <PostCard post={dataPost} user={dataUser} />
         </>
     );
 };
