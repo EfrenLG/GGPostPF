@@ -15,17 +15,12 @@ const PostCard = ({ post, user }) => {
 
     // Likes
     const [likesData, setLikesData] = useState({});
-
-    // Chat
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const wsRef = useRef(null);
 
     const navigate = useNavigate();
 
-    // --------------------------
-    // 🔌 WEBSOCKET CHAT CONEXIÓN
-    // --------------------------
     useEffect(() => {
         const URL_API = import.meta.env.VITE_URL_API;
         const ws = new WebSocket(URL_API);
@@ -69,9 +64,6 @@ const PostCard = ({ post, user }) => {
         setNewMessage("");
     };
 
-    // --------------------
-    // ❤️ ENVIAR LIKE
-    // --------------------
     const sendLike = async (idPost, idUser) => {
 
         const postData = {
@@ -95,7 +87,6 @@ const PostCard = ({ post, user }) => {
     return (
         <div className="post-page">
 
-            {/* HEADER DEL POST */}
             <div className="post-header-section">
                 <img src={user.icon} className="post-user-icon" alt="user icon" />
                 <div className="post-user-info">
@@ -104,10 +95,8 @@ const PostCard = ({ post, user }) => {
                 </div>
             </div>
 
-            {/* IMAGEN DEL POST */}
             <img src={post.file} alt={post.tittle} className="post-image-full" />
 
-            {/* INFO DEL POST */}
             <div className="post-content">
                 <h1 className="post-title">{post.tittle}</h1>
                 <p className="post-description">{post.description}</p>
@@ -151,7 +140,7 @@ const PostCard = ({ post, user }) => {
 
                     {messages.map((msg, i) => (
                         <div key={i} className="chat-message">
-                            <strong>{msg.username || "Anon"}:</strong> {msg.message}
+                            <strong>{username}:</strong> {msg.message}
                         </div>
                     ))}
                 </div>
