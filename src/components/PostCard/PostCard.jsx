@@ -9,6 +9,11 @@ import userService from "../../services/api";
 import "./PostCard.css";
 
 const PostCard = ({ post, user }) => {
+
+    if (!post || !user) {
+        return <div>Cargando...</div>;
+    };
+    
     const username = localStorage.getItem("username");
     const userId = localStorage.getItem("userId");
 
