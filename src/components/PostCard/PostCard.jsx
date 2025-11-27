@@ -92,6 +92,17 @@ const PostCard = ({ post, user }) => {
                 <div className="post-user-info">
                     <h2>{user.username}</h2>
                     <span className="post-date">{post.date}</span>
+                    {post.idUser !== userId && (
+                        <button id={post.idUser}
+                            className="follow-button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleFollow(post.idUser);
+                            }}
+                        >
+                            Seguir
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -129,7 +140,6 @@ const PostCard = ({ post, user }) => {
                 </div>
             </div>
 
-            {/* CHAT DEL POST */}
             <div className="chat-section">
                 <h2>Comentarios</h2>
 
