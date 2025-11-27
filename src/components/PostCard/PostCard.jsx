@@ -14,7 +14,7 @@ const PostCard = ({ post, user }) => {
     const userId = localStorage.getItem("userId");
 
     // Likes
-    const [likes, setLikes] = useState(post.likes || []);
+    const [likesData, setLikesData] = useState({});
 
     // Chat
     const [messages, setMessages] = useState([]);
@@ -72,22 +72,24 @@ const PostCard = ({ post, user }) => {
     // --------------------
     // ❤️ ENVIAR LIKE
     // --------------------
-    const handleLike = async () => {
-        try {
-            await userService.likePost({
-                idPost: post._id,
-                userId
-            });
+    const sendLike = async (idPost, idUser) => {
 
-            setLikes(prev =>
-                prev.includes(userId)
-                    ? prev.filter(id => id !== userId)
-                    : [...prev, userId]
-            );
+        const postData = {
+            'idPost': idPost,
+            'userId': idUser
+        };
+
+        try {
+
+            await userService.likePost(postData);
 
         } catch (error) {
-            console.error(error);
-        }
+
+            if (error.response.data.error === 'Acceso no autorizado') {
+                navigate('/')
+            };
+            console.log('Error cargando los post', error);
+        };
     };
 
     return (
@@ -111,12 +113,24 @@ const PostCard = ({ post, user }) => {
                 <p className="post-description">{post.description}</p>
 
                 <div className="post-likes">
-                    {likes.includes(userId) ? (
-                        <i className="fa fa-heart heart-liked" onClick={handleLike}></i>
+                    {post.likes?.includes(userId) ? (
+                        <i className="fa fa-heart" style={{ color: '#ff0000' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                sendLike(post._id, userId);
+                                post.likes = post.likes.filter(id => id !== userId);
+                                setLikesData(prev => ({ ...prev }));
+                            }}></i>
                     ) : (
-                        <i className="fa-regular fa-heart heart-not-liked" onClick={handleLike}></i>
+                        <i className="fa-regular fa-heart"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                sendLike(post._id, userId);
+                                post.likes = [...(post.likes || []), userId];
+                                setLikesData(prev => ({ ...prev }));
+                            }}></i>
                     )}
-                    <span>{likes.length} likes</span>
+                    <span className="like-number">{post.likes?.length || 0}</span>
                 </div>
 
                 <div className="post-categories">
