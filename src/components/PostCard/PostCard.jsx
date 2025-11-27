@@ -22,7 +22,10 @@ const adSlot = import.meta.env.VITE_ADCLIENT;
 
 
 const PostCard = ({ post, user }) => {
-
+    return (<>
+        <p>HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
+    </>)
+/*
     const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
     const [usuariosD, setUsuariosD] = useState([]);
@@ -319,7 +322,7 @@ const PostCard = ({ post, user }) => {
             navigate('/post'); 
             })}
     </>
-    );
+    );*/
 };
 
 export default PostCard;
