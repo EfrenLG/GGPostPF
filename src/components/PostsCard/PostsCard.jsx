@@ -26,7 +26,6 @@ const PostsCard = ({ posts, usuarios }) => {
     //const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
     const [usuariosD, setUsuariosD] = useState([]);
-    const [selectedPost, setselectedPost] = useState(null);
     const [seeker, setSeeker] = useState('');
     const [likesData, setLikesData] = useState({});
 
@@ -41,8 +40,7 @@ const PostsCard = ({ posts, usuarios }) => {
 
 
     const handlePostClick = (post) => {
-        setselectedPost(post);
-        navigate('/post/' + selectedPost._id);
+        navigate('/post/' + post._id);
     };
 
     // Servicios
