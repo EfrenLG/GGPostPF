@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 // Navegación
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams  } from 'react-router-dom';
 
 // Estilos
 import './Post.css';
@@ -18,11 +18,11 @@ import PostCard from '../../components/PostCard/PostCard';
 const Post = () => {
 
     const [dataPost, setDataPost] = useState([]);
-    const [dataUsers, setDataUsers] = useState([]);
+    const [dataUser, setDataUser] = useState([]);
 
     const navigate = useNavigate();
+    const { id } = useParams();
 
-    const userId = localStorage.getItem('userId');
 
     useEffect(() => {
 
@@ -32,7 +32,7 @@ const Post = () => {
 
                 if (res.data.message === 'Token válido') {
                     console.log('Token válido');
-                    loadPost(userId);
+                    loadPost();
 
                 } else {
                     navigate('/');
@@ -48,15 +48,10 @@ const Post = () => {
     const loadPost = async () => {
 
         try {
-            const getPostsR = await userService.getPosts();
+            const getPost = await userService.getPost(id);
 
-            setDataPost(getPostsR.data.posts);
-
-            const getUsersR = await userService.getUsers();
-
-            setDataUsers(getUsersR.data);
-
-            console.log({ dataUsers, dataPost });
+            setDataPost(getPost.data.post);
+            setDataUser(getPost.data.user);
 
         } catch (error) {
 
@@ -67,7 +62,7 @@ const Post = () => {
     return (
         <>
             <MenuToggle />
-            <PostCard post={dataPost} usuario={dataUsers} />
+            <PostCard post={dataPost} usuario={dataUser} />
         </>
     );
 };
