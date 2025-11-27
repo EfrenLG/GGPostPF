@@ -29,7 +29,7 @@ const Header = () => {
                 alt="Logo GGPost"
                 className="header-logo"
                 style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/')} />
+                onClick={() => navigate('/posts')} />
         );
     } else {
 
