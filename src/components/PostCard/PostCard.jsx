@@ -1,397 +1,159 @@
 // React
-import React from 'react';
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
-// React Router
-import { useNavigate } from 'react-router-dom';
-
-// Servicios y funciones
-import userService from '../../services/api';
-import { url } from '../../functions/url';
-
-// Componentes
-import AdBanner from '../AdBanner/AdBanner';
+// Servicios
+import userService from "../../services/api";
 
 // Estilos
-import './PostCard.css';
-
-// Variables
-
-const adClient = import.meta.env.VITE_ADSLOT;
-const adSlot = import.meta.env.VITE_ADCLIENT;
-
+import "./PostCard.css";
 
 const PostCard = ({ post, user }) => {
-    return (<>
-        <p>HOLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-    </>)
-/*
-    const username = localStorage.getItem('username');
-    const userId = localStorage.getItem('userId');
-    const [usuariosD, setUsuariosD] = useState([]);
-    const [selectedPost, setselectedPost] = useState(null);
-    const [seeker, setSeeker] = useState('');
-    const [likesData, setLikesData] = useState({});
-    const [disabledV, setDisabled] = useState(true);
-    const [selectedTitle, setSelectedTitle] = useState(null);
-    const [selectedDescription, setSelectedDescription] = useState(null);
-    const [selectedCategorie, setSelectedCategorie] = useState(null);
+    const username = localStorage.getItem("username");
+    const userId = localStorage.getItem("userId");
 
-    const resultURL = url();
-    const navigate = useNavigate();
+    // Likes
+    const [likes, setLikes] = useState(post.likes || []);
 
-    //CHAT
+    // Chat
     const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState('');
+    const [newMessage, setNewMessage] = useState("");
     const wsRef = useRef(null);
 
-    useEffect(() => {
-        if (Array.isArray(usuarios)) {
-            setUsuariosD(usuarios);
-        }
-    }), [usuarios];
+    const navigate = useNavigate();
 
+    // --------------------------
+    // 🔌 WEBSOCKET CHAT CONEXIÓN
+    // --------------------------
     useEffect(() => {
-        if (!selectedPost) return;
-
         const URL_API = import.meta.env.VITE_URL_API;
-
         const ws = new WebSocket(URL_API);
+
         wsRef.current = ws;
 
         ws.onopen = () => {
-            console.log('WebSocket conectado');
-
-            ws.send(JSON.stringify({ type: 'join', postId: selectedPost._id }));
+            ws.send(JSON.stringify({
+                type: "join",
+                postId: post._id
+            }));
         };
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
 
-            if (data.type === 'history') {
+            if (data.type === "history") {
                 setMessages(data.messages);
-            } else if (data.type === 'message') {
-                setMessages((prev) => [...prev, data]);
+            } else if (data.type === "message") {
+                setMessages(prev => [...prev, data]);
             }
-        };
-
-        ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
-        };
-
-        ws.onclose = () => {
-            console.log('WebSocket cerrado');
         };
 
         return () => {
             ws.close();
-            wsRef.current = null;
-            setMessages([]);
         };
-    }, [selectedPost]);
+    }, [post._id]);
 
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
 
-        if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) {
-            wsRef.current.send(
-                JSON.stringify({
-                    type: 'message',
-                    postId: selectedPost._id,
-                    user: username,
-                    message: newMessage,
-                })
+        wsRef.current?.send(
+            JSON.stringify({
+                type: "message",
+                postId: post._id,
+                username,
+                message: newMessage
+            })
+        );
+
+        setNewMessage("");
+    };
+
+    // --------------------
+    // ❤️ ENVIAR LIKE
+    // --------------------
+    const handleLike = async () => {
+        try {
+            await userService.likePost({
+                idPost: post._id,
+                userId
+            });
+
+            setLikes(prev =>
+                prev.includes(userId)
+                    ? prev.filter(id => id !== userId)
+                    : [...prev, userId]
             );
-            setNewMessage('');
+
+        } catch (error) {
+            console.error(error);
         }
     };
 
-    useEffect(() => {
-        if (resultURL === 'user') {
-            setDisabled(false);
-        } else {
-            setDisabled(true);
-        }
-    }, [resultURL]);
+    return (
+        <div className="post-page">
 
-    useEffect(() => {
-        if (selectedPost) {
-            setSelectedTitle(selectedPost.tittle || '');
-            setSelectedDescription(selectedPost.description || '');
-            setSelectedCategorie(selectedPost.categories || '');
-        }
-    }, [selectedPost]);
+            {/* HEADER DEL POST */}
+            <div className="post-header-section">
+                <img src={user.icon} className="post-user-icon" alt="user icon" />
+                <div className="post-user-info">
+                    <h2>{user.username}</h2>
+                    <span className="post-date">{post.date}</span>
+                </div>
+            </div>
 
-    const handlePostClick = (post) => {
-        setselectedPost(post);
-    };
+            {/* IMAGEN DEL POST */}
+            <img src={post.file} alt={post.tittle} className="post-image-full" />
 
-    const closeModal = () => {
-        setselectedPost(null);
-    };
+            {/* INFO DEL POST */}
+            <div className="post-content">
+                <h1 className="post-title">{post.tittle}</h1>
+                <p className="post-description">{post.description}</p>
 
-    // Servicios
-    const sendView = async (idPost) => {
+                <div className="post-likes">
+                    {likes.includes(userId) ? (
+                        <i className="fa fa-heart heart-liked" onClick={handleLike}></i>
+                    ) : (
+                        <i className="fa-regular fa-heart heart-not-liked" onClick={handleLike}></i>
+                    )}
+                    <span>{likes.length} likes</span>
+                </div>
 
-        const dataPost = {
-            'idPost': idPost
-        };
+                <div className="post-categories">
+                    {post.categories?.split(",").map(cat => (
+                        <span key={cat} className="cat-tag">#{cat.trim()}</span>
+                    ))}
+                </div>
+            </div>
 
-        try {
+            {/* CHAT DEL POST */}
+            <div className="chat-section">
+                <h2>Comentarios</h2>
 
-            await userService.viewPost(dataPost);
+                <div className="chat-messages">
+                    {messages.length === 0 && (
+                        <p className="no-msg">Todavía no hay mensajes</p>
+                    )}
 
-        } catch (error) {
-
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            };
-            console.log('Error cargando los post', error);
-        };
-    };
-
-    const sendLike = async (idPost, idUser) => {
-
-        const postData = {
-            'idPost': idPost,
-            'userId': idUser
-        };
-
-        try {
-
-            await userService.likePost(postData);
-
-        } catch (error) {
-
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            };
-            console.log('Error cargando los post', error);
-        };
-    };
-
-    const editPost = async (idPost) => {
-
-        const dataPost = {
-            'idPost': idPost,
-            'tittlePost': selectedTitle,
-            'descriptionPost': selectedDescription,
-            'categoriesPost': selectedCategorie
-        };
-
-        try {
-
-            await userService.editPost(dataPost);
-
-            window.location.reload();
-        } catch (error) {
-
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            };
-            console.log('Error cargando los post', error);
-        };
-    };
-
-    const deletePost = async (idPost) => {
-        const confirmed = confirm('Va a eliminar un post, desea seguir?');
-        if (!confirmed) return;
-
-        try {
-
-            await userService.deletePost(idPost);
-            window.location.reload();
-
-        } catch (error) {
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            };
-            console.error("Error eliminando el post:", error);
-            alert("No se pudo eliminar el post. Inténtalo de nuevo.");
-        };
-    };
-
-    const filterPosts = posts.filter(post => {
-        if (!seeker) return true;
-
-        if (!post.categories || typeof post.categories !== 'string') return false;
-
-        const categorias = post.categories.split(',');
-
-        return categorias.some(cat => cat.toLowerCase().includes(seeker.toLowerCase()));
-    });
-
-    return (<>
-
-        <div className='seeker'>
-            <input type="text" id="buscador" placeholder='Introduzca un #...' value={seeker} onChange={(e) => setSeeker(e.target.value)} />
-        </div>
-
-        <div className="post-wrapper">
-            <div id="userPosts" className="posts-container">
-                {filterPosts.map((post, index) => (
-                    <React.Fragment key={post._id}>
-
-                        <div className="post-card" key={post._id}
-                            onClick={(e) => {
-                                const isFollowButton = e.target.closest('.follow-button');
-                                if (!isFollowButton) {
-                                    handlePostClick(post);
-                                    post.idUser !== userId && sendView(post._id);
-                                }
-                            }}
-                        >
-                            {resultURL !== 'user' && (
-                                <div className="post-header">
-                                    <img src={usuariosD.find(u => u.id === post.idUser)?.icon} alt='icon' className='icon' id={post.idUser} ></img>
-                                    <span className="author-name">{post.username}</span>
-                                    {post.idUser !== userId && (
-                                        <button id={post.idUser}
-                                            className="follow-button"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleFollow(post.idUser);
-                                            }}
-                                        >
-                                            Seguir
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-
-                            <img src={post.file} alt={post.tittle} className="post-image-card" />
-
-                            <div className="post-title">{post.tittle}</div>
-                            <div className="post-description-container">
-                                <div className="post-description">
-                                    {post.description.length > 100
-                                        ? post.description.slice(0, 100) + "..."
-                                        : post.description}
-                                </div>
-                                {post.description.length > 100 && (
-                                    <span
-                                        className="ver-mas"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handlePostClick(post);
-                                            post.idUser !== userId && sendView(post._id);
-                                        }}
-                                    >
-                                        Ver más
-                                    </span>
-                                )}
-                            </div>
-
-                            <div className="post-footer">
-                                <span className="views-count">{post.views} vistas</span>
-                                <span className="likes-count">
-                                    <span className="likes-count">
-                                        {post.likes?.includes(userId) ? (
-                                            <i className="fa fa-heart" style={{ color: '#ff0000' }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    sendLike(post._id, userId);
-                                                    post.likes = post.likes.filter(id => id !== userId);
-                                                    setLikesData(prev => ({ ...prev }));
-                                                }}></i>
-                                        ) : (
-                                            <i className="fa-regular fa-heart"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    sendLike(post._id, userId);
-                                                    post.likes = [...(post.likes || []), userId];
-                                                    setLikesData(prev => ({ ...prev }));
-                                                }}></i>
-                                        )}
-                                        <span className="like-number">{post.likes?.length || 0}</span>
-                                    </span>
-                                </span>
-                            </div>
+                    {messages.map((msg, i) => (
+                        <div key={i} className="chat-message">
+                            <strong>{msg.username || "Anon"}:</strong> {msg.message}
                         </div>
+                    ))}
+                </div>
 
-                        {(index + 1) % 5 === 0 && (
-                            <AdBanner adClient={adClient} adSlot={adSlot} style={{ margin: '20px 0' }} />
-                        )}
-                    </React.Fragment>
-                ))}
+                <div className="chat-input-box">
+                    <input
+                        type="text"
+                        placeholder="Escribe un comentario..."
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                    />
+                    <button onClick={handleSendMessage}>Enviar</button>
+                </div>
             </div>
         </div>
-
-        {selectedPost && (() => { 
-            <PostCard postId={selectedPost._id} postFile={selectedPost.file} postTitle={selectedPost.tittle} postDescription={selectedPost.description} postCategories={selectedPost.categories} />
-            navigate('/post'); 
-            })}
-    </>
-    );*/
+    );
 };
 
 export default PostCard;
-
-/*
-            <div id="postModal" className='modal' onClick={(e) => {
-                if (e.target.classList.contains('modal')) closeModal();
-            }}>
-                <div className="modal-content">
-                    <div className="post-meta">
-
-                        <span className="close-btn" onClick={closeModal}>&times;</span>
-                    </div>
-                    <p id="modal-id">{selectedPost._id}</p>
-                    <img
-                        id="modal-img"
-                        src={`${selectedPost.file}`}
-                    />
-                    <input type="text" id="modal-title"
-                        value={selectedTitle}
-                        disabled={disabledV}
-                        onChange={(e) => setSelectedTitle(e.target.value)}
-                        required
-                    />
-
-                    <textarea
-                        id="modal-description"
-                        value={selectedDescription}
-                        disabled={disabledV}
-                        onChange={(e) => setSelectedDescription(e.target.value)}
-                        required
-                    />
-
-                    <input type="text" id="modal-categories"
-                        value={selectedCategorie}
-                        disabled={disabledV}
-                        onChange={(e) => setSelectedCategorie(e.target.value)}
-                        required
-                    />
-
-                    {(username === 'admin' || resultURL === 'user') && (
-                        <>
-                            <button type="button" className="edit-btn" id="editPost" onClick={() => editPost(selectedPost._id)}>Editar</button>
-                            <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
-                        </>
-                    )}
-                    <div className="chat-container">
-                        <div className="chat-header">
-                            <h1>Chat del post</h1>
-                        </div>
-                        <div className="chat-messages" id="messages">
-                            {messages.map((msg, index) => (
-                                <div key={index} className="chat-message">
-                                    <strong>{msg.username}: </strong>{msg.message}
-                                </div>
-                            ))}
-                        </div>
-                        <div className="chat-input">
-                            <input
-                                type="text"
-                                id="messageInput"
-                                placeholder="Escribe un mensaje..."
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                            />
-                            <button id="sendButton" onClick={handleSendMessage}>Enviar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-*/ 
