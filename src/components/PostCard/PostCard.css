@@ -1,28 +1,36 @@
-/* =============================
-   GLOBAL POST WRAPPER
-============================= */
+/* ==========================
+   POST LAYOUT (DESKTOP)
+   ========================== */
+
 .post-page {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1000px;  
     margin: 30px auto;
-    background: #0f0f0f;
-    border-radius: 16px;
-    padding: 20px;
+    background: #0f0f0f; 
+    border-radius: 18px;
+    padding: 25px;
     display: grid;
-    grid-template-columns: 60% 40%;
+    grid-template-columns: 60% 40%; /* izquierda: imagen + likes — derecha: título, desc, comentarios */
     gap: 25px;
 }
 
-/* =============================
-   HEADER (arriba izquierda)
-============================= */
+/* ==========================
+   LEFT SIDE (IMAGE + USER + LIKES)
+   ========================== */
+
+.left-side {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Header (avatar + nombre + botón seguir) */
 .post-header {
-    grid-column: 1 / 2;
     display: flex;
     align-items: center;
     gap: 14px;
     background: #1b1b1b;
-    padding: 12px;
+    padding: 12px 14px;
     border-radius: 12px;
 }
 
@@ -36,7 +44,7 @@
 
 .post-user-block h3 {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 600;
 }
 
@@ -55,92 +63,99 @@
     font-size: 0.9rem;
     cursor: pointer;
 }
+.follow-btn:hover {
+    opacity: 0.85;
+}
 
-/* =============================
-   MAIN IMAGE (izquierda)
-============================= */
+/* Imagen principal */
 .post-media-container {
-    grid-column: 1 / 2;
+    width: 100%;
 }
 
 .post-media {
     width: 100%;
+    height: auto;
     border-radius: 12px;
     display: block;
     object-fit: cover;
 }
 
-/* =============================
-   LIKES debajo de la imagen
-============================= */
-.post-actions {
-    grid-column: 1 / 2;
-    margin-top: 12px;
-}
-
-.likes-handler {
+/* Likes debajo de la imagen */
+.likes-box {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-top: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #222;
+}
+
+.likes-box i {
+    font-size: 1.8rem;
     cursor: pointer;
 }
 
-.likes-handler i {
-    font-size: 1.8rem;
-}
-
 .like-number {
-    color: #eee;
     font-size: 1rem;
+    color: #eee;
 }
 
+/* ==========================
+   RIGHT SIDE (TÍTULO + DESCRIPCIÓN + COMENTARIOS)
+   ========================== */
+
+.right-side {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    justify-content: flex-start;
+}
+
+/* Movemos el título arriba de los comentarios */
+.post-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.post-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #cfcfcf;
+}
+
+/* Categorías debajo de descripción */
 .categories-container {
-    margin-top: 12px;
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
 .category-tag {
-    background: #252525;
+    background: #27272a;
     color: #e4e4ff;
     padding: 6px 10px;
     border-radius: 8px;
     font-size: 0.85rem;
+    font-weight: 600;
 }
 
-/* =============================
-   POST BODY (va a la derecha)
-============================= */
-.post-body {
-    grid-column: 2 / 3;
-}
+/* ==========================
+   COMMENTS
+   ========================== */
 
-.post-title {
-    font-size: 2rem;
-    font-weight: 800;
-    color: white;
-}
-
-.post-description {
-    margin-top: 8px;
-    color: #d0d0d0;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
-/* =============================
-   COMMENTS (abajo derecha)
-============================= */
 .comments-section {
-    grid-column: 2 / 3;
-    margin-top: 15px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .comments-box {
     background: #1b1b1b;
-    padding: 15px;
     border-radius: 12px;
+    padding: 15px;
     max-height: 300px;
     overflow-y: auto;
 }
@@ -149,7 +164,12 @@
     background: #252525;
     padding: 10px;
     border-radius: 10px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+}
+
+.no-comments {
+    color: #888;
+    text-align: center;
 }
 
 .comment-input {
@@ -160,7 +180,7 @@
 
 .comment-input input {
     flex: 1;
-    padding: 10px;
+    padding: 12px;
     border-radius: 10px;
     border: 1px solid #333;
     background: #111;
@@ -169,27 +189,35 @@
 
 .comment-input button {
     padding: 10px 15px;
-    background: #007bff;
     border-radius: 10px;
-    border: none;
+    background: #007bff;
     color: white;
+    border: none;
+    cursor: pointer;
+}
+.comment-input button:hover {
+    opacity: 0.85;
 }
 
-/* =============================
-   RESPONSIVE — MODO INSTAGRAM
-============================= */
-@media (max-width: 850px) {
+/* ==========================
+   RESPONSIVE (MOBILE - IG STYLE)
+   ========================== */
 
+@media (max-width: 850px) {
     .post-page {
-        grid-template-columns: 1fr;
-        gap: 0;
+        grid-template-columns: 1fr;  
         padding: 0;
-        background: none;
+        background: none; 
+    }
+
+    .left-side,
+    .right-side {
+        width: 100%;
     }
 
     .post-header {
+        background: none;
         border-radius: 0;
-        background: transparent;
         padding: 12px;
     }
 
@@ -197,20 +225,37 @@
         border-radius: 0;
     }
 
-    .post-actions {
-        padding: 12px;
-        border-bottom: 1px solid #222;
+    .likes-box {
+        padding-left: 12px;
     }
 
-    .post-body {
+    .right-side {
         padding: 12px;
+        background: none;
     }
 
-    .comments-section {
-        padding: 12px;
+    .post-title {
+        font-size: 1.25rem;
+        color: var(--h123);
+        margin-bottom: 6px;
+    }
+
+    .post-description { 
+        color: var(--text); 
     }
 
     .comments-box {
         background: #121212;
+    }
+
+    .comment {
+        background: #1a1a1a;
+        color: #fff;
+    }
+
+    .comment-input input {
+        background: #222;
+        color: #fff;
+        border: 1px solid #444;
     }
 }
