@@ -1,19 +1,4 @@
-/* =========================
-   PostCard.css (mejorado)
-   Mantiene clases originales del JSX
-   ========================= */
 
-/* ---------- VARIABLES (usa las tuyas) ---------- */
-:root{
-  --layout: #ffffff;
-  --body: #e4e9f1;
-  --h123: #4f46e5;
-  --text: #111827;
-  --input-text: #111827;
-  --buton-send: #3b82f6;
-  --buton-hover: #6d28d9;
-  --accent-magenta: #d87ca0;
-}
 
 /* ---------- WRAPPER DESTACADO (CAJA NEGRA) ---------- */
 .post-page {
