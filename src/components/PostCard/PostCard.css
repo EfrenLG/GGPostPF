@@ -78,7 +78,7 @@
 .post-description {
     line-height: 1.6;
     font-size: 1rem;
-    color: #444;
+    color: var(--text);
 }
 
 /* ====== ACTIONS ====== */
