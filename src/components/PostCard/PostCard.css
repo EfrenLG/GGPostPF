@@ -1,177 +1,126 @@
-/* ====== POST WRAPPER ====== */
-.post-page {
-    width: 100%;
-    max-width: 720px;
-    margin: 0 auto;
-    background: var(--body);
-    border-radius: 18px;
-    padding-bottom: 35px;
+/* ====== POST WRAPPER (Black Highlight Box) ====== */
 }
 
-/* ====== HEADER ====== */
-.post-header {
-    display: flex;
-    align-items: center;
-    padding: 18px;
-    gap: 14px;
-}
-
-.post-user-avatar {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ffffff33;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-}
-
-.post-user-block h3 {
-    margin: 0;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.post-date {
-    font-size: 0.85rem;
-    color: #9a9a9a;
-}
-
-/* Follow button */
-.follow-btn {
-    margin-left: auto;
-    background: #007bff;
-    border: none;
-    padding: 7px 15px;
-    border-radius: 8px;
-    color: white;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-.follow-btn:hover {
-    opacity: 0.85;
-}
-
-/* ====== MAIN POST MEDIA ====== */
-.post-media-container {
-    width: 100%;
-    position: relative;
-}
-
-.post-media {
-    width: 100%;
-    border-radius: 12px;
-    display: block;
-    object-fit: cover;
-}
-
-/* ====== POST BODY ====== */
-.post-body {
-    padding: 20px;
-}
-
-.post-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
 
 .post-description {
-    line-height: 1.6;
-    font-size: 1rem;
-    color: var(--text);
+font-size: 1rem;
+line-height: 1.6;
+margin-bottom: 18px;
 }
 
-/* ====== ACTIONS ====== */
+
+/* ACTIONS */
 .post-actions {
-    margin-top: 18px;
+margin-bottom: 25px;
 }
+
 
 .likes-handler {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.2rem;
-    cursor: pointer;
+display: flex;
+align-items: center;
+gap: 8px;
+font-size: 1.3rem;
+cursor: pointer;
 }
 
-.likes-handler i {
-    font-size: 1.5rem;
-}
-
-.liked {
-    color: red;
-}
 
 .categories-container {
-    margin-top: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+margin-top: 12px;
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
 }
+
 
 .category-tag {
-    background: #eef2ff;
-    color: #4a4aff;
-    padding: 6px 10px;
-    border-radius: 10px;
-    font-size: 0.85rem;
-    font-weight: 600;
+background: #eef2ff;
+color: #4a4aff;
+padding: 6px 10px;
+border-radius: 10px;
+font-size: 0.85rem;
+font-weight: 600;
 }
 
-/* ====== COMMENTS ====== */
+
+/* COMMENTS */
 .comments-section {
-    padding: 20px;
+padding: 10px;
 }
 
-.comments-section h3 {
-    margin-bottom: 12px;
-}
 
 .comments-box {
-    background: #fff;
-    border-radius: 12px;
-    padding: 15px;
-    max-height: 260px;
-    overflow-y: auto;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+background: #ffffff11;
+border-radius: 12px;
+padding: 15px;
+max-height: 260px;
+overflow-y: auto;
 }
+
 
 .comment {
-    background: #eef6ff;
-    padding: 8px 12px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+background: #1b1b1b;
+padding: 10px 12px;
+border-radius: 10px;
+margin-bottom: 10px;
 }
 
-.no-comments {
-    color: #7d7d7d;
-    text-align: center;
-    font-size: 0.9rem;
-}
 
-/* Input */
 .comment-input {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 15px;
+display: flex;
+gap: 10px;
+margin-top: 15px;
 }
+
 
 .comment-input input {
-    flex: 1;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
+flex: 1;
+padding: 12px;
+border-radius: 10px;
+border: 1px solid #555;
+background: #111;
+color: white;
 }
 
+
 .comment-input button {
-    background: #007bff;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
+background: #007bff;
+color: white;
+padding: 10px 15px;
+border-radius: 10px;
+border: none;
+cursor: pointer;
 }
-.comment-input button:hover {
-    opacity: 0.85;
+
+
+/* ====== RESPONSIVE (Instagram layout on small screens) ====== */
+@media (max-width: 780px) {
+.post-page {
+grid-template-columns: 1fr;
+padding: 0;
+background: transparent;
+}
+
+
+.post-left,
+.post-body,
+.comments-section {
+padding: 15px;
+}
+
+
+.post-title {
+font-size: 1.5rem;
+margin-top: 10px;
+}
+
+
+.post-media {
+border-radius: 0;
+}
+
+
+/* Comentarios debajo de todo, estilo Instagram */
+.comments-section {
+order: 99;
+}
 }
