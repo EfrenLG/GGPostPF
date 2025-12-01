@@ -87,7 +87,6 @@ const PostCard = ({ post, user }) => {
     return (
         <div className="post-page">
 
-            {/* Top User Bar */}
             <div className="post-header">
                 <img src={user.icon} className="post-user-avatar" alt="user avatar" />
 
@@ -103,49 +102,47 @@ const PostCard = ({ post, user }) => {
                 )}
             </div>
 
-            {/* Full Media */}
             <div className="post-media-container">
                 <img src={post.file} alt={post.tittle} className="post-media" />
             </div>
 
-            {/* Post Body */}
+            <div className="post-actions">
+                <div className="likes-handler" onClick={() => sendLike(post._id, userId)}>
+                    {post.likes?.includes(userId) ? (
+                        <i className="fa fa-heart" style={{ color: '#ff0000' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                sendLike(post._id, userId);
+                                post.likes = post.likes.filter(id => id !== userId);
+                                setLikesData(prev => ({ ...prev }));
+                            }}></i>
+                    ) : (
+                        <i className="fa-regular fa-heart"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                sendLike(post._id, userId);
+                                post.likes = [...(post.likes || []), userId];
+                                setLikesData(prev => ({ ...prev }));
+                            }}></i>
+                    )}
+                    <span className="like-number">{post.likes?.length || 0}</span>
+                </div>
+
+                <div className="categories-container">
+                    {post.categories?.split(",").map(cat => (
+                        <span key={cat} className="category-tag">
+                            #{cat.trim()}
+                        </span>
+                    ))}
+                </div>
+            </div>
+
             <div className="post-body">
                 <h1 className="post-title">{post.tittle}</h1>
                 <p className="post-description">{post.description}</p>
 
-                <div className="post-actions">
-                    <div className="likes-handler" onClick={() => sendLike(post._id, userId)}>
-                        {post.likes?.includes(userId) ? (
-                            <i className="fa fa-heart" style={{ color: '#ff0000' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    sendLike(post._id, userId);
-                                    post.likes = post.likes.filter(id => id !== userId);
-                                    setLikesData(prev => ({ ...prev }));
-                                }}></i>
-                        ) : (
-                            <i className="fa-regular fa-heart"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    sendLike(post._id, userId);
-                                    post.likes = [...(post.likes || []), userId];
-                                    setLikesData(prev => ({ ...prev }));
-                                }}></i>
-                        )}
-                        <span className="like-number">{post.likes?.length || 0}</span>
-                    </div>
-
-                    <div className="categories-container">
-                        {post.categories?.split(",").map(cat => (
-                            <span key={cat} className="category-tag">
-                                #{cat.trim()}
-                            </span>
-                        ))}
-                    </div>
-                </div>
             </div>
 
-            {/* Comments Section */}
             <div className="comments-section">
                 <h3>Comentarios</h3>
 
@@ -174,7 +171,6 @@ const PostCard = ({ post, user }) => {
             </div>
         </div>
     );
-
 };
 
 export default PostCard;
