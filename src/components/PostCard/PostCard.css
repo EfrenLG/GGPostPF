@@ -1,126 +1,309 @@
-/* ====== POST WRAPPER (Black Highlight Box) ====== */
+/* =========================
+   PostCard.css (mejorado)
+   Mantiene clases originales del JSX
+   ========================= */
+
+/* ---------- VARIABLES (usa las tuyas) ---------- */
+:root{
+  --layout: #ffffff;
+  --body: #e4e9f1;
+  --h123: #4f46e5;
+  --text: #111827;
+  --input-text: #111827;
+  --buton-send: #3b82f6;
+  --buton-hover: #6d28d9;
+  --accent-magenta: #d87ca0;
 }
 
+/* ---------- WRAPPER DESTACADO (CAJA NEGRA) ---------- */
+.post-page {
+  width: 100%;
+  max-width: 720px;       /* conserva tu max original */
+  margin: 24px auto;
+  background: #0b0b0b;    /* caja negra para destacar */
+  border-radius: 18px;
+  padding: 16px;
+  box-sizing: border-box;
+  /* Grid para colocar Left (header+media) y Right (body+comments) */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "left right";
+  gap: 20px;
+  color: var(--text);
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(2,6,23,0.45);
+}
+
+/* Aseguramos que los elementos internos usen el ancho correcto */
+.post-page * { box-sizing: border-box; }
+
+/* ---------- ZONA IZQUIERDA (HEADER + MEDIA) ---------- */
+/* Usamos selectores para reubicar los bloques sin tocar HTML */
+.post-header {
+  grid-area: left; /* header va en la columna izquierda */
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 2px;   /* algo de aire dentro del bloque */
+  color: var(--layout); /* texto del header sobre fondo oscuro */
+}
+
+/* Avatar: tamaño original preservado */
+.post-user-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.12);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.35);
+  flex-shrink: 0;
+}
+
+/* Nombre + fecha dentro del header (texto claro sobre negro) */
+.post-user-block h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+.post-date {
+  display: block;
+  font-size: 0.82rem;
+  color: #d1d1d1;
+  margin-top: 2px;
+}
+
+/* Botón seguir: restaurado y respetando estilo original */
+.follow-btn {
+  margin-left: auto;
+  background: var(--buton-send);
+  border: none;
+  padding: 7px 15px;
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease;
+}
+.follow-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+
+/* Contenedor de la imagen: colocamos debajo del header en la columna izquierda */
+.post-media-container {
+  grid-area: left; /* también izquierda */
+  width: 100%;
+  margin-top: 6px;
+  display: block;
+}
+
+/* Imagen principal: conserva border-radius y object-fit */
+.post-media {
+  width: 100%;
+  height: auto;
+  max-height: 560px;
+  border-radius: 12px;
+  display: block;
+  object-fit: cover;
+  background: #111; /* fallback mientras carga */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+/* ---------- ZONA DERECHA (BODY + COMMENTS) ---------- */
+.post-body {
+  grid-area: right; /* colocamos todo el body en la columna derecha */
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+  background: transparent; /* mantener caja negra externa */
+}
+
+/* Título y descripción (tinte claro para contraste en caja negra) */
+.post-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  color: #fff; /* sobre fondo negro */
+  line-height: 1.1;
+}
 
 .post-description {
-font-size: 1rem;
-line-height: 1.6;
-margin-bottom: 18px;
+  line-height: 1.6;
+  font-size: 1rem;
+  color: #d7d7d7; /* texto secundario claro */
+  margin: 0;
 }
 
-
-/* ACTIONS */
+/* Acciones: likes + categorias */
 .post-actions {
-margin-bottom: 25px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-
 
 .likes-handler {
-display: flex;
-align-items: center;
-gap: 8px;
-font-size: 1.3rem;
-cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #fff;
+}
+.likes-handler i { font-size: 1.5rem; }
+
+/* Número de likes */
+.like-number {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
-
+/* Categorías: pegatinas con contraste */
 .categories-container {
-margin-top: 12px;
-display: flex;
-flex-wrap: wrap;
-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
-
-
 .category-tag {
-background: #eef2ff;
-color: #4a4aff;
-padding: 6px 10px;
-border-radius: 10px;
-font-size: 0.85rem;
-font-weight: 600;
+  background: #eef2ff;
+  color: #4a4aff;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
-
-/* COMMENTS */
+/* ---------- COMMENTS (en la columna derecha, debajo del body) ---------- */
 .comments-section {
-padding: 10px;
+  padding: 8px 2px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: #fff;
 }
 
+.comments-section h3 {
+  margin: 0 0 6px 0;
+  color: #fff;
+  font-size: 1.05rem;
+}
 
+/* Caja de comentarios: ligera translúcida sobre el negro */
 .comments-box {
-background: #ffffff11;
-border-radius: 12px;
-padding: 15px;
-max-height: 260px;
-overflow-y: auto;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  padding: 12px;
+  max-height: 260px;
+  overflow-y: auto;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.35);
 }
-
 
 .comment {
-background: #1b1b1b;
-padding: 10px 12px;
-border-radius: 10px;
-margin-bottom: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 8px 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  color: #eaeaea;
+  font-size: 0.95rem;
 }
 
+/* No-comments */
+.no-comments {
+  color: #bfbfbf;
+  text-align: center;
+  font-size: 0.9rem;
+}
 
+/* Input */
 .comment-input {
-display: flex;
-gap: 10px;
-margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
 }
-
-
 .comment-input input {
-flex: 1;
-padding: 12px;
-border-radius: 10px;
-border: 1px solid #555;
-background: #111;
-color: white;
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.03);
+  color: #fff;
+  font-size: 0.95rem;
 }
-
-
 .comment-input button {
-background: #007bff;
-color: white;
-padding: 10px 15px;
-border-radius: 10px;
-border: none;
-cursor: pointer;
+  background: var(--buton-send);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+.comment-input button:hover { background: var(--buton-hover); }
+
+/* ---------- SMALL SCREENS: Instagram-like layout ---------- */
+@media (max-width: 768px) {
+  .post-page {
+    grid-template-columns: 1fr;    /* una columna */
+    grid-template-areas:
+      "left"
+      "right";
+    padding: 0;
+    background: transparent;      /* dejar fondo natural para simular feed */
+    max-width: 720px;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  /* Hacemos que el contenido quede compacto como en IG */
+  .post-header {
+    padding: 12px 16px;
+    background: var(--layout);   /* header claro sobre fondo de feed */
+    color: var(--text);
+    border-radius: 0;
+    margin-bottom: 0;
+  }
+  .post-user-block h3 { color: var(--text); }
+  .post-date { color: #666; }
+
+  .post-media {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    border-radius: 0;            /* imagen a tope como Instagram */
+    box-shadow: none;
+  }
+
+  /* Sobre móvil, el cuerpo y comentarios se muestran con fondo claro */
+  .post-body, .comments-section {
+    background: var(--layout);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 0;
+  }
+
+  .post-title { color: var(--h123); font-size: 1.25rem; }
+  .post-description { color: var(--text); }
+
+  .comments-box {
+    background: #fff;
+    color: var(--text);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  }
+
+  .comment {
+    background: #f3f6ff;
+    color: var(--text);
+  }
+
+  .comment-input input { background: #fff; color: var(--text); border: 1px solid #e2e8f0; }
+  .comment-input button { background: var(--buton-send); }
 }
 
-
-/* ====== RESPONSIVE (Instagram layout on small screens) ====== */
-@media (max-width: 780px) {
-.post-page {
-grid-template-columns: 1fr;
-padding: 0;
-background: transparent;
+/* ---------- ACCESSIBILITY / TUNING ---------- */
+/* Reduce motion for those who prefer that */
+@media (prefers-reduced-motion: reduce) {
+  .follow-btn, .comment-input button { transition: none; }
 }
 
-
-.post-left,
-.post-body,
-.comments-section {
-padding: 15px;
-}
-
-
-.post-title {
-font-size: 1.5rem;
-margin-top: 10px;
-}
-
-
-.post-media {
-border-radius: 0;
-}
-
-
-/* Comentarios debajo de todo, estilo Instagram */
-.comments-section {
-order: 99;
-}
-}
+/* ---------- End of file ---------- */
