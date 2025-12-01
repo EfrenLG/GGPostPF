@@ -61,7 +61,6 @@ const Post = () => {
 
     return (
         <>
-            <MenuToggle />
             <PostCard post={dataPost} user={dataUser} />
         </>
     );

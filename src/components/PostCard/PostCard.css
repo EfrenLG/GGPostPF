@@ -1,7 +1,7 @@
 /* ---------- WRAPPER DESTACADO (CAJA NEGRA) ---------- */
 .post-page {
   width: 100%;
-  max-width: 920px;          /* aumentado para hacer el post más grande */
+  max-width: 1200px;          /* aumentado para hacer el post más grande */
   margin: 28px auto;
   background: #0b0b0b;       /* caja negra para destacar */
   border-radius: 18px;
