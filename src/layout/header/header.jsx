@@ -22,7 +22,7 @@ const Header = () => {
     const iconUser = icon !== 'default.png' ? icon : '../images/default.png';
 
 
-    if (resultURL !== 'post' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
+    if (resultURL !== 'posts' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
 
         logo = (
             <img src="../images/logo_small.webp"
