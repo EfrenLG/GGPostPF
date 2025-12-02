@@ -22,14 +22,14 @@ const Header = () => {
     const iconUser = icon !== 'default.png' ? icon : '../images/default.png';
 
 
-    if (resultURL !== 'posts' && resultURL !== 'user' && resultURL !== 'rawgAPI') {
+    if (resultURL !== 'posts' && resultURL !== 'user' && resultURL !== 'rawgAPI' && resultURL !== 'post') {
 
         logo = (
             <img src="../images/logo_small.webp"
                 alt="Logo GGPost"
                 className="header-logo"
                 style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/posts')} />
+                onClick={() => navigate('/')} />
         );
     } else {
 
@@ -38,7 +38,7 @@ const Header = () => {
                 alt="Logo GGPost"
                 className="header-logo"
                 style={{ cursor: 'pointer' }}
-                onClick={() => navigate('/post')} />
+                onClick={() => navigate('/posts')} />
         );
 
         header = (
