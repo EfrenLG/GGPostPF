@@ -7,7 +7,7 @@ const AdBanner = ({ adClient, adSlot, style }) => {
         if (ins && !ins.dataset.adsLoaded) {
             try {
                 (window.adsbygoogle = window.adsbygoogle || []).push({});
-                ins.dataset.adsLoaded = "true"; // marcar como cargado
+                ins.dataset.adsLoaded = "true"; 
             } catch (e) {
                 console.warn("adsbygoogle push failed:", e);
             }

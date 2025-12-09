@@ -1,15 +1,8 @@
-/* =============================== */
-/* 🎮 MENU TOGGLE - ESTILO PREMIUM */
-/* =============================== */
-
 .menu-container {
   position: relative;
   z-index: 1200;
 }
 
-/* =============================== */
-/* BOTÓN DE MENÚ */
-/* =============================== */
 .menu-button {
   display: inline-block;
   margin: 1.2rem;
@@ -36,9 +29,6 @@
   transform: scale(0.97);
 }
 
-/* =============================== */
-/* OVERLAY */
-/* =============================== */
 .overlay {
   position: fixed;
   inset: 0;
@@ -49,9 +39,6 @@
   transition: opacity 0.3s ease;
 }
 
-/* =============================== */
-/* MENÚ LATERAL */
-/* =============================== */
 .side-menu {
   position: fixed;
   top: 0;
@@ -70,15 +57,12 @@
   overflow-y: auto;
 }
 
-/* TEMA OSCURO */
 [data-theme='dark'] .side-menu {
   background: #1b1b1f;
   border-right: 2px solid var(--buton-hover);
 }
 
-/* =============================== */
-/* NAVEGACIÓN INTERNA */
-/* =============================== */
+
 .side-menu nav ul {
   list-style: none;
   padding: 0;
@@ -122,25 +106,19 @@
   height: 60%;
 }
 
-/* =============================== */
-/* ACTIVACIÓN */
-/* =============================== */
-#menu-toggle:checked ~ .side-menu {
+#menu-toggle:checked~.side-menu {
   left: 0;
 }
 
-#menu-toggle:checked ~ .overlay {
+#menu-toggle:checked~.overlay {
   display: block;
   opacity: 1;
 }
 
-#menu-toggle:checked ~ .menu-button {
+#menu-toggle:checked~.menu-button {
   display: none;
 }
 
-/* =============================== */
-/* RESPONSIVE */
-/* =============================== */
 @media (max-width: 1024px) {
   .side-menu {
     width: 240px;

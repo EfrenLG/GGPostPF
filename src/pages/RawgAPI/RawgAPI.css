@@ -1,8 +1,3 @@
-/* 🎮 RAWG API STYLING - Profesional, limpio y moderno */
-
-/* ===================== */
-/* ESTRUCTURA BASE */
-/* ===================== */
 .post-content {
   max-width: 1400px;
   margin: 0 auto;
@@ -12,9 +7,6 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 
-/* ===================== */
-/* TÍTULO */
-/* ===================== */
 .section-title {
   font-size: 2.2rem;
   margin-bottom: 2rem;
@@ -36,9 +28,6 @@
   border-radius: 2px;
 }
 
-/* ===================== */
-/* FILTRO DE PLATAFORMA */
-/* ===================== */
 .platform-filter {
   margin-bottom: 2rem;
   display: flex;
@@ -74,9 +63,6 @@
   outline: none;
 }
 
-/* ===================== */
-/* GRID DE JUEGOS */
-/* ===================== */
 .games-grid {
   display: grid;
   gap: 30px;
@@ -86,9 +72,6 @@
   justify-items: center;
 }
 
-/* ===================== */
-/* TARJETAS DE JUEGOS */
-/* ===================== */
 .game-card {
   width: 100%;
   max-width: 380px;
@@ -107,7 +90,6 @@
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Imagen */
 .game-image-container {
   position: relative;
   width: 100%;
@@ -126,7 +108,6 @@
   transform: scale(1.07);
 }
 
-/* Detalles */
 .game-details {
   padding: 1.2rem 1.5rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -156,9 +137,6 @@
   font-weight: 600;
 }
 
-/* ===================== */
-/* ESTADOS */
-/* ===================== */
 p {
   text-align: center;
   color: var(--text);
@@ -170,9 +148,6 @@ p.error {
   font-weight: 600;
 }
 
-/* ===================== */
-/* RESPONSIVE */
-/* ===================== */
 @media (max-width: 1024px) {
   .games-grid {
     gap: 24px;
