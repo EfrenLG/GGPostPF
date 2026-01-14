@@ -56,7 +56,7 @@ const PostCard = ({ post, user }) => {
             JSON.stringify({
                 type: "message",
                 postId: post._id,
-                username,
+                username: username,
                 message: newMessage
             })
         );
