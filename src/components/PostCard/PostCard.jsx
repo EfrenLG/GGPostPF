@@ -52,6 +52,7 @@ const PostCard = ({ post, user }) => {
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
 
+        console.log(username);
         wsRef.current?.send(
             JSON.stringify({
                 type: "message",
