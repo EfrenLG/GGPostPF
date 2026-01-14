@@ -1,6 +1,5 @@
 export const url = () => {
-    const url = window.location.href;
-    const lastPart = url.substring(url.lastIndexOf('/') + 1);
-
-    return lastPart;
+    const url = window.location.pathname;
+    const parts = url.split('/').filter(Boolean);
+    return parts[0];
 };
