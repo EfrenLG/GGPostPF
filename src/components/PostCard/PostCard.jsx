@@ -103,7 +103,16 @@ const PostCard = ({ post, user }) => {
             </div>
 
             <div className="post-media-container">
-                <img src={post.file} alt={post.tittle} className="post-media" />
+                <div className="media-carousel">
+                    {post.files.map((img, index) => (
+                        <img
+                            key={index}
+                            src={img}
+                            alt={`media-${index}`}
+                            className="post-media"
+                        />
+                    ))}
+                </div>
             </div>
 
             <div className="post-actions">
