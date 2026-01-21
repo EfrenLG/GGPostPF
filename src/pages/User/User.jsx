@@ -115,7 +115,7 @@ const User = () => {
 
         if (files) {
 
-            const imageUrl = URL.createObjectURL(files);
+            const imageUrl = files.map(file => URL.createObjectURL(file));
             setPreviewUrlPost(imageUrl);
 
         } else {
