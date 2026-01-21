@@ -110,12 +110,12 @@ const User = () => {
     };
 
     const handleFileChangePost = (e) => {
-        const file = e.target.files[0];
-        setSelectedFile(file);
+        const files = Array.from(e.target.files);
+        setSelectedFile(files);
 
-        if (file) {
+        if (files) {
 
-            const imageUrl = URL.createObjectURL(file);
+            const imageUrl = URL.createObjectURL(files);
             setPreviewUrlPost(imageUrl);
 
         } else {
