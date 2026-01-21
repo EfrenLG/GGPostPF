@@ -58,18 +58,18 @@ const User = () => {
     };
 
     useEffect(() => {
-
+        
         const verifyToken = async () => {
             try {
-                const res = await userService.checkToken();
+                const res = await userService.checkToken(); 
 
-                if (res.data.message === 'Token válido') {
-                    dataUserAPI(userId);
+                if (res.data.message === 'Token válido') {   
+                    dataUserAPI(userId);                      
                 } else {
-                    navigate('/');
+                    navigate('/');                            
                 }
             } catch (err) {
-                navigate('/');
+                navigate('/'); 
             }
         };
 
@@ -110,18 +110,17 @@ const User = () => {
     };
 
     const handleFileChangePost = (e) => {
-        const files = Array.from(e.target.files);
-        setSelectedFile(files);
+        const file = e.target.files[0];
+        setSelectedFile(file);
 
-        if (files.length !== 0) {
+        if (file) {
 
-            const imageUrl = files.map(file => URL.createObjectURL(file));
+            const imageUrl = URL.createObjectURL(file);
             setPreviewUrlPost(imageUrl);
 
         } else {
 
             setPreviewUrlPost(null);
-            return;
         };
     };
 
@@ -246,7 +245,7 @@ const User = () => {
                             </div>
 
                             <div className="modal-image-input-wrapper">
-                                <input type="file" accept="image/*" id="profile-image-input" className="file-input" onChange={handleFileChangeIcon} />
+                                <input type="file" accept="image/*" id="profile-image-input" multiple className="file-input" onChange={handleFileChangeIcon} />
                                 <label htmlFor="profile-image-input" className="custom-file-label">
                                     Seleccionar imagen
                                 </label>
@@ -286,7 +285,7 @@ const User = () => {
                             <h1 className="post-title">Nuevo Post</h1>
                             <form className="post-form" id="post-form" onSubmit={(e) => handleSubmitPost(e)}>
                                 <div className="post-image-wrapper">
-                                    <input type="file" id="post-pic" accept="image/*" multiple onChange={handleFileChangePost} />
+                                    <input type="file" id="post-pic" accept="image/*" onChange={handleFileChangePost} />
                                     <label htmlFor="post-pic" className="post-image-label">
 
                                         <img src={previewUrlPost || "../images/no-image.jpeg"} alt="Imagen del post" id="imagePost" className=" post-image" />

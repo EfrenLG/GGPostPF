@@ -27,7 +27,7 @@
   grid-area: header;
   display: flex;
   align-items: center;
-  justify-content: flex-start !importantimportant;
+  justify-content: flex-start !important;
   gap: 12px;
   padding: 6px 2px;
   color: #fff;
