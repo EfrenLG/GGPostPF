@@ -240,10 +240,10 @@
       "body"
       "comments";
     max-width: 720px;
-    padding: 0;
+    padding: 18px;
     background: var(--layout);
-    border-radius: 0;
-    box-shadow: none;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(2, 6, 23, 0.55);
   }
 
   .post-header {
@@ -300,7 +300,6 @@
 }
 
   .comment {
-    background: #f3f6ff;
     color: var(--text);
   }
 
