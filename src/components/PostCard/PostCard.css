@@ -162,9 +162,11 @@
 
 .comments-section {
   grid-area: comments;
+  padding: 8px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  gap: 12px;
+  align-self: center;
 }
 
 .comments-section h3 {
@@ -174,7 +176,10 @@
 }
 
 .comments-box {
-  flex: 1;
+  background: var(--body);
+  border-radius: 12px;
+  padding: 12px;
+  max-height: 640px;
   overflow-y: auto;
 }
 
@@ -187,8 +192,9 @@
 }
 
 .comment-input {
-  margin-top: auto;
-  padding-top: 10px;
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
 }
 
 .comment-input input {
@@ -220,31 +226,6 @@
 
 .comment-input button:hover {
   background: var(--buton-hover);
-}
-
-.post-media-container {
-  grid-area: media;
-  width: 100%;
-  overflow: hidden;
-}
-
-.media-carousel {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-}
-
-.media-carousel::-webkit-scrollbar {
-  display: none;
-}
-
-.post-media {
-  flex: 0 0 100%;
-  max-height: 720px;
-  object-fit: cover;
-  scroll-snap-align: center;
-  border-radius: 12px;
 }
 
 @media (max-width: 780px) {
