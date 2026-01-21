@@ -58,18 +58,18 @@ const User = () => {
     };
 
     useEffect(() => {
-        
+
         const verifyToken = async () => {
             try {
-                const res = await userService.checkToken(); 
+                const res = await userService.checkToken();
 
-                if (res.data.message === 'Token válido') {   
-                    dataUserAPI(userId);                      
+                if (res.data.message === 'Token válido') {
+                    dataUserAPI(userId);
                 } else {
-                    navigate('/');                            
+                    navigate('/');
                 }
             } catch (err) {
-                navigate('/'); 
+                navigate('/');
             }
         };
 
@@ -113,7 +113,7 @@ const User = () => {
         const files = Array.from(e.target.files);
         setSelectedFile(files);
 
-        if (files) {
+        if (files.length !== 0) {
 
             const imageUrl = files.map(file => URL.createObjectURL(file));
             setPreviewUrlPost(imageUrl);
@@ -121,6 +121,7 @@ const User = () => {
         } else {
 
             setPreviewUrlPost(null);
+            return;
         };
     };
 
@@ -285,7 +286,7 @@ const User = () => {
                             <h1 className="post-title">Nuevo Post</h1>
                             <form className="post-form" id="post-form" onSubmit={(e) => handleSubmitPost(e)}>
                                 <div className="post-image-wrapper">
-                                    <input type="file" id="post-pic" accept="image/*" onChange={handleFileChangePost} />
+                                    <input type="file" id="post-pic" accept="image/*" multiple onChange={handleFileChangePost} />
                                     <label htmlFor="post-pic" className="post-image-label">
 
                                         <img src={previewUrlPost || "../images/no-image.jpeg"} alt="Imagen del post" id="imagePost" className=" post-image" />
