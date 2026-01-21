@@ -233,23 +233,17 @@
 
 @media (max-width: 780px) {
   .post-page {
-  max-width: 1000px;
-  margin: 28px auto;
-  background: var(--layout);
-  border-radius: 18px;
-  padding: 18px;
-  box-sizing: border-box;
-  color: #fff;
-  display: grid;
-  grid-template-columns: 1fr 420px;
-  grid-template-rows: auto auto auto;
-  grid-template-areas:
-    "header comments"
-    "media comments"
-    "body comments";
-  gap: 18px;
-  box-shadow: 0 8px 28px rgba(2, 6, 23, 0.55);
-  overflow: hidden;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "media"
+      "body"
+      "comments";
+    max-width: 720px;
+    padding: 0;
+    background: var(--layout);
+    border-radius: 0;
+    box-shadow: none;
   }
 
   .post-header {
