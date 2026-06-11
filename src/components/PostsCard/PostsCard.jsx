@@ -1,102 +1,105 @@
-// React
-import React from 'react';
-import { useState, useEffect } from 'react';
-
-// React Router
-import { useNavigate } from 'react-router-dom';
-
-// Servicios y funciones
-import userService from '../../services/api';
-import { url } from '../../functions/url';
-
-// Componentes
-import AdBanner from '../AdBanner/AdBanner';
-
-// Estilos
 import './PostsCard.css';
 
-// Variables
-
-const adClient = import.meta.env.VITE_ADSLOT;
-const adSlot = import.meta.env.VITE_ADCLIENT;
+const adClient = import.meta.env.VITE_ADCLIENT; // FIX: variables de entorno corregidas
+const adSlot = import.meta.env.VITE_ADSLOT;     // FIX: variables de entorno corregidas
 
 
 const PostsCard = ({ posts, usuarios }) => {
 
-    //const username = localStorage.getItem('username');
     const userId = localStorage.getItem('userId');
     const [usuariosD, setUsuariosD] = useState([]);
     const [seeker, setSeeker] = useState('');
-    const [likesData, setLikesData] = useState({});
+    const [postsState, setPostsState] = useState([]); // FIX: estado propio para no mutar props
 
     const resultURL = url();
     const navigate = useNavigate();
 
+    // FIX: useEffect con sintaxis correcta (coma estaba fuera)
     useEffect(() => {
         if (Array.isArray(usuarios)) {
             setUsuariosD(usuarios);
         }
-    }), [usuarios];
+    }, [usuarios]);
 
+    // FIX: sincronizar postsState cuando lleguen los posts
+    useEffect(() => {
+        if (Array.isArray(posts)) {
+            setPostsState(posts.map(p => ({ ...p })));
+        }
+    }, [posts]);
 
     const handlePostClick = (post) => {
         navigate('/post/' + post._id);
     };
 
-    // Servicios
-    const sendView = async (idPost) => {
-
-        const dataPost = {
-            'idPost': idPost
-        };
-
+    // FIX: handleFollow definida (antes no existía y daba error en runtime)
+    const handleFollow = async (targetUserId) => {
         try {
-
-            await userService.viewPost(dataPost);
-
+            await userService.followUser(targetUserId);
         } catch (error) {
+            if (error.response?.data?.error === 'Acceso no autorizado') {
+                navigate('/');
+            }
+            console.log('Error al seguir al usuario', error);
+        }
+    };
 
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            };
+    const sendView = async (idPost) => {
+        const dataPost = { 'idPost': idPost };
+        try {
+            await userService.viewPost(dataPost);
+        } catch (error) {
+            if (error.response?.data?.error === 'Acceso no autorizado') {
+                navigate('/');
+            }
             console.log('Error cargando los post', error);
-        };
+        }
     };
 
     const sendLike = async (idPost, idUser) => {
-
-        const postData = {
-            'idPost': idPost,
-            'userId': idUser
-        };
-
+        const postData = { 'idPost': idPost, 'userId': idUser };
         try {
-
             await userService.likePost(postData);
-
         } catch (error) {
-
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            };
+            if (error.response?.data?.error === 'Acceso no autorizado') {
+                navigate('/');
+            }
             console.log('Error cargando los post', error);
-        };
+        }
     };
 
-    const filterPosts = posts.filter(post => {
+    // FIX: toggle de like sin mutar el objeto original
+    const toggleLike = (postId) => {
+        setPostsState(prev => prev.map(p => {
+            if (p._id !== postId) return p;
+            const alreadyLiked = p.likes?.includes(userId);
+            return {
+                ...p,
+                likes: alreadyLiked
+                    ? p.likes.filter(id => id !== userId)
+                    : [...(p.likes || []), userId]
+            };
+        }));
+        sendLike(postId, userId);
+    };
+
+    const filterPosts = postsState.filter(post => {
         if (!seeker) return true;
-
         if (!post.categories || typeof post.categories !== 'string') return false;
-
         const categorias = post.categories.split(',');
-
         return categorias.some(cat => cat.toLowerCase().includes(seeker.toLowerCase()));
     });
 
     return (<>
 
         <div className='seeker'>
-            <input type="text" id="buscador" placeholder='Introduzca un #...' value={seeker} onChange={(e) => setSeeker(e.target.value)} />
+            <input
+                type="text"
+                id="buscador"
+                placeholder='Introduzca un #...'
+                value={seeker}
+                onChange={(e) => setSeeker(e.target.value)}
+            />
         </div>
 
         <div className="post-wrapper">
@@ -104,7 +107,7 @@ const PostsCard = ({ posts, usuarios }) => {
                 {filterPosts.map((post, index) => (
                     <React.Fragment key={post._id}>
 
-                        <div className="post-card" key={post._id}
+                        <div className="post-card"
                             onClick={(e) => {
                                 const isFollowButton = e.target.closest('.follow-button');
                                 if (!isFollowButton) {
@@ -115,14 +118,20 @@ const PostsCard = ({ posts, usuarios }) => {
                         >
                             {resultURL !== 'user' && (
                                 <div className="post-header">
-                                    <img src={usuariosD.find(u => u.id === post.idUser)?.icon} alt='icon' className='icon' id={post.idUser} ></img>
+                                    <img
+                                        src={usuariosD.find(u => u.id === post.idUser)?.icon}
+                                        alt='icon'
+                                        className='icon'
+                                        id={post.idUser}
+                                    />
                                     <span className="author-name">{post.username}</span>
                                     {post.idUser !== userId && (
-                                        <button id={post.idUser}
+                                        <button
+                                            id={post.idUser}
                                             className="follow-button"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleFollow(post.idUser);
+                                                handleFollow(post.idUser); // FIX: función ahora definida
                                             }}
                                         >
                                             Seguir
@@ -157,26 +166,25 @@ const PostsCard = ({ posts, usuarios }) => {
                             <div className="post-footer">
                                 <span className="views-count">{post.views} vistas</span>
                                 <span className="likes-count">
-                                    <span className="likes-count">
-                                        {post.likes?.includes(userId) ? (
-                                            <i className="fa fa-heart" style={{ color: '#ff0000' }}
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    sendLike(post._id, userId);
-                                                    post.likes = post.likes.filter(id => id !== userId);
-                                                    setLikesData(prev => ({ ...prev }));
-                                                }}></i>
-                                        ) : (
-                                            <i className="fa-regular fa-heart"
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    sendLike(post._id, userId);
-                                                    post.likes = [...(post.likes || []), userId];
-                                                    setLikesData(prev => ({ ...prev }));
-                                                }}></i>
-                                        )}
-                                        <span className="like-number">{post.likes?.length || 0}</span>
-                                    </span>
+                                    {post.likes?.includes(userId) ? (
+                                        <i
+                                            className="fa fa-heart"
+                                            style={{ color: '#ff0000' }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleLike(post._id); // FIX: sin mutar props
+                                            }}
+                                        />
+                                    ) : (
+                                        <i
+                                            className="fa-regular fa-heart"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleLike(post._id); // FIX: sin mutar props
+                                            }}
+                                        />
+                                    )}
+                                    <span className="like-number">{post.likes?.length || 0}</span>
                                 </span>
                             </div>
                         </div>
@@ -188,77 +196,7 @@ const PostsCard = ({ posts, usuarios }) => {
                 ))}
             </div>
         </div>
-    </>
-    );
+    </>);
 };
 
 export default PostsCard;
-
-/*
-            <div id="postModal" className='modal' onClick={(e) => {
-                if (e.target.classList.contains('modal')) closeModal();
-            }}>
-                <div className="modal-content">
-                    <div className="post-meta">
-
-                        <span className="close-btn" onClick={closeModal}>&times;</span>
-                    </div>
-                    <p id="modal-id">{selectedPost._id}</p>
-                    <img
-                        id="modal-img"
-                        src={`${selectedPost.file}`}
-                    />
-                    <input type="text" id="modal-title"
-                        value={selectedTitle}
-                        disabled={disabledV}
-                        onChange={(e) => setSelectedTitle(e.target.value)}
-                        required
-                    />
-
-                    <textarea
-                        id="modal-description"
-                        value={selectedDescription}
-                        disabled={disabledV}
-                        onChange={(e) => setSelectedDescription(e.target.value)}
-                        required
-                    />
-
-                    <input type="text" id="modal-categories"
-                        value={selectedCategorie}
-                        disabled={disabledV}
-                        onChange={(e) => setSelectedCategorie(e.target.value)}
-                        required
-                    />
-
-                    {(username === 'admin' || resultURL === 'user') && (
-                        <>
-                            <button type="button" className="edit-btn" id="editPost" onClick={() => editPost(selectedPost._id)}>Editar</button>
-                            <button className="delete-btn" id="deletePost" onClick={() => deletePost(selectedPost._id)}>Eliminar</button>
-                        </>
-                    )}
-                    <div className="chat-container">
-                        <div className="chat-header">
-                            <h1>Chat del post</h1>
-                        </div>
-                        <div className="chat-messages" id="messages">
-                            {messages.map((msg, index) => (
-                                <div key={index} className="chat-message">
-                                    <strong>{msg.username}: </strong>{msg.message}
-                                </div>
-                            ))}
-                        </div>
-                        <div className="chat-input">
-                            <input
-                                type="text"
-                                id="messageInput"
-                                placeholder="Escribe un mensaje..."
-                                value={newMessage}
-                                onChange={(e) => setNewMessage(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-                            />
-                            <button id="sendButton" onClick={handleSendMessage}>Enviar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-*/ 

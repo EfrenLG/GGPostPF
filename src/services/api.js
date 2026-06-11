@@ -4,7 +4,6 @@ import axios from 'axios';
 const URL_API = import.meta.env.VITE_URL_API;
 
 const api = axios.create({
-
     baseURL: URL_API,
     timeout: 30000,
     headers: {
@@ -13,12 +12,25 @@ const api = axios.create({
     withCredentials: true
 });
 
+// FIX: interceptor centralizado para errores 401
+// Antes se repetía este bloque en cada catch de cada componente
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401 ||
+            error.response?.data?.error === 'Acceso no autorizado') {
+            window.location.href = '/';
+        }
+        return Promise.reject(error);
+    }
+);
+
 const userService = {
 
-    //SERVICE TOKEN CONTROL
+    // SERVICE TOKEN CONTROL
     checkToken: () => api.get('/api/verify'),
 
-    //SERVICE USER
+    // SERVICE USER
     checkUser: (userData) => api.post('/auth/check', userData),
     registerUser: (userData) => api.post('/auth/register', userData),
     emailUser: (userData) => api.post('/email/send-email', userData),
@@ -26,14 +38,13 @@ const userService = {
     getUser: (id) => api.get(`/api/user/${id}`),
     getUsers: () => api.get(`/api/user/all`),
     updateIconUser: (userData) => api.put('/api/user/icon', userData),
+    followUser: (targetUserId) => api.post(`/api/user/follow/${targetUserId}`), // FIX: añadido para handleFollow
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
     }),
 
-    //SERVICES POSTS
+    // SERVICES POSTS
     getPost: (id) => api.get(`/api/post/${id}`),
     getPosts: () => api.get('/api/post/all'),
     viewPost: (idPost) => api.put('/api/post/view', idPost),
@@ -42,13 +53,11 @@ const userService = {
     deletePost: (idPost) => api.delete(`/api/post/delete/${idPost}`),
     newPost: (dataPost) => api.post('/api/post/register', dataPost),
     newImagePost: (formData) => api.post('/api/icon/upload/post', formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        },
+        headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true
     }),
 
-    //SERVICE OPENAI
+    // SERVICE OPENAI
     chatWithAI: (message) => api.post('/api/chat', { message }),
 };
 

@@ -6,25 +6,23 @@ import './ChargeCard.css';
 
 const ChargeCard = ({ text }) => {
 
-    const [loanding, setLoanding] = useState(true);
+    const [loading, setLoading] = useState(true); // FIX: typo "loanding" → "loading"
 
     useEffect(() => {
         const timer = setTimeout(() => {
-
-            setLoanding(false);
+            setLoading(false);
         }, 1000);
 
         return () => clearTimeout(timer);
     }, []);
 
-
     return (
         <div className="card-overlay">
             <div className='card'>
-                {loanding ? (
+                {loading ? (           // FIX: typo corregido aquí también
                     <p>...Cargando</p>
                 ) : (
-                    <p className='succes'>{text}</p>
+                    <p className='success'>{text}</p>   // FIX: typo "succes" → "success"
                 )}
             </div>
         </div>

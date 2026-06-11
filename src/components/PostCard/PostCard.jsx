@@ -13,15 +13,23 @@ const PostCard = ({ post, user }) => {
     const username = localStorage.getItem("username");
     const userId = localStorage.getItem("userId");
 
-    // Likes
-    const [likesData, setLikesData] = useState({});
+    const [localPost, setLocalPost] = useState(null); // FIX: estado propio, no mutamos props
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
     const wsRef = useRef(null);
 
     const navigate = useNavigate();
 
+    // FIX: sincronizar localPost cuando llegue el prop post
     useEffect(() => {
+        if (post && post._id) {
+            setLocalPost({ ...post });
+        }
+    }, [post]);
+
+    useEffect(() => {
+        if (!post?._id) return;
+
         const URL_API = import.meta.env.VITE_URL_API;
         const ws = new WebSocket(URL_API);
 
@@ -36,7 +44,6 @@ const PostCard = ({ post, user }) => {
 
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
-
             if (data.type === "history") {
                 setMessages(data.messages);
             } else if (data.type === "message") {
@@ -47,7 +54,7 @@ const PostCard = ({ post, user }) => {
         return () => {
             ws.close();
         };
-    }, [post._id]);
+    }, [post?._id]);
 
     const handleSendMessage = () => {
         if (!newMessage.trim()) return;
@@ -64,25 +71,41 @@ const PostCard = ({ post, user }) => {
         setNewMessage("");
     };
 
-    const sendLike = async (idPost, idUser) => {
+    // FIX: handleFollow definida (antes no existía y daba error en runtime)
+    const handleFollow = async (targetUserId) => {
+        try {
+            await userService.followUser(targetUserId);
+        } catch (error) {
+            if (error.response?.data?.error === 'Acceso no autorizado') {
+                navigate('/');
+            }
+            console.log('Error al seguir al usuario', error);
+        }
+    };
 
-        const postData = {
-            'idPost': idPost,
-            'userId': idUser
-        };
+    // FIX: toggle de like sin mutar props, usando localPost
+    const toggleLike = async () => {
+        if (!localPost) return;
+
+        const alreadyLiked = localPost.likes?.includes(userId);
+        const updatedLikes = alreadyLiked
+            ? localPost.likes.filter(id => id !== userId)
+            : [...(localPost.likes || []), userId];
+
+        setLocalPost(prev => ({ ...prev, likes: updatedLikes }));
 
         try {
-
-            await userService.likePost(postData);
-
+            await userService.likePost({ idPost: localPost._id, userId });
         } catch (error) {
-
-            if (error.response.data.error === 'Acceso no autorizado') {
-                navigate('/')
-            };
-            console.log('Error cargando los post', error);
-        };
+            // Revertir si falla
+            setLocalPost(prev => ({ ...prev, likes: localPost.likes }));
+            if (error.response?.data?.error === 'Acceso no autorizado') {
+                navigate('/');
+            }
+        }
     };
+
+    if (!localPost || !localPost._id) return null;
 
     return (
         <div className="post-page">
@@ -92,44 +115,33 @@ const PostCard = ({ post, user }) => {
 
                 <div className="post-user-block">
                     <h3>{user.username}</h3>
-                    <span className="post-date">{post.date}</span>
+                    <span className="post-date">{localPost.date}</span>
                 </div>
 
-                {post.idUser !== userId && (
-                    <button className="follow-btn" onClick={() => handleFollow(post.idUser)}>
+                {localPost.idUser !== userId && (
+                    <button className="follow-btn" onClick={() => handleFollow(localPost.idUser)}>
                         Seguir
                     </button>
                 )}
             </div>
 
             <div className="post-media-container">
-                <img src={post.file} alt={post.tittle} className="post-media" />
+                <img src={localPost.file} alt={localPost.tittle} className="post-media" />
             </div>
 
             <div className="post-actions">
-                <div className="likes-handler" onClick={() => sendLike(post._id, userId)}>
-                    {post.likes?.includes(userId) ? (
-                        <i className="fa fa-heart" style={{ color: '#ff0000' }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                sendLike(post._id, userId);
-                                post.likes = post.likes.filter(id => id !== userId);
-                                setLikesData(prev => ({ ...prev }));
-                            }}></i>
+                {/* FIX: un solo handler toggleLike, sin doble onClick anidado */}
+                <div className="likes-handler" onClick={toggleLike}>
+                    {localPost.likes?.includes(userId) ? (
+                        <i className="fa fa-heart" style={{ color: '#ff0000' }} />
                     ) : (
-                        <i className="fa-regular fa-heart"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                sendLike(post._id, userId);
-                                post.likes = [...(post.likes || []), userId];
-                                setLikesData(prev => ({ ...prev }));
-                            }}></i>
+                        <i className="fa-regular fa-heart" />
                     )}
-                    <span className="like-number">{post.likes?.length || 0}</span>
+                    <span className="like-number">{localPost.likes?.length || 0}</span>
                 </div>
 
                 <div className="categories-container">
-                    {post.categories?.split(",").map(cat => (
+                    {localPost.categories?.split(",").map(cat => (
                         <span key={cat} className="category-tag">
                             #{cat.trim()}
                         </span>
@@ -138,9 +150,8 @@ const PostCard = ({ post, user }) => {
             </div>
 
             <div className="post-body">
-                <h1 className="post-title">{post.tittle}</h1>
-                <p className="post-description">{post.description}</p>
-
+                <h1 className="post-title">{localPost.tittle}</h1>
+                <p className="post-description">{localPost.description}</p>
             </div>
 
             <div className="comments-section">
