@@ -1,27 +1,38 @@
+// React
+import React, { useState, useEffect } from 'react';
+
+// React Router
+import { useNavigate } from 'react-router-dom';
+
+// Servicios y funciones
+import userService from '../../services/api';
+import { url } from '../../functions/url';
+
+// Componentes
+import AdBanner from '../AdBanner/AdBanner';
+
+// Estilos
 import './PostsCard.css';
 
-const adClient = import.meta.env.VITE_ADCLIENT; // FIX: variables de entorno corregidas
-const adSlot = import.meta.env.VITE_ADSLOT;     // FIX: variables de entorno corregidas
-
+const adClient = import.meta.env.VITE_ADCLIENT;
+const adSlot = import.meta.env.VITE_ADSLOT;
 
 const PostsCard = ({ posts, usuarios }) => {
 
     const userId = localStorage.getItem('userId');
     const [usuariosD, setUsuariosD] = useState([]);
     const [seeker, setSeeker] = useState('');
-    const [postsState, setPostsState] = useState([]); // FIX: estado propio para no mutar props
+    const [postsState, setPostsState] = useState([]);
 
     const resultURL = url();
     const navigate = useNavigate();
 
-    // FIX: useEffect con sintaxis correcta (coma estaba fuera)
     useEffect(() => {
         if (Array.isArray(usuarios)) {
             setUsuariosD(usuarios);
         }
     }, [usuarios]);
 
-    // FIX: sincronizar postsState cuando lleguen los posts
     useEffect(() => {
         if (Array.isArray(posts)) {
             setPostsState(posts.map(p => ({ ...p })));
@@ -32,14 +43,10 @@ const PostsCard = ({ posts, usuarios }) => {
         navigate('/post/' + post._id);
     };
 
-    // FIX: handleFollow definida (antes no existía y daba error en runtime)
     const handleFollow = async (targetUserId) => {
         try {
             await userService.followUser(targetUserId);
         } catch (error) {
-            if (error.response?.data?.error === 'Acceso no autorizado') {
-                navigate('/');
-            }
             console.log('Error al seguir al usuario', error);
         }
     };
@@ -49,9 +56,6 @@ const PostsCard = ({ posts, usuarios }) => {
         try {
             await userService.viewPost(dataPost);
         } catch (error) {
-            if (error.response?.data?.error === 'Acceso no autorizado') {
-                navigate('/');
-            }
             console.log('Error cargando los post', error);
         }
     };
@@ -61,14 +65,10 @@ const PostsCard = ({ posts, usuarios }) => {
         try {
             await userService.likePost(postData);
         } catch (error) {
-            if (error.response?.data?.error === 'Acceso no autorizado') {
-                navigate('/');
-            }
             console.log('Error cargando los post', error);
         }
     };
 
-    // FIX: toggle de like sin mutar el objeto original
     const toggleLike = (postId) => {
         setPostsState(prev => prev.map(p => {
             if (p._id !== postId) return p;
@@ -131,7 +131,7 @@ const PostsCard = ({ posts, usuarios }) => {
                                             className="follow-button"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                handleFollow(post.idUser); // FIX: función ahora definida
+                                                handleFollow(post.idUser);
                                             }}
                                         >
                                             Seguir
@@ -172,7 +172,7 @@ const PostsCard = ({ posts, usuarios }) => {
                                             style={{ color: '#ff0000' }}
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                toggleLike(post._id); // FIX: sin mutar props
+                                                toggleLike(post._id);
                                             }}
                                         />
                                     ) : (
@@ -180,7 +180,7 @@ const PostsCard = ({ posts, usuarios }) => {
                                             className="fa-regular fa-heart"
                                             onClick={(e) => {
                                                 e.stopPropagation();
-                                                toggleLike(post._id); // FIX: sin mutar props
+                                                toggleLike(post._id);
                                             }}
                                         />
                                     )}
