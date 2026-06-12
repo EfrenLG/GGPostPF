@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useState } from 'react'; // FIX: useState importado
 
 // Estilos
 import './FormCard.css';
@@ -9,10 +9,7 @@ import { progressBar } from '../../functions/progessBar';
 
 const FormCard = ({ title, onSubmit, register, errors, fields, buttons, password, setPassword }) => {
 
-    progressBar(length);
-
     return (
-
         <div className="containerLR">
 
             <h2>{title}</h2>
@@ -32,12 +29,13 @@ const FormCard = ({ title, onSubmit, register, errors, fields, buttons, password
                             onChange={(e) => {
                                 if (name === 'password') {
                                     setPassword(e.target.value);
-                                };
+                                }
                             }}
                         />
                         {type === 'password' && name === 'password' && (
                             <div id="progress-container">
-                                <div id="progress-bar" style={progressBar(password.length)}></div>
+                                {/* FIX: progressBar(length) con "length" indefinido -> progressBar(password?.length ?? 0) */}
+                                <div id="progress-bar" style={progressBar(password?.length ?? 0)}></div>
                             </div>
                         )}
 
