@@ -1,72 +1,49 @@
-// React
 import React, { useState, useEffect } from 'react';
-
-// React Router
 import { useNavigate } from 'react-router-dom';
-
-// Servicios y funciones
 import userService from '../../services/api';
 import { url } from '../../functions/url';
-
-// Componentes
 import AdBanner from '../AdBanner/AdBanner';
-
-// Estilos
 import './PostsCard.css';
 
 const adClient = import.meta.env.VITE_ADCLIENT;
 const adSlot = import.meta.env.VITE_ADSLOT;
 
+const getInitials = (name) => {
+    if (!name) return '?';
+    return name.slice(0, 2).toUpperCase();
+};
+
+const timeAgo = (dateStr) => {
+    if (!dateStr) return '';
+    const diff = (Date.now() - new Date(dateStr)) / 1000;
+    if (diff < 60) return 'ahora';
+    if (diff < 3600) return `${Math.floor(diff / 60)} min`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} h`;
+    return `${Math.floor(diff / 86400)} d`;
+};
+
 const PostsCard = ({ posts, usuarios }) => {
 
     const userId = localStorage.getItem('userId');
+    const userIcon = localStorage.getItem('userIcon');
+    const username = localStorage.getItem('username');
+
     const [usuariosD, setUsuariosD] = useState([]);
-    const [seeker, setSeeker] = useState('');
     const [postsState, setPostsState] = useState([]);
 
     const resultURL = url();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (Array.isArray(usuarios)) {
-            setUsuariosD(usuarios);
-        }
+        if (Array.isArray(usuarios)) setUsuariosD(usuarios);
     }, [usuarios]);
 
     useEffect(() => {
-        if (Array.isArray(posts)) {
-            setPostsState(posts.map(p => ({ ...p })));
-        }
+        if (Array.isArray(posts)) setPostsState(posts.map(p => ({ ...p })));
     }, [posts]);
 
-    const handlePostClick = (post) => {
-        navigate('/post/' + post._id);
-    };
-
-    const handleFollow = async (targetUserId) => {
-        try {
-            await userService.followUser(targetUserId);
-        } catch (error) {
-            console.log('Error al seguir al usuario', error);
-        }
-    };
-
     const sendView = async (idPost) => {
-        const dataPost = { 'idPost': idPost };
-        try {
-            await userService.viewPost(dataPost);
-        } catch (error) {
-            console.log('Error cargando los post', error);
-        }
-    };
-
-    const sendLike = async (idPost, idUser) => {
-        const postData = { 'idPost': idPost, 'userId': idUser };
-        try {
-            await userService.likePost(postData);
-        } catch (error) {
-            console.log('Error cargando los post', error);
-        }
+        try { await userService.viewPost({ idPost }); } catch {}
     };
 
     const toggleLike = (postId) => {
@@ -80,123 +57,156 @@ const PostsCard = ({ posts, usuarios }) => {
                     : [...(p.likes || []), userId]
             };
         }));
-        sendLike(postId, userId);
+        try { userService.likePost({ idPost: postId, userId }); } catch {}
     };
 
-    const filterPosts = postsState.filter(post => {
-        if (!seeker) return true;
-        if (!post.categories || typeof post.categories !== 'string') return false;
-        const categorias = post.categories.split(',');
-        return categorias.some(cat => cat.toLowerCase().includes(seeker.toLowerCase()));
-    });
+    const handlePostClick = (post) => {
+        if (post.idUser !== userId) sendView(post._id);
+        navigate('/post/' + post._id);
+    };
 
-    return (<>
+    const storyUsers = usuariosD.slice(0, 8);
 
-        <div className='seeker'>
-            <input
-                type="text"
-                id="buscador"
-                placeholder='Introduzca un #...'
-                value={seeker}
-                onChange={(e) => setSeeker(e.target.value)}
-            />
-        </div>
-
+    return (
         <div className="post-wrapper">
-            <div id="userPosts" className="posts-container">
-                {filterPosts.map((post, index) => (
-                    <React.Fragment key={post._id}>
+            <div className="feed-wrapper">
 
-                        <div className="post-card"
-                            onClick={(e) => {
-                                const isFollowButton = e.target.closest('.follow-button');
-                                if (!isFollowButton) {
-                                    handlePostClick(post);
-                                    post.idUser !== userId && sendView(post._id);
-                                }
-                            }}
-                        >
-                            {resultURL !== 'user' && (
-                                <div className="post-header">
-                                    <img
-                                        src={usuariosD.find(u => u.id === post.idUser)?.icon}
-                                        alt='icon'
-                                        className='icon'
-                                        id={post.idUser}
-                                    />
-                                    <span className="author-name">{post.username}</span>
-                                    {post.idUser !== userId && (
-                                        <button
-                                            id={post.idUser}
-                                            className="follow-button"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleFollow(post.idUser);
-                                            }}
-                                        >
-                                            Seguir
-                                        </button>
-                                    )}
+                {resultURL !== 'user' && storyUsers.length > 0 && (
+                    <div className="stories-bar">
+                        <div className="stories-inner">
+                            {storyUsers.map((u) => (
+                                <div key={u.id} className="story-item">
+                                    <div className="story-ring">
+                                        <div className="story-avatar-initials">
+                                            {getInitials(u.username || u.id)}
+                                        </div>
+                                    </div>
+                                    <span className="story-label">{u.username || u.id?.slice(0, 6)}</span>
                                 </div>
-                            )}
-
-                            <img src={post.file} alt={post.tittle} className="post-image-card" />
-
-                            <div className="post-title">{post.tittle}</div>
-                            <div className="post-description-container">
-                                <div className="post-description">
-                                    {post.description.length > 100
-                                        ? post.description.slice(0, 100) + "..."
-                                        : post.description}
-                                </div>
-                                {post.description.length > 100 && (
-                                    <span
-                                        className="ver-mas"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            handlePostClick(post);
-                                            post.idUser !== userId && sendView(post._id);
-                                        }}
-                                    >
-                                        Ver más
-                                    </span>
-                                )}
-                            </div>
-
-                            <div className="post-footer">
-                                <span className="views-count">{post.views} vistas</span>
-                                <span className="likes-count">
-                                    {post.likes?.includes(userId) ? (
-                                        <i
-                                            className="fa fa-heart"
-                                            style={{ color: '#ff0000' }}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                toggleLike(post._id);
-                                            }}
-                                        />
-                                    ) : (
-                                        <i
-                                            className="fa-regular fa-heart"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                toggleLike(post._id);
-                                            }}
-                                        />
-                                    )}
-                                    <span className="like-number">{post.likes?.length || 0}</span>
-                                </span>
-                            </div>
+                            ))}
                         </div>
+                    </div>
+                )}
 
-                        {(index + 1) % 5 === 0 && (
-                            <AdBanner adClient={adClient} adSlot={adSlot} style={{ margin: '20px 0' }} />
-                        )}
-                    </React.Fragment>
-                ))}
+                {postsState.map((post, index) => {
+                    const author = usuariosD.find(u => u.id === post.idUser);
+                    const isLiked = post.likes?.includes(userId);
+                    const tags = post.categories
+                        ? post.categories.split(',').map(t => t.trim()).filter(Boolean)
+                        : [];
+
+                    return (
+                        <React.Fragment key={post._id}>
+                            <div className="post-card">
+
+                                <div className="post-header">
+                                    <div className="post-header-left" onClick={() => handlePostClick(post)}>
+                                        <div className="post-avatar">
+                                            {author?.icon && author.icon !== 'default.png'
+                                                ? <img src={author.icon} alt={post.username} />
+                                                : getInitials(post.username)
+                                            }
+                                        </div>
+                                        <div>
+                                            <div className="post-username">{post.username}</div>
+                                            {tags[0] && <div className="post-location">{tags[0]}</div>}
+                                        </div>
+                                    </div>
+                                    <button className="post-more-btn" aria-label="más opciones">
+                                        <i className="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                </div>
+
+                                <img
+                                    src={post.file}
+                                    alt={post.tittle}
+                                    className="post-image-card"
+                                    onClick={() => handlePostClick(post)}
+                                    onDoubleClick={() => toggleLike(post._id)}
+                                />
+
+                                <div className="post-actions-row">
+                                    <div className="actions-left">
+                                        <button
+                                            className={`action-btn ${isLiked ? 'liked' : ''}`}
+                                            onClick={() => toggleLike(post._id)}
+                                            aria-label="me gusta"
+                                        >
+                                            <i className={isLiked ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}></i>
+                                        </button>
+                                        <button
+                                            className="action-btn"
+                                            onClick={() => handlePostClick(post)}
+                                            aria-label="comentar"
+                                        >
+                                            <i className="fa-regular fa-comment"></i>
+                                        </button>
+                                        <button className="action-btn" aria-label="compartir">
+                                            <i className="fa-regular fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                    <button className="save-btn" aria-label="guardar">
+                                        <i className="fa-regular fa-bookmark"></i>
+                                    </button>
+                                </div>
+
+                                <div className="post-info">
+                                    <div className="likes-count">
+                                        {post.likes?.length || 0} me gusta
+                                    </div>
+                                    <div className="post-caption">
+                                        <span className="uname">{post.username}</span>
+                                        {post.description?.length > 100
+                                            ? post.description.slice(0, 100) + '...'
+                                            : post.description}
+                                    </div>
+                                    {tags.length > 0 && (
+                                        <div className="post-tags">
+                                            {tags.map(t => (
+                                                <span key={t} className="post-tag">#{t}</span>
+                                            ))}
+                                        </div>
+                                    )}
+                                    <button
+                                        className="view-comments-btn"
+                                        onClick={() => handlePostClick(post)}
+                                    >
+                                        Ver comentarios
+                                    </button>
+                                    <div className="post-time">{timeAgo(post.fechaAlta)}</div>
+                                </div>
+
+                                <div className="comment-bar">
+                                    <div className="comment-av">
+                                        {userIcon && userIcon !== 'default.png'
+                                            ? <img src={userIcon} alt="tú" />
+                                            : getInitials(username)
+                                        }
+                                    </div>
+                                    <span
+                                        className="comment-fake-input"
+                                        onClick={() => handlePostClick(post)}
+                                    >
+                                        Añade un comentario...
+                                    </span>
+                                    <button
+                                        className="comment-post-btn"
+                                        onClick={() => handlePostClick(post)}
+                                    >
+                                        Publicar
+                                    </button>
+                                </div>
+                            </div>
+
+                            {(index + 1) % 5 === 0 && (
+                                <AdBanner adClient={adClient} adSlot={adSlot} style={{ margin: '12px 0' }} />
+                            )}
+                        </React.Fragment>
+                    );
+                })}
             </div>
         </div>
-    </>);
+    );
 };
 
 export default PostsCard;
