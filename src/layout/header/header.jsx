@@ -9,6 +9,7 @@ const Header = () => {
     const navigate  = useNavigate();
     const resultURL = url();
     const iconUser  = icon && icon !== 'default.png' ? icon : null;
+    const username  = localStorage.getItem('username');
     const isApp     = ['posts', 'user', 'rawgAPI', 'post'].includes(resultURL);
 
     const [theme, setTheme]       = useState(() => localStorage.getItem('theme') || 'light');
@@ -19,11 +20,17 @@ const Header = () => {
         localStorage.setItem('theme', theme);
     }, [theme]);
 
-    // FIX 6: cerrar menú al cambiar de ruta
+    // Cerrar menú al navegar
     useEffect(() => { setMenuOpen(false); }, [resultURL]);
 
-    const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
+    // FIX 6: cerrar menú con Escape
+    useEffect(() => {
+        const handler = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+    }, []);
 
+    const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
     const goTo = (path) => { navigate(path); setMenuOpen(false); };
 
     return (
@@ -36,41 +43,58 @@ const Header = () => {
                         GG<span>Post</span>
                     </span>
 
-                    {/* BUSCADOR — solo desktop y solo en la app */}
+                    {/* BUSCADOR — solo desktop */}
                     {isApp && (
                         <div className="header-search">
                             <i className="fa fa-search header-search-icon"></i>
-                            <input type="text" placeholder="Buscar" readOnly onClick={() => navigate('/posts')} />
+                            <input
+                                type="text"
+                                placeholder="Buscar"
+                                readOnly
+                                onClick={() => navigate('/posts')}
+                            />
                         </div>
                     )}
 
                     <div className="header-right">
                         {isApp && (
                             <>
-                                {/* Iconos navegación desktop */}
-                                <button className="header-icon-btn desktop-only" onClick={() => navigate('/posts')} aria-label="inicio">
+                                <button
+                                    className="header-icon-btn desktop-only"
+                                    onClick={() => navigate('/posts')}
+                                    aria-label="inicio"
+                                >
                                     <i className="fa-solid fa-house"></i>
                                 </button>
-                                <button className="header-icon-btn desktop-only notif-dot" aria-label="notificaciones">
+                                <button
+                                    className="header-icon-btn desktop-only notif-dot"
+                                    aria-label="notificaciones"
+                                >
                                     <i className="fa-regular fa-heart"></i>
                                 </button>
-                                <div className="profile-icon desktop-only" onClick={() => navigate('/user')}>
+                                <div
+                                    className="profile-icon desktop-only"
+                                    onClick={() => navigate('/user')}
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label="mi perfil"
+                                >
                                     {iconUser
                                         ? <img src={iconUser} alt="Perfil" className="profile-img" />
                                         : <div className="profile-initials">
-                                            {localStorage.getItem('username')?.slice(0,2).toUpperCase() || 'U'}
+                                            {username?.slice(0,2).toUpperCase() || 'U'}
                                           </div>
                                     }
                                 </div>
                             </>
                         )}
 
-                        {/* Toggle tema */}
+                        {/* Toggle tema — siempre visible */}
                         <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="cambiar tema">
                             {theme === 'light' ? '🌙' : '☀️'}
                         </button>
 
-                        {/* FIX 6: botón hamburguesa solo en móvil con contraste garantizado */}
+                        {/* FIX 6: hamburguesa solo en móvil */}
                         {isApp && (
                             <button
                                 className="hamburger-btn"
@@ -87,32 +111,48 @@ const Header = () => {
                 </div>
             </header>
 
-            {/* FIX 6: menú lateral con fondo sólido, siempre contraste correcto */}
+            {/* FIX 6: menú lateral con fondo sólido + publicaciones visibles */}
             {menuOpen && (
-                <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)}>
+                <div
+                    className="mobile-menu-overlay"
+                    onClick={() => setMenuOpen(false)}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="menú de navegación"
+                >
                     <nav className="mobile-menu" onClick={e => e.stopPropagation()}>
+
                         <div className="mobile-menu-header">
                             <span className="mobile-menu-logo">GG<span>Post</span></span>
-                            <button className="mobile-menu-close" onClick={() => setMenuOpen(false)} aria-label="cerrar menú">✕</button>
+                            <button
+                                className="mobile-menu-close"
+                                onClick={() => setMenuOpen(false)}
+                                aria-label="cerrar menú"
+                            >✕</button>
                         </div>
 
+                        {/* Avatar */}
                         {iconUser
                             ? <img src={iconUser} alt="perfil" className="mobile-menu-avatar" />
                             : <div className="mobile-menu-avatar-initials">
-                                {localStorage.getItem('username')?.slice(0,2).toUpperCase() || 'U'}
+                                {username?.slice(0,2).toUpperCase() || 'U'}
                               </div>
                         }
-                        <div className="mobile-menu-username">{localStorage.getItem('username')}</div>
+                        <div className="mobile-menu-username">{username}</div>
 
+                        {/* FIX 6: botones con colores hardcodeados para garantizar legibilidad */}
                         <div className="mobile-menu-links">
                             <button onClick={() => goTo('/posts')}>
-                                <i className="fa-solid fa-house"></i> Inicio
+                                <i className="fa-solid fa-house"></i>
+                                Publicaciones
                             </button>
                             <button onClick={() => goTo('/user')}>
-                                <i className="fa-regular fa-user"></i> Mi perfil
+                                <i className="fa-regular fa-user"></i>
+                                Mi perfil
                             </button>
                             <button onClick={() => goTo('/rawgAPI')}>
-                                <i className="fa-solid fa-gamepad"></i> Explorar juegos
+                                <i className="fa-solid fa-gamepad"></i>
+                                Explorar juegos
                             </button>
                             <button onClick={toggleTheme}>
                                 {theme === 'light'

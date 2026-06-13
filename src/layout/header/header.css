@@ -1,8 +1,3 @@
-/* =============================================
-   HEADER — sticky top bar responsive
-   FIX 6: hamburguesa con contraste + menú lateral
-   ============================================= */
-
 header {
     background: var(--layout);
     border-bottom: 1px solid var(--border);
@@ -13,7 +8,7 @@ header {
 }
 
 .header-content {
-    max-width: 1200px;
+    max-width: 1240px;
     margin: 0 auto;
     height: 100%;
     padding: 0 16px;
@@ -24,279 +19,139 @@ header {
 }
 
 .header-logo-text {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    cursor: pointer;
-    letter-spacing: -0.5px;
-    white-space: nowrap;
-    flex-shrink: 0;
+    font-size: 22px; font-weight: 700;
+    color: var(--text); cursor: pointer;
+    letter-spacing: -0.5px; white-space: nowrap; flex-shrink: 0;
 }
 .header-logo-text span { color: var(--h123); }
 
-/* Buscador solo desktop */
-.header-search {
-    flex: 1;
-    max-width: 268px;
-    position: relative;
-    display: none;
-}
+.header-search { flex: 1; max-width: 268px; position: relative; display: none; }
 .header-search input {
-    width: 100%;
-    background: var(--body);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 12px 7px 36px;
-    font-size: 14px;
-    color: var(--text);
-    outline: none;
-    cursor: pointer;
-    transition: border-color .2s;
+    width: 100%; background: var(--body); border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 12px 7px 36px;
+    font-size: 14px; color: var(--text); outline: none; cursor: pointer;
 }
 .header-search input:hover { border-color: #aaa; }
 .header-search input::placeholder { color: #8e8e8e; }
-.header-search-icon {
-    position: absolute;
-    left: 10px; top: 50%;
-    transform: translateY(-50%);
-    color: #8e8e8e; font-size: 15px;
-    pointer-events: none;
-}
+.header-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #8e8e8e; font-size: 15px; pointer-events: none; }
 
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
+.header-right { display: flex; align-items: center; gap: 14px; }
 
-/* Iconos solo desktop */
-.desktop-only { display: none; }
+.desktop-only { display: none !important; }
 
-.header-icon-btn {
-    background: none; border: none;
-    cursor: pointer; color: var(--text);
-    font-size: 24px; padding: 0; line-height: 1;
-    position: relative;
-    transition: opacity .2s;
-}
-.header-icon-btn:hover { opacity: .6; }
+.header-icon-btn { background:none;border:none;cursor:pointer;color:var(--text);font-size:24px;padding:0;line-height:1;position:relative;transition:opacity .2s; }
+.header-icon-btn:hover { opacity:.6; }
+.notif-dot::after { content:'';position:absolute;top:0;right:-1px;width:8px;height:8px;border-radius:50%;background:var(--h123);border:2px solid var(--layout); }
 
-.notif-dot::after {
-    content: '';
-    position: absolute;
-    top: 0; right: -1px;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--h123);
-    border: 2px solid var(--layout);
-}
+.profile-icon { width:28px;height:28px;border-radius:50%;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .2s;flex-shrink:0; }
+.profile-icon:hover { border-color:var(--h123); }
+.profile-img { width:100%;height:100%;object-fit:cover; }
+.profile-initials { width:100%;height:100%;background:#FBEAF0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#993556; }
 
-.profile-icon {
-    width: 28px; height: 28px;
-    border-radius: 50%; overflow: hidden;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: border-color .2s;
-    flex-shrink: 0;
-}
-.profile-icon:hover { border-color: var(--h123); }
-.profile-img { width: 100%; height: 100%; object-fit: cover; }
+.theme-toggle-btn { background:none;border:1px solid var(--border);color:var(--text);padding:4px 8px;font-size:14px;border-radius:8px;cursor:pointer;line-height:1.4;transition:background .2s; }
+.theme-toggle-btn:hover { background:var(--body); }
 
-.profile-initials {
-    width: 100%; height: 100%;
-    background: #FBEAF0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10px; font-weight: 700; color: #993556;
-}
-
-.theme-toggle-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 4px 8px;
-    font-size: 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background .2s;
-    line-height: 1.4;
-}
-.theme-toggle-btn:hover { background: var(--body); }
-
-/* FIX 6: HAMBURGUESA — siempre visible en móvil con contraste forzado */
+/* FIX 6: HAMBURGUESA — contraste forzado */
 .hamburger-btn {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 5px;
     background: none;
-    border: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
     cursor: pointer;
-    padding: 4px;
-    width: 32px;
-    height: 32px;
+    padding: 6px 8px;
+    width: 38px;
+    height: 36px;
 }
-
+/* FIX 6: las líneas usan currentColor del botón que hereda var(--text) */
 .hamburger-btn span {
     display: block;
-    width: 22px;
+    width: 20px;
     height: 2px;
-    /* FIX 6: color absoluto que siempre contrasta en ambos temas */
-    background: var(--text);
+    background: var(--text);   /* siempre contrasta: negro en light, blanco en dark */
     border-radius: 2px;
-    transition: transform .2s, opacity .2s;
+    transition: transform .2s;
 }
 
-/* FIX 6: MENÚ LATERAL — fondo sólido, texto siempre legible */
+/* FIX 6: OVERLAY */
 .mobile-menu-overlay {
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background: rgba(0,0,0,.5);
     z-index: 200;
     animation: fade-in .2s ease;
 }
+@keyframes fade-in { from{opacity:0} to{opacity:1} }
 
-@keyframes fade-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
+/* FIX 6: PANEL LATERAL — fondo sólido hardcodeado, nunca invisible */
 .mobile-menu {
     position: absolute;
     right: 0; top: 0; bottom: 0;
-    width: min(300px, 80vw);
-    /* FIX 6: fondo sólido que no depende de variables — siempre legible */
-    background: #ffffff;
+    width: min(300px, 82vw);
+    background: #ffffff;          /* light: siempre blanco */
     display: flex;
     flex-direction: column;
-    padding: 0 0 24px;
-    animation: slide-in .2s ease;
     overflow-y: auto;
+    animation: slide-in .22s ease;
+    box-shadow: -4px 0 24px rgba(0,0,0,.18);
 }
+[data-theme='dark'] .mobile-menu { background: #1c1c1c; }  /* dark: siempre oscuro */
 
-[data-theme='dark'] .mobile-menu {
-    background: #1a1a1a;
-}
-
-@keyframes slide-in {
-    from { transform: translateX(100%); }
-    to   { transform: translateX(0); }
-}
+@keyframes slide-in { from{transform:translateX(100%)} to{transform:translateX(0)} }
 
 .mobile-menu-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
     padding: 16px 20px;
-    border-bottom: 1px solid #dbdbdb;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
 }
+[data-theme='dark'] .mobile-menu-header { border-color: #333; }
 
-[data-theme='dark'] .mobile-menu-header {
-    border-color: #333;
-}
-
-.mobile-menu-logo {
-    font-size: 20px;
-    font-weight: 700;
-    color: #111827;
-}
-
-[data-theme='dark'] .mobile-menu-logo {
-    color: #f5f5f5;
-}
-
+.mobile-menu-logo { font-size: 20px; font-weight: 700; color: #111827; }
+[data-theme='dark'] .mobile-menu-logo { color: #f5f5f5; }
 .mobile-menu-logo span { color: #D4537E; }
 
-.mobile-menu-close {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-    color: #111827;
-    padding: 4px;
-    line-height: 1;
-}
+.mobile-menu-close { background:none;border:none;font-size:20px;cursor:pointer;color:#111827;padding:4px;line-height:1; }
+[data-theme='dark'] .mobile-menu-close { color:#f5f5f5; }
 
-[data-theme='dark'] .mobile-menu-close {
-    color: #f5f5f5;
-}
+.mobile-menu-avatar { width:64px;height:64px;border-radius:50%;object-fit:cover;margin:24px auto 8px;display:block;border:2px solid #e0e0e0; }
+.mobile-menu-avatar-initials { width:64px;height:64px;border-radius:50%;background:#FBEAF0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:#993556;margin:24px auto 8px; }
 
-.mobile-menu-avatar {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin: 24px auto 8px;
-    display: block;
-    border: 2px solid #dbdbdb;
-}
+.mobile-menu-username { text-align:center;font-size:14px;font-weight:600;color:#111827;margin-bottom:20px; }
+[data-theme='dark'] .mobile-menu-username { color:#f5f5f5; }
 
-.mobile-menu-avatar-initials {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    background: #FBEAF0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 700; color: #993556;
-    margin: 24px auto 8px;
-}
-
-.mobile-menu-username {
-    text-align: center;
-    font-size: 14px;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 24px;
-}
-
-[data-theme='dark'] .mobile-menu-username {
-    color: #f5f5f5;
-}
-
-.mobile-menu-links {
-    display: flex;
-    flex-direction: column;
-    padding: 0 12px;
-    gap: 4px;
-}
-
+/* FIX 6: enlaces del menú — texto siempre legible */
+.mobile-menu-links { display:flex;flex-direction:column;padding:0 12px;gap:2px; }
 .mobile-menu-links button {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 12px;
-    background: none;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #111827;
-    cursor: pointer;
-    text-align: left;
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 12px; background: none; border: none;
+    border-radius: 10px; font-size: 15px; font-weight: 500;
+    color: #111827;      /* hardcodeado light */
+    cursor: pointer; text-align: left; width: 100%;
     transition: background .15s;
 }
+[data-theme='dark'] .mobile-menu-links button { color: #f5f5f5; }
+.mobile-menu-links button:hover { background: #f0f0f0; }
+[data-theme='dark'] .mobile-menu-links button:hover { background: #2a2a2a; }
+.mobile-menu-links button i { width:22px;text-align:center;color:#D4537E;font-size:18px; }
 
-[data-theme='dark'] .mobile-menu-links button {
-    color: #f5f5f5;
+/* FIX 6: publicaciones visibles — asegurar que el contenido del menú no tiene overflow:hidden que tape cosas */
+.mobile-menu-links a {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 12px; text-decoration: none;
+    border-radius: 10px; font-size: 15px; font-weight: 500;
+    color: #111827;
+    transition: background .15s;
 }
+[data-theme='dark'] .mobile-menu-links a { color: #f5f5f5; }
+.mobile-menu-links a:hover { background: #f0f0f0; }
+[data-theme='dark'] .mobile-menu-links a:hover { background: #2a2a2a; }
 
-.mobile-menu-links button:hover {
-    background: #f5f5f5;
-}
-
-[data-theme='dark'] .mobile-menu-links button:hover {
-    background: #2a2a2a;
-}
-
-.mobile-menu-links button i {
-    width: 20px;
-    text-align: center;
-    color: #D4537E;
-    font-size: 18px;
-}
-
-/* =============================================
-   DESKTOP ≥ 768px
-   ============================================= */
+/* DESKTOP ≥ 768px */
 @media (min-width: 768px) {
-    .header-search  { display: block; }
-    .desktop-only   { display: flex; }
-    .hamburger-btn  { display: none; }
+    .header-search   { display: block; }
+    .desktop-only    { display: flex !important; }
+    .hamburger-btn   { display: none; }
 }
