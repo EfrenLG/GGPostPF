@@ -75,9 +75,9 @@
 
 /* ---- LAYOUT ---- */
 .feed-layout { display: flex; justify-content: center; align-items: flex-start; }
-.feed-wrapper { width: 100%; padding-bottom: 70px; }
+.feed-wrapper { width: 100%; max-width: 614px; margin: 0 auto; padding-bottom: 70px; }
 
-/* ---- POSTS GRID (FIX 3: 1 col en móvil) ---- */
+/* ---- POSTS GRID (1 col en móvil) ---- */
 .posts-grid { display: grid; grid-template-columns: 1fr; }
 
 /* ---- POST CARD ---- */
@@ -179,18 +179,18 @@
 .feed-sidebar { display: none; }
 
 /* ============================================
-   DESKTOP ≥ 900px
+   DESKTOP ≥ 768px
    FIX 3: grid 2 columnas con info visible
    ============================================ */
-@media (min-width: 900px) {
+@media (min-width: 768px) {
 
     .stories-bar { max-width: 980px; margin: 16px auto 0; border: 1px solid var(--border); border-radius: 3px; }
 
-    .feed-layout { max-width: 1240px; margin: 20px auto 0; padding: 0 20px; gap: 28px; align-items: flex-start; }
+    .feed-layout { max-width: 1240px; margin: 20px auto 0; padding: 0 20px; gap: 28px; align-items: flex-start; justify-content: center; }
 
-    .feed-wrapper { flex: 1; max-width: none; padding-bottom: 30px; margin: 0; }
+    .feed-wrapper { flex: 1; max-width: none; padding-bottom: 30px; margin: 0 auto; }
 
-    /* FIX 3: 2 columnas — ves 2 posts por fila, con toda la info */
+    /* FIX 3: 2 columnas */
     .posts-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -201,15 +201,12 @@
         border: 1px solid var(--border);
         border-radius: 8px;
         overflow: hidden;
-        border-bottom: 1px solid var(--border);
         transition: box-shadow .2s;
     }
     .post-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
 
-    /* imagen 4:3 en desktop para que se vean más posts verticalmente */
     .post-image-wrapper { aspect-ratio: 4 / 3; }
 
-    /* FIX 6: SIDEBAR visible en desktop */
     .feed-sidebar {
         display: flex;
         flex-direction: column;

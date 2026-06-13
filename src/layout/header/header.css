@@ -144,5 +144,5 @@ header {
 /* DESKTOP ≥ 768px */
 @media (min-width: 768px) {
     .desktop-only    { display: flex !important; }
-    .hamburger-btn   { display: none; }
+    .hamburger-btn   { display: none !important; }
 }

@@ -49,6 +49,17 @@ a { color: inherit; }
 /* scroll suave global */
 html { scroll-behavior: smooth; }
 
+/* FIX: MenuToggle original — forzar contraste si sigue en el proyecto */
+.menu-toggle,
+.menuToggle,
+[class*="menu-btn"],
+[class*="menuBtn"],
+[class*="toggle-btn"] {
+    color: var(--text) !important;
+    border-color: var(--border) !important;
+    background: var(--layout) !important;
+}
+
 /* quitar scrollbar visible en webkit manteniendo scroll */
 ::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
