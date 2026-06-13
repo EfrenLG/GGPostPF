@@ -43,18 +43,7 @@ const Header = () => {
                         GG<span>Post</span>
                     </span>
 
-                    {/* BUSCADOR — solo desktop */}
-                    {isApp && (
-                        <div className="header-search">
-                            <i className="fa fa-search header-search-icon"></i>
-                            <input
-                                type="text"
-                                placeholder="Buscar"
-                                readOnly
-                                onClick={() => navigate('/posts')}
-                            />
-                        </div>
-                    )}
+
 
                     <div className="header-right">
                         {isApp && (
