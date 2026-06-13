@@ -13,7 +13,7 @@
     z-index: 90;
 }
 .search-bar-inner {
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -74,11 +74,14 @@
 .story-label { font-size: 11px; color: var(--text); max-width: 56px; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---- LAYOUT ---- */
-.feed-layout { display: flex; justify-content: center; align-items: flex-start; }
-.feed-wrapper { width: 100%; max-width: 614px; margin: 0 auto; padding-bottom: 70px; }
+.feed-layout { display: flex; justify-content: center; align-items: flex-start; width: 100%; }
+.feed-wrapper { width: 100%; max-width: 100%; padding-bottom: 70px; }
 
-/* ---- POSTS GRID (1 col en móvil) ---- */
-.posts-grid { display: grid; grid-template-columns: 1fr; }
+/* ---- POSTS GRID (1 col en móvil, ocupa todo el ancho) ---- */
+.posts-grid { display: grid; grid-template-columns: 1fr; width: 100%; }
+
+/* post-card ocupa todo el ancho */
+.post-card { width: 100%; }
 
 /* ---- POST CARD ---- */
 .post-card { background: var(--layout); border-bottom: 1px solid var(--border); }
@@ -179,18 +182,29 @@
 .feed-sidebar { display: none; }
 
 /* ============================================
-   DESKTOP ≥ 768px
-   FIX 3: grid 2 columnas con info visible
+   TABLET 768px–1099px: 1 columna centrada, sin sidebar
    ============================================ */
 @media (min-width: 768px) {
+    .feed-layout { max-width: 614px; margin: 20px auto 0; padding: 0 16px; }
+    .feed-wrapper { max-width: 100%; padding-bottom: 30px; }
+    .posts-grid { grid-template-columns: 1fr; gap: 0; }
+    .post-card { border: none; border-radius: 0; border-bottom: 1px solid var(--border); box-shadow: none; }
+    .post-image-wrapper { aspect-ratio: 1 / 1; }
+    .feed-sidebar { display: none; }
+    .stories-bar { max-width: 614px; margin: 16px auto 0; border: 1px solid var(--border); border-radius: 3px; }
+}
+
+/* ============================================
+   DESKTOP ≥ 1100px: grid 2 columnas + sidebar
+   ============================================ */
+@media (min-width: 1100px) {
 
     .stories-bar { max-width: 980px; margin: 16px auto 0; border: 1px solid var(--border); border-radius: 3px; }
 
     .feed-layout { max-width: 1240px; margin: 20px auto 0; padding: 0 20px; gap: 28px; align-items: flex-start; justify-content: center; }
 
-    .feed-wrapper { flex: 1; max-width: none; padding-bottom: 30px; margin: 0 auto; }
+    .feed-wrapper { flex: 1; max-width: none; padding-bottom: 30px; margin: 0; }
 
-    /* FIX 3: 2 columnas */
     .posts-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -201,11 +215,12 @@
         border: 1px solid var(--border);
         border-radius: 8px;
         overflow: hidden;
+        border-bottom: 1px solid var(--border);
         transition: box-shadow .2s;
     }
     .post-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
 
-    .post-image-wrapper { aspect-ratio: 4 / 3; }
+    .post-image-wrapper { aspect-ratio: 1 / 1; }
 
     .feed-sidebar {
         display: flex;
@@ -216,6 +231,7 @@
         position: sticky;
         top: 120px;
     }
+
 
     .sidebar-profile { display:flex;align-items:center;gap:12px; }
     .sidebar-avatar {
