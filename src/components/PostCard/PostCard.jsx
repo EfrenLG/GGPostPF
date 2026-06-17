@@ -16,17 +16,18 @@ const timeAgo = (dateStr) => {
 
 const PostCard = ({ post, user }) => {
     const username = localStorage.getItem("username");
-    const userId = localStorage.getItem("userId");
+    const userId   = localStorage.getItem("userId");
     const userIcon = localStorage.getItem("userIcon");
 
-    const [localPost, setLocalPost] = useState(null);
-    const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessage] = useState("");
-    const [isEditing, setIsEditing] = useState(false);
-    const [editTitle, setEditTitle] = useState("");
+    const [localPost, setLocalPost]         = useState(null);
+    const [messages, setMessages]           = useState([]);
+    const [newMessage, setNewMessage]       = useState("");
+    const [isEditing, setIsEditing]         = useState(false);
+    const [editTitle, setEditTitle]         = useState("");
     const [editDescription, setEditDescription] = useState("");
-    const [editCategories, setEditCategories] = useState("");
-    const wsRef = useRef(null);
+    const [editCategories, setEditCategories]   = useState("");
+    const [isFollowing, setIsFollowing]     = useState(false);
+    const wsRef    = useRef(null);
     const navigate = useNavigate();
 
     const isOwner = localPost?.idUser === userId;
@@ -61,8 +62,21 @@ const PostCard = ({ post, user }) => {
         setNewMessage("");
     };
 
+    // ACTUALIZADO: follow funcional con toggle visual
     const handleFollow = async () => {
-        try { await userService.followUser(localPost.idUser); } catch {}
+        try {
+            const res = await userService.followUser(localPost.idUser);
+            setIsFollowing(res.data.action === 'follow');
+        } catch {}
+    };
+
+    // NUEVO: navegar al perfil del autor
+    const goToAuthorProfile = () => {
+        if (localPost?.idUser === userId) {
+            navigate('/user');
+        } else {
+            navigate(`/perfil/${localPost.idUser}`);
+        }
     };
 
     const toggleLike = async () => {
@@ -118,29 +132,35 @@ const PostCard = ({ post, user }) => {
 
             <div className="post-page">
 
-                {/* IMAGEN IZQUIERDA */}
+                {/* IMAGEN */}
                 <div className="post-media-container">
                     <img src={localPost.file} alt={localPost.tittle} className="post-media" />
                 </div>
 
-                {/* SIDEBAR DERECHA */}
+                {/* SIDEBAR */}
                 <div className="post-sidebar">
 
-                    {/* HEADER */}
+                    {/* HEADER — avatar y nombre clickables */}
                     <div className="post-header">
-                        <div className="post-header-left">
+                        <div className="post-header-left" style={{ cursor: 'pointer' }} onClick={goToAuthorProfile}>
                             {user?.icon && user.icon !== 'default.png'
                                 ? <img src={user.icon} className="post-user-avatar" alt={user.username} />
-                                : <div className="post-user-avatar" style={{background:'#FBEAF0',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:600,color:'#993556'}}>{getInitials(user?.username)}</div>
+                                : <div className="post-user-avatar">{getInitials(user?.username)}</div>
                             }
                             <div className="post-user-block">
                                 <h3>{user?.username}</h3>
                                 <span className="post-date">{timeAgo(localPost.fechaAlta)}</span>
                             </div>
                         </div>
-                        <div style={{display:'flex',gap:'10px',alignItems:'center'}}>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                             {!isOwner && (
-                                <button className="follow-btn" onClick={handleFollow}>Seguir</button>
+                                <button
+                                    className="follow-btn"
+                                    onClick={handleFollow}
+                                    style={ isFollowing ? { color: '#8e8e8e' } : {} }
+                                >
+                                    {isFollowing ? 'Siguiendo' : 'Seguir'}
+                                </button>
                             )}
                             <button className="post-more-btn" aria-label="más opciones">
                                 <i className="fa-solid fa-ellipsis"></i>
@@ -148,14 +168,16 @@ const PostCard = ({ post, user }) => {
                         </div>
                     </div>
 
-                    {/* CAPTION + TÍTULO */}
+                    {/* CAPTION */}
                     <div className="post-caption-block">
                         {user?.icon && user.icon !== 'default.png'
                             ? <img src={user.icon} className="caption-avatar" alt="" />
-                            : <div className="caption-avatar" style={{background:'#FBEAF0',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:600,color:'#993556'}}>{getInitials(user?.username)}</div>
+                            : <div className="caption-avatar">{getInitials(user?.username)}</div>
                         }
                         <div className="caption-text">
-                            <span className="uname">{user?.username}</span>
+                            <span className="uname" style={{ cursor: 'pointer' }} onClick={goToAuthorProfile}>
+                                {user?.username}
+                            </span>
                             <strong>{localPost.tittle} — </strong>
                             {localPost.description}
                             {tags.length > 0 && (
@@ -172,7 +194,7 @@ const PostCard = ({ post, user }) => {
                         </div>
                     </div>
 
-                    {/* FORMULARIO EDICIÓN */}
+                    {/* EDICIÓN */}
                     {isEditing && (
                         <div className="edit-form">
                             <input className="edit-input" value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="Título" />

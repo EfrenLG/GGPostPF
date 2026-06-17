@@ -1,0 +1,235 @@
+/* =============================================
+   PERFIL PÚBLICO — estilo Instagram
+   ============================================= */
+
+.profile-page {
+    max-width: 935px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+}
+
+.profile-loading {
+    text-align: center;
+    padding: 4rem;
+    color: #8e8e8e;
+    font-size: 14px;
+}
+
+/* ---- BACK ---- */
+.profile-back-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 16px;
+    opacity: .7;
+    transition: opacity .2s;
+}
+.profile-back-btn:hover { opacity: 1; }
+
+/* ---- CABECERA ---- */
+.profile-header {
+    padding: 0 16px;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 20px 0 24px;
+}
+
+/* AVATAR */
+.profile-avatar-ring {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 2px solid var(--border);
+}
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.profile-avatar-initials {
+    width: 100%;
+    height: 100%;
+    background: #FBEAF0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #993556;
+}
+
+/* META */
+.profile-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.profile-username-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.profile-username {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text);
+    margin: 0;
+}
+
+.profile-follow-btn {
+    padding: 7px 20px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--h123);
+    color: #fff;
+    transition: background .2s;
+}
+.profile-follow-btn:hover { background: var(--buton-hover); }
+.profile-follow-btn.following {
+    background: var(--body);
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+.profile-follow-btn.following:hover { background: #ffd6e0; border-color: var(--h123); }
+
+.profile-edit-btn {
+    padding: 7px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--body);
+    color: var(--text);
+    transition: background .2s;
+}
+.profile-edit-btn:hover { background: var(--layout); }
+
+/* STATS */
+.profile-stats {
+    display: flex;
+    gap: 32px;
+}
+.profile-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.stat-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+}
+.stat-label {
+    font-size: 13px;
+    color: var(--text);
+}
+
+/* ---- DIVISOR ---- */
+.profile-divider {
+    border-top: 1px solid var(--border);
+    margin: 0 0 4px;
+}
+
+/* ---- GRID ---- */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+}
+
+.profile-grid-item {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--body);
+}
+
+.profile-grid-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .2s ease;
+}
+.profile-grid-item:hover .profile-grid-img { transform: scale(1.04); }
+
+.profile-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    opacity: 0;
+    transition: opacity .2s;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+}
+.profile-grid-overlay i { margin-right: 5px; }
+.profile-grid-item:hover .profile-grid-overlay { opacity: 1; }
+
+/* ---- VACÍO ---- */
+.profile-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 5rem 0;
+    color: #8e8e8e;
+    font-size: 14px;
+}
+
+/* ============================================
+   MÓVIL < 768px
+   ============================================ */
+@media (max-width: 767px) {
+    .profile-info {
+        gap: 20px;
+        padding: 16px 0 20px;
+    }
+    .profile-avatar-ring {
+        width: 72px;
+        height: 72px;
+    }
+    .profile-avatar-initials { font-size: 22px; }
+    .profile-stats { gap: 20px; }
+    .stat-number { font-size: 15px; }
+    .stat-label  { font-size: 12px; }
+    .profile-username { font-size: 17px; }
+}
+
+/* ============================================
+   DESKTOP ≥ 768px
+   ============================================ */
+@media (min-width: 768px) {
+    .profile-avatar-ring {
+        width: 150px;
+        height: 150px;
+    }
+    .profile-avatar-initials { font-size: 46px; }
+    .profile-info { gap: 60px; padding: 28px 0 32px; }
+    .profile-stats { gap: 40px; }
+    .profile-stat { flex-direction: row; gap: 6px; }
+    .stat-label { font-size: 14px; }
+}

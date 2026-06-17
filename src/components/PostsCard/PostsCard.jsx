@@ -19,11 +19,25 @@ const timeAgo = (dateStr) => {
 };
 
 const FeedSidebar = ({ usuarios, userId, username, userIcon, navigate }) => {
-    const suggestions = usuarios.filter(u => u.id !== userId).slice(0, 5);
+    const suggestions = usuarios.filter(u => String(u.id) !== String(userId)).slice(0, 5);
+    const [followingIds, setFollowingIds] = useState([]);
+
+    const handleFollow = async (targetId) => {
+        try {
+            const res = await userService.followUser(targetId);
+            const action = res.data.action;
+            setFollowingIds(prev =>
+                action === 'follow'
+                    ? [...prev, targetId]
+                    : prev.filter(id => id !== targetId)
+            );
+        } catch {}
+    };
+
     return (
         <aside className="feed-sidebar">
             <div className="sidebar-profile">
-                <div className="sidebar-avatar">
+                <div className="sidebar-avatar" style={{ cursor: 'pointer' }} onClick={() => navigate('/user')}>
                     {userIcon && userIcon !== 'default.png'
                         ? <img src={userIcon} alt={username} />
                         : getInitials(username)}
@@ -39,20 +53,32 @@ const FeedSidebar = ({ usuarios, userId, username, userIcon, navigate }) => {
                     <div className="sidebar-suggestions-title">
                         <span>Sugerencias para ti</span>
                     </div>
-                    {suggestions.map(u => (
-                        <div key={u.id} className="suggestion-item">
-                            <div className="suggestion-avatar">
-                                {u.icon && u.icon !== 'default.png'
-                                    ? <img src={u.icon} alt={u.username} />
-                                    : getInitials(u.username || u.id)}
+                    {suggestions.map(u => {
+                        const isF = followingIds.includes(String(u.id));
+                        return (
+                            <div key={u.id} className="suggestion-item">
+                                <div
+                                    className="suggestion-avatar"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => navigate(`/perfil/${u.id}`)}
+                                >
+                                    {u.icon && u.icon !== 'default.png'
+                                        ? <img src={u.icon} alt={u.username} />
+                                        : getInitials(u.username || u.id)}
+                                </div>
+                                <div className="suggestion-info" style={{ cursor: 'pointer' }} onClick={() => navigate(`/perfil/${u.id}`)}>
+                                    <div className="suggestion-name">{u.username || u.id?.slice(0, 10)}</div>
+                                    <div className="suggestion-sub">Sugerido para ti</div>
+                                </div>
+                                <button
+                                    className="suggestion-follow-btn"
+                                    onClick={() => handleFollow(String(u.id))}
+                                >
+                                    {isF ? 'Siguiendo' : 'Seguir'}
+                                </button>
                             </div>
-                            <div className="suggestion-info">
-                                <div className="suggestion-name">{u.username || u.id?.slice(0,10)}</div>
-                                <div className="suggestion-sub">Sugerido para ti</div>
-                            </div>
-                            <button className="suggestion-follow-btn">Seguir</button>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
             <div className="sidebar-footer">
@@ -71,7 +97,7 @@ const PostsCard = ({ posts, usuarios }) => {
     const [usuariosD, setUsuariosD]   = useState([]);
     const [postsState, setPostsState] = useState([]);
     const [seeker, setSeeker]         = useState('');
-    const searchRef = useRef(null);  // FIX 4: ref para el input real
+    const searchRef = useRef(null);
 
     const isUserPage = url() === 'user';
     const navigate   = useNavigate();
@@ -93,7 +119,16 @@ const PostsCard = ({ posts, usuarios }) => {
         navigate('/post/' + post._id);
     };
 
-    // FIX 4: filtrado real por categorías y título
+    // NUEVO: navegar al perfil del autor
+    const handleAuthorClick = (e, post) => {
+        e.stopPropagation();
+        if (post.idUser === userId) {
+            navigate('/user');
+        } else {
+            navigate(`/perfil/${post.idUser}`);
+        }
+    };
+
     const filteredPosts = seeker.trim()
         ? postsState.filter(p => {
             const q = seeker.toLowerCase().replace(/^#/, '').trim();
@@ -110,7 +145,6 @@ const PostsCard = ({ posts, usuarios }) => {
     return (
         <div className="post-wrapper">
 
-            {/* FIX 4: input REAL, no readOnly, con ref */}
             <div className="search-bar-wrapper">
                 <div className="search-bar-inner">
                     <i className="fa fa-search search-icon"></i>
@@ -132,16 +166,23 @@ const PostsCard = ({ posts, usuarios }) => {
                 </div>
             </div>
 
-            {/* STORIES */}
+            {/* STORIES — clickables → perfil */}
             {!isUserPage && storyUsers.length > 0 && (
                 <div className="stories-bar">
                     <div className="stories-inner">
                         {storyUsers.map(u => (
-                            <div key={u.id} className="story-item">
+                            <div
+                                key={u.id}
+                                className="story-item"
+                                onClick={() => String(u.id) === String(userId)
+                                    ? navigate('/user')
+                                    : navigate(`/perfil/${u.id}`)
+                                }
+                            >
                                 <div className="story-ring">
                                     <div className="story-avatar-initials">{getInitials(u.username || u.id)}</div>
                                 </div>
-                                <span className="story-label">{u.username || u.id?.slice(0,6)}</span>
+                                <span className="story-label">{u.username || u.id?.slice(0, 6)}</span>
                             </div>
                         ))}
                     </div>
@@ -157,10 +198,9 @@ const PostsCard = ({ posts, usuarios }) => {
                         </div>
                     )}
 
-                    {/* FIX 3: posts-grid — en móvil 1 col, en desktop 2 cols con info */}
                     <div className="posts-grid">
                         {filteredPosts.map((post, index) => {
-                            const author  = usuariosD.find(u => u.id === post.idUser);
+                            const author  = usuariosD.find(u => String(u.id) === String(post.idUser));
                             const isLiked = post.likes?.includes(userId);
                             const isOwner = post.idUser === userId;
                             const tags    = post.categories
@@ -169,15 +209,15 @@ const PostsCard = ({ posts, usuarios }) => {
 
                             return (
                                 <React.Fragment key={post._id}>
-                                    <div
-                                        className="post-card"
-                                        data-likes={post.likes?.length || 0}
-                                        data-comments="0"
-                                    >
-                                        {/* HEADER — solo en feed global */}
+                                    <div className="post-card" data-likes={post.likes?.length || 0}>
+
+                                        {/* HEADER — avatar y nombre clickables → perfil */}
                                         {!isUserPage && (
                                             <div className="post-header">
-                                                <div className="post-header-left" onClick={() => handlePostClick(post)}>
+                                                <div
+                                                    className="post-header-left"
+                                                    onClick={(e) => handleAuthorClick(e, post)}
+                                                >
                                                     <div className="post-avatar">
                                                         {author?.icon && author.icon !== 'default.png'
                                                             ? <img src={author.icon} alt={post.username} />
@@ -193,7 +233,11 @@ const PostsCard = ({ posts, usuarios }) => {
                                                         <i className="fa-solid fa-ellipsis"></i>
                                                     </button>
                                                     <div className="post-more-menu">
-                                                        {!isOwner && <button>Seguir a {post.username}</button>}
+                                                        {!isOwner && (
+                                                            <button onClick={(e) => { e.stopPropagation(); navigate(`/perfil/${post.idUser}`); }}>
+                                                                Ver perfil de {post.username}
+                                                            </button>
+                                                        )}
                                                         <button>Reportar</button>
                                                         <button>Copiar enlace</button>
                                                     </div>
@@ -201,11 +245,7 @@ const PostsCard = ({ posts, usuarios }) => {
                                             </div>
                                         )}
 
-                                        {/* FIX 1: wrapper con aspect-ratio fijo, imagen cover */}
-                                        <div
-                                            className="post-image-wrapper"
-                                            onClick={() => handlePostClick(post)}
-                                        >
+                                        <div className="post-image-wrapper" onClick={() => handlePostClick(post)}>
                                             <img
                                                 src={post.file}
                                                 alt={post.tittle}
@@ -214,7 +254,6 @@ const PostsCard = ({ posts, usuarios }) => {
                                             />
                                         </div>
 
-                                        {/* INFO — visible en móvil y en desktop 2-col */}
                                         <div className="post-actions-row">
                                             <div className="actions-left">
                                                 <button className={`action-btn ${isLiked ? 'liked' : ''}`} onClick={() => toggleLike(post._id)} aria-label="me gusta">
@@ -235,7 +274,15 @@ const PostsCard = ({ posts, usuarios }) => {
                                         <div className="post-info">
                                             <div className="likes-count">{post.likes?.length || 0} me gusta</div>
                                             <div className="post-caption">
-                                                {!isUserPage && <span className="uname">{post.username} </span>}
+                                                {!isUserPage && (
+                                                    <span
+                                                        className="uname"
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={(e) => handleAuthorClick(e, post)}
+                                                    >
+                                                        {post.username}{' '}
+                                                    </span>
+                                                )}
                                                 <strong>{post.tittle}</strong>
                                                 {post.description?.length > 80
                                                     ? ' — ' + post.description.slice(0, 80) + '...'

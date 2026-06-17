@@ -5,12 +5,13 @@ import { UserContext } from '../../context/UserContext';
 import { url } from '../../functions/url.js';
 
 const Footer = () => {
-    const navigate = useNavigate();
-    const { icon } = useContext(UserContext);
+    const navigate  = useNavigate();
+    const { icon }  = useContext(UserContext);
     const resultURL = url();
-    const iconUser = icon !== 'default.png' ? icon : '../images/default.png';
+    const iconUser  = icon !== 'default.png' ? icon : '../images/default.png';
 
-    const isApp = ['posts', 'user', 'rawgAPI', 'post'].includes(resultURL);
+    // ACTUALIZADO: 'perfil' añadido para que el footer aparezca en páginas de perfil público
+    const isApp = ['posts', 'user', 'rawgAPI', 'post', 'perfil'].includes(resultURL);
 
     if (!isApp) {
         return (

@@ -1,0 +1,146 @@
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import userService from '../../services/api';
+import './Profile.css';
+
+const getInitials = (name) => name ? name.slice(0, 2).toUpperCase() : '?';
+
+const Profile = () => {
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const myUserId = localStorage.getItem('userId');
+
+    const [profile, setProfile]     = useState(null);
+    const [posts, setPosts]         = useState([]);
+    const [stats, setStats]         = useState({ posts: 0, followers: 0, following: 0 });
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [loading, setLoading]     = useState(true);
+
+    const isMyProfile = id === myUserId;
+
+    useEffect(() => {
+        const load = async () => {
+            try {
+                const res = await userService.checkToken();
+                if (res.data.message !== 'Token válido') { navigate('/'); return; }
+
+                const profileRes = await userService.getPublicProfile(id);
+                const { usuario, posts: userPosts, stats: userStats } = profileRes.data;
+
+                setProfile(usuario);
+                setPosts(userPosts);
+                setStats(userStats);
+                setIsFollowing(usuario.followers?.includes(myUserId));
+            } catch (e) {
+                console.error('Error cargando perfil', e);
+                navigate('/posts');
+            } finally {
+                setLoading(false);
+            }
+        };
+        load();
+    }, [id, navigate, myUserId]);
+
+    const handleFollow = async () => {
+        try {
+            const res = await userService.followUser(id);
+            const action = res.data.action;
+            setIsFollowing(action === 'follow');
+            setStats(prev => ({
+                ...prev,
+                followers: action === 'follow' ? prev.followers + 1 : prev.followers - 1
+            }));
+        } catch (e) {
+            console.error('Error al seguir', e);
+        }
+    };
+
+    if (loading) return <div className="profile-loading">Cargando perfil...</div>;
+    if (!profile) return null;
+
+    const iconSrc = profile.icon && profile.icon !== 'default.png' ? profile.icon : null;
+
+    return (
+        <div className="profile-page">
+
+            {/* CABECERA */}
+            <div className="profile-header">
+                <button className="profile-back-btn" onClick={() => navigate(-1)}>← Volver</button>
+
+                <div className="profile-info">
+                    {/* AVATAR */}
+                    <div className="profile-avatar-ring">
+                        {iconSrc
+                            ? <img src={iconSrc} alt={profile.username} className="profile-avatar-img" />
+                            : <div className="profile-avatar-initials">{getInitials(profile.username)}</div>
+                        }
+                    </div>
+
+                    {/* DATOS */}
+                    <div className="profile-meta">
+                        <div className="profile-username-row">
+                            <h2 className="profile-username">{profile.username}</h2>
+                            {!isMyProfile && (
+                                <button
+                                    className={`profile-follow-btn ${isFollowing ? 'following' : ''}`}
+                                    onClick={handleFollow}
+                                >
+                                    {isFollowing ? 'Siguiendo' : 'Seguir'}
+                                </button>
+                            )}
+                            {isMyProfile && (
+                                <button className="profile-edit-btn" onClick={() => navigate('/user')}>
+                                    Editar perfil
+                                </button>
+                            )}
+                        </div>
+
+                        {/* STATS */}
+                        <div className="profile-stats">
+                            <div className="profile-stat">
+                                <span className="stat-number">{stats.posts}</span>
+                                <span className="stat-label">publicaciones</span>
+                            </div>
+                            <div className="profile-stat">
+                                <span className="stat-number">{stats.followers}</span>
+                                <span className="stat-label">seguidores</span>
+                            </div>
+                            <div className="profile-stat">
+                                <span className="stat-number">{stats.following}</span>
+                                <span className="stat-label">siguiendo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* SEPARADOR */}
+            <div className="profile-divider" />
+
+            {/* GRID DE POSTS */}
+            {posts.length === 0 ? (
+                <div className="profile-empty">
+                    <i className="fa-regular fa-image" style={{ fontSize: 48, color: '#8e8e8e' }}></i>
+                    <p>Sin publicaciones aún</p>
+                </div>
+            ) : (
+                <div className="profile-grid">
+                    {posts.map(post => (
+                        <div
+                            key={post._id}
+                            className="profile-grid-item"
+                            onClick={() => navigate('/post/' + post._id)}
+                        >
+                            <img src={post.file} alt={post.tittle} className="profile-grid-img" />
+                            <div className="profile-grid-overlay">
+                                <span><i className="fa-solid fa-heart"></i> {post.likes?.length || 0}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default Profile;
