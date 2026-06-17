@@ -148,7 +148,9 @@ const PostCard = ({ post, user }) => {
                                 : <div className="post-user-avatar">{getInitials(user?.username)}</div>
                             }
                             <div className="post-user-block">
-                                <h3>{user?.username}</h3>
+                                <h3 style={{ color: 'var(--text)', fontWeight: 600, fontSize: '14px', margin: 0 }}>
+                                    {user?.username || 'Usuario'}
+                                </h3>
                                 <span className="post-date">{timeAgo(localPost.fechaAlta)}</span>
                             </div>
                         </div>

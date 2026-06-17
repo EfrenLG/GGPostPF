@@ -22,6 +22,19 @@ const FeedSidebar = ({ usuarios, userId, username, userIcon, navigate }) => {
     const suggestions = usuarios.filter(u => String(u.id) !== String(userId)).slice(0, 5);
     const [followingIds, setFollowingIds] = useState([]);
 
+    // FIX: cargar el estado real de "siguiendo" al montar, en vez de asumir que está vacío
+    useEffect(() => {
+        if (!userId) return;
+        const loadFollowing = async () => {
+            try {
+                const res = await userService.getPublicProfile(userId);
+                const following = res.data.usuario.following || [];
+                setFollowingIds(following.map(String));
+            } catch {}
+        };
+        loadFollowing();
+    }, [userId]);
+
     const handleFollow = async (targetId) => {
         try {
             const res = await userService.followUser(targetId);
@@ -97,13 +110,26 @@ const PostsCard = ({ posts, usuarios }) => {
     const [usuariosD, setUsuariosD]   = useState([]);
     const [postsState, setPostsState] = useState([]);
     const [seeker, setSeeker]         = useState('');
-    const searchRef = useRef(null);
+    const [showUserResults, setShowUserResults] = useState(false); // NUEVO
+    const searchRef    = useRef(null);
+    const searchBoxRef = useRef(null); // NUEVO: para detectar click fuera
 
     const isUserPage = url() === 'user';
     const navigate   = useNavigate();
 
     useEffect(() => { if (Array.isArray(usuarios)) setUsuariosD(usuarios); }, [usuarios]);
     useEffect(() => { if (Array.isArray(posts)) setPostsState(posts.map(p => ({ ...p }))); }, [posts]);
+
+    // NUEVO: cerrar el dropdown de usuarios al hacer click fuera de la barra de búsqueda
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (searchBoxRef.current && !searchBoxRef.current.contains(e.target)) {
+                setShowUserResults(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     const sendView   = async (idPost) => { try { await userService.viewPost({ idPost }); } catch {} };
     const toggleLike = (postId) => {
@@ -129,6 +155,17 @@ const PostsCard = ({ posts, usuarios }) => {
         }
     };
 
+    // NUEVO: ir al perfil de un usuario desde el dropdown de búsqueda
+    const goToSearchedProfile = (u) => {
+        setSeeker('');
+        setShowUserResults(false);
+        if (String(u.id) === String(userId)) {
+            navigate('/user');
+        } else {
+            navigate(`/perfil/${u.id}`);
+        }
+    };
+
     const filteredPosts = seeker.trim()
         ? postsState.filter(p => {
             const q = seeker.toLowerCase().replace(/^#/, '').trim();
@@ -140,30 +177,58 @@ const PostsCard = ({ posts, usuarios }) => {
           })
         : postsState;
 
+    // NUEVO: usuarios que coinciden con el texto buscado (por username)
+    const matchedUsers = seeker.trim() && !seeker.trim().startsWith('#')
+        ? usuariosD.filter(u =>
+            u.username?.toLowerCase().includes(seeker.toLowerCase().trim())
+          ).slice(0, 6)
+        : [];
+
     const storyUsers = usuariosD.slice(0, 10);
 
     return (
         <div className="post-wrapper">
 
-            <div className="search-bar-wrapper">
+            <div className="search-bar-wrapper" ref={searchBoxRef}>
                 <div className="search-bar-inner">
                     <i className="fa fa-search search-icon"></i>
                     <input
                         ref={searchRef}
                         type="text"
                         className="search-input"
-                        placeholder="Buscar por #categoría o título..."
+                        placeholder="Buscar usuarios o #categoría..."
                         value={seeker}
-                        onChange={e => setSeeker(e.target.value)}
+                        onChange={e => { setSeeker(e.target.value); setShowUserResults(true); }}
+                        onFocus={() => setShowUserResults(true)}
                         autoComplete="off"
                     />
                     {seeker && (
                         <button
                             className="search-clear"
-                            onClick={() => { setSeeker(''); searchRef.current?.focus(); }}
+                            onClick={() => { setSeeker(''); setShowUserResults(false); searchRef.current?.focus(); }}
                         >✕</button>
                     )}
                 </div>
+
+                {/* NUEVO: dropdown de usuarios coincidentes */}
+                {showUserResults && matchedUsers.length > 0 && (
+                    <div className="search-users-dropdown">
+                        {matchedUsers.map(u => (
+                            <div
+                                key={u.id}
+                                className="search-user-item"
+                                onClick={() => goToSearchedProfile(u)}
+                            >
+                                <div className="search-user-avatar">
+                                    {u.icon && u.icon !== 'default.png'
+                                        ? <img src={u.icon} alt={u.username} />
+                                        : getInitials(u.username || u.id)}
+                                </div>
+                                <div className="search-user-name">{u.username}</div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* STORIES — clickables → perfil */}

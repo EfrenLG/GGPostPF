@@ -10,7 +10,10 @@ const Header = () => {
     const resultURL = url();
     const iconUser  = icon && icon !== 'default.png' ? icon : null;
     const username  = localStorage.getItem('username');
-    const isApp     = ['posts', 'user', 'rawgAPI', 'post'].includes(resultURL);
+    const isApp     = ['posts', 'user', 'rawgAPI', 'post', 'perfil'].includes(resultURL);
+
+    // FIX: comprobamos si hay sesión iniciada (token/userId guardado), no solo en qué página estamos
+    const isLoggedIn = !!localStorage.getItem('userId');
 
     const [theme, setTheme]       = useState(() => localStorage.getItem('theme') || 'light');
     const [menuOpen, setMenuOpen] = useState(false);
@@ -23,7 +26,7 @@ const Header = () => {
     // Cerrar menú al navegar
     useEffect(() => { setMenuOpen(false); }, [resultURL]);
 
-    // FIX 6: cerrar menú con Escape
+    // Cerrar menú con Escape
     useEffect(() => {
         const handler = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
         window.addEventListener('keydown', handler);
@@ -33,17 +36,19 @@ const Header = () => {
     const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
     const goTo = (path) => { navigate(path); setMenuOpen(false); };
 
+    // FIX: el logo lleva a /posts si hay sesión iniciada (sea cual sea la página actual),
+    // y solo al login ('/') si no hay sesión
+    const handleLogoClick = () => navigate(isLoggedIn ? '/posts' : '/');
+
     return (
         <>
             <header>
                 <div className="header-content">
 
                     {/* LOGO */}
-                    <span className="header-logo-text" onClick={() => navigate(isApp ? '/posts' : '/')}>
+                    <span className="header-logo-text" onClick={handleLogoClick}>
                         GG<span>Post</span>
                     </span>
-
-
 
                     <div className="header-right">
                         {isApp && (
@@ -83,7 +88,7 @@ const Header = () => {
                             {theme === 'light' ? '🌙' : '☀️'}
                         </button>
 
-                        {/* FIX 6: hamburguesa solo en móvil */}
+                        {/* Hamburguesa solo en móvil */}
                         {isApp && (
                             <button
                                 className="hamburger-btn"
@@ -100,7 +105,7 @@ const Header = () => {
                 </div>
             </header>
 
-            {/* FIX 6: menú lateral con fondo sólido + publicaciones visibles */}
+            {/* Menú lateral con fondo sólido + publicaciones visibles */}
             {menuOpen && (
                 <div
                     className="mobile-menu-overlay"
@@ -129,7 +134,6 @@ const Header = () => {
                         }
                         <div className="mobile-menu-username">{username}</div>
 
-                        {/* FIX 6: botones con colores hardcodeados para garantizar legibilidad */}
                         <div className="mobile-menu-links">
                             <button onClick={() => goTo('/posts')}>
                                 <i className="fa-solid fa-house"></i>
