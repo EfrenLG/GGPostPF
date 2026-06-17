@@ -1,49 +1,64 @@
-import React from 'react';
-import { UserProvider } from "./context/UserContext";
+// Axios
+import axios from 'axios';
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+const URL_API = import.meta.env.VITE_URL_API;
 
-import './App.css';
+const api = axios.create({
+    baseURL: URL_API,
+    timeout: 30000,
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    withCredentials: true
+});
 
-import Header from './layout/header/header.jsx';
-import Footer from './layout/footer/footer.jsx';
-import AdRefreshOnRouteChange from './components/AdRefreshOnRouteChange/AdRefreshOnRouteChange.jsx';
-import ChatGPT from './components/ChatGPT/ChatGPT.jsx';
+// Interceptor centralizado para errores 401
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401 ||
+            error.response?.data?.error === 'Acceso no autorizado') {
+            window.location.href = '/';
+        }
+        return Promise.reject(error);
+    }
+);
 
-import Login from './pages/Login/Login.jsx';
-import Register from './pages/Register/Register.jsx';
-import Posts from './pages/Posts/Posts.jsx';
-import Post from './pages/Post/Post.jsx';
-import RawgAPI from './pages/RawgAPI/RawgAPI.jsx';
-import User from './pages/User/User.jsx';
-import Profile from './pages/Profile/Profile.jsx'; // NUEVO
+const userService = {
 
-function App() {
-  return (
-    <Router>
-      <UserProvider>
-        <div className='layout-wrapper'>
-          <Header />
-          <AdRefreshOnRouteChange />
-          <div className='main-content'>
-            <Routes>
-              <Route path='/' element={<Login />} />
-              <Route path='/register' element={<Register />} />
-              <Route path='/posts' element={<Posts />} />
-              <Route path='/post/:id' element={<Post />} />
-              <Route path='/rawgAPI' element={<RawgAPI />} />
-              <Route path='/user' element={<User />} />
-              <Route path='/perfil/:id' element={<Profile />} /> {/* NUEVO */}
-            </Routes>
-          </div>
-          {/*<ChatGPT />*/}
-          <Footer />
-        </div>
-      </UserProvider>
-    </Router>
-  );
+    // SERVICE TOKEN CONTROL
+    checkToken: () => api.get('/api/verify'),
+
+    // SERVICE USER
+    checkUser: (userData) => api.post('/auth/check', userData),
+    registerUser: (userData) => api.post('/auth/register', userData),
+    emailUser: (userData) => api.post('/email/send-email', userData),
+    loginUser: (userData) => api.post('/auth/login', userData),
+    getUser: (id) => api.get(`/api/user/${id}`),
+    getUsers: () => api.get(`/api/user/all`),
+    updateIconUser: (userData) => api.put('/api/user/icon', userData),
+    followUser: (targetUserId) => api.post(`/api/user/follow/${targetUserId}`),
+    getPublicProfile: (id) => api.get(`/api/user/profile/${id}`), // NUEVO
+    saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true
+    }),
+
+    // SERVICES POSTS
+    getPost: (id) => api.get(`/api/post/${id}`),
+    getPosts: () => api.get('/api/post/all'),
+    viewPost: (idPost) => api.put('/api/post/view', idPost),
+    likePost: (dataPost) => api.put('/api/post/like', dataPost),
+    editPost: (postData) => api.put('/api/post/edit', postData),
+    deletePost: (idPost) => api.delete(`/api/post/delete/${idPost}`),
+    newPost: (dataPost) => api.post('/api/post/register', dataPost),
+    newImagePost: (formData) => api.post('/api/icon/upload/post', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true
+    }),
+
+    // SERVICE OPENAI
+    chatWithAI: (message) => api.post('/api/chat', { message }),
 };
 
-export default App;
+export default userService;
