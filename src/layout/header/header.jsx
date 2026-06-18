@@ -13,13 +13,10 @@ const Header = () => {
     const iconUser  = icon && icon !== 'default.png' ? icon : null;
     const username  = localStorage.getItem('username');
     const isApp     = ['posts', 'user', 'rawgAPI', 'post', 'perfil'].includes(resultURL);
-
     const isLoggedIn = !!localStorage.getItem('userId');
 
     const [theme, setTheme]       = useState(() => localStorage.getItem('theme') || 'light');
     const [menuOpen, setMenuOpen] = useState(false);
-
-    // NUEVO: solicitudes de seguimiento pendientes
     const [requestsCount, setRequestsCount] = useState(0);
     const [showRequestsModal, setShowRequestsModal] = useState(false);
 
@@ -28,39 +25,29 @@ const Header = () => {
         localStorage.setItem('theme', theme);
     }, [theme]);
 
-    // Cerrar menú al navegar
     useEffect(() => { setMenuOpen(false); }, [resultURL]);
 
-    // Cerrar menú con Escape
     useEffect(() => {
         const handler = (e) => { if (e.key === 'Escape') { setMenuOpen(false); setShowRequestsModal(false); } };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
     }, []);
 
-    // NUEVO: cargar el número de solicitudes pendientes mientras haya sesión
     useEffect(() => {
         if (!isLoggedIn) return;
-        const loadCount = async () => {
-            try {
-                const res = await userService.getFollowRequests();
-                setRequestsCount(res.data.length);
-            } catch {}
-        };
-        loadCount();
+        userService.getFollowRequests()
+            .then(res => setRequestsCount(res.data.length))
+            .catch(() => {});
     }, [isLoggedIn, resultURL]);
 
     const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
     const goTo = (path) => { navigate(path); setMenuOpen(false); };
-
     const handleLogoClick = () => navigate(isLoggedIn ? '/posts' : '/');
 
     return (
         <>
             <header>
                 <div className="header-content">
-
-                    {/* LOGO */}
                     <span className="header-logo-text" onClick={handleLogoClick}>
                         GG<span>Post</span>
                     </span>
@@ -68,15 +55,9 @@ const Header = () => {
                     <div className="header-right">
                         {isApp && (
                             <>
-                                <button
-                                    className="header-icon-btn desktop-only"
-                                    onClick={() => navigate('/posts')}
-                                    aria-label="inicio"
-                                >
+                                <button className="header-icon-btn desktop-only" onClick={() => navigate('/posts')} aria-label="inicio">
                                     <i className="fa-solid fa-house"></i>
                                 </button>
-
-                                {/* ACTUALIZADO: campana de solicitudes de seguimiento con badge */}
                                 <button
                                     className={`header-icon-btn desktop-only ${requestsCount > 0 ? 'notif-dot' : ''}`}
                                     aria-label="solicitudes de seguimiento"
@@ -84,93 +65,46 @@ const Header = () => {
                                 >
                                     <i className="fa-regular fa-bell"></i>
                                 </button>
-
-                                <div
-                                    className="profile-icon desktop-only"
-                                    onClick={() => navigate('/user')}
-                                    role="button"
-                                    tabIndex={0}
-                                    aria-label="mi perfil"
-                                >
+                                <div className="profile-icon desktop-only" onClick={() => navigate('/user')} role="button" tabIndex={0} aria-label="mi perfil">
                                     {iconUser
                                         ? <img src={iconUser} alt="Perfil" className="profile-img" />
-                                        : <div className="profile-initials">
-                                            {username?.slice(0,2).toUpperCase() || 'U'}
-                                          </div>
+                                        : <div className="profile-initials">{username?.slice(0,2).toUpperCase() || 'U'}</div>
                                     }
                                 </div>
                             </>
                         )}
-
-                        {/* Toggle tema — siempre visible */}
                         <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="cambiar tema">
                             {theme === 'light' ? '🌙' : '☀️'}
                         </button>
-
-                        {/* Hamburguesa solo en móvil */}
                         {isApp && (
-                            <button
-                                className="hamburger-btn"
-                                onClick={() => setMenuOpen(o => !o)}
-                                aria-label="abrir menú"
-                                aria-expanded={menuOpen}
-                            >
-                                <span></span>
-                                <span></span>
-                                <span></span>
+                            <button className="hamburger-btn" onClick={() => setMenuOpen(o => !o)} aria-label="abrir menú" aria-expanded={menuOpen}>
+                                <span></span><span></span><span></span>
                             </button>
                         )}
                     </div>
                 </div>
             </header>
 
-            {/* Menú lateral con fondo sólido + publicaciones visibles */}
             {menuOpen && (
-                <div
-                    className="mobile-menu-overlay"
-                    onClick={() => setMenuOpen(false)}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label="menú de navegación"
-                >
+                <div className="mobile-menu-overlay" onClick={() => setMenuOpen(false)} role="dialog" aria-modal="true" aria-label="menú de navegación">
                     <nav className="mobile-menu" onClick={e => e.stopPropagation()}>
-
                         <div className="mobile-menu-header">
                             <span className="mobile-menu-logo">GG<span>Post</span></span>
-                            <button
-                                className="mobile-menu-close"
-                                onClick={() => setMenuOpen(false)}
-                                aria-label="cerrar menú"
-                            >✕</button>
+                            <button className="mobile-menu-close" onClick={() => setMenuOpen(false)} aria-label="cerrar menú">✕</button>
                         </div>
-
-                        {/* Avatar */}
                         {iconUser
                             ? <img src={iconUser} alt="perfil" className="mobile-menu-avatar" />
-                            : <div className="mobile-menu-avatar-initials">
-                                {username?.slice(0,2).toUpperCase() || 'U'}
-                              </div>
+                            : <div className="mobile-menu-avatar-initials">{username?.slice(0,2).toUpperCase() || 'U'}</div>
                         }
                         <div className="mobile-menu-username">{username}</div>
-
                         <div className="mobile-menu-links">
-                            <button onClick={() => goTo('/posts')}>
-                                <i className="fa-solid fa-house"></i>
-                                Publicaciones
-                            </button>
-                            <button onClick={() => goTo('/user')}>
-                                <i className="fa-regular fa-user"></i>
-                                Mi perfil
-                            </button>
-                            {/* NUEVO: acceso a solicitudes también en móvil */}
+                            <button onClick={() => goTo('/posts')}><i className="fa-solid fa-house"></i>Publicaciones</button>
+                            <button onClick={() => goTo('/user')}><i className="fa-regular fa-user"></i>Mi perfil</button>
                             <button onClick={() => { setMenuOpen(false); setShowRequestsModal(true); }}>
                                 <i className="fa-regular fa-bell"></i>
                                 Solicitudes{requestsCount > 0 ? ` (${requestsCount})` : ''}
                             </button>
-                            <button onClick={() => goTo('/rawgAPI')}>
-                                <i className="fa-solid fa-gamepad"></i>
-                                Explorar juegos
-                            </button>
+                            <button onClick={() => goTo('/rawgAPI')}><i className="fa-solid fa-gamepad"></i>Explorar juegos</button>
                             <button onClick={toggleTheme}>
                                 {theme === 'light'
                                     ? <><i className="fa-solid fa-moon"></i> Modo oscuro</>
@@ -182,7 +116,6 @@ const Header = () => {
                 </div>
             )}
 
-            {/* NUEVO: modal de solicitudes de seguimiento */}
             {showRequestsModal && (
                 <FollowRequestsModal
                     onClose={() => setShowRequestsModal(false)}
