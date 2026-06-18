@@ -4,7 +4,78 @@ import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../../context/UserContext";
 import { url } from '../../functions/url.js';
 import userService from '../../services/api';
-import FollowRequestsModal from '../../components/FollowRequestsModal/FollowRequestsModal';
+
+const getInitials = (name) => name ? name.slice(0, 2).toUpperCase() : '?';
+
+/* Modal de solicitudes de seguimiento — inlinado en el header */
+const RequestsModal = ({ onClose, onCountChange }) => {
+    const navigate = useNavigate();
+    const [requests, setRequests] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [processingId, setProcessingId] = useState(null);
+
+    useEffect(() => {
+        userService.getFollowRequests()
+            .then(res => setRequests(res.data))
+            .catch(() => {})
+            .finally(() => setLoading(false));
+    }, []);
+
+    const handle = async (id, action) => {
+        setProcessingId(id);
+        try {
+            if (action === 'accept') await userService.acceptFollowRequest(id);
+            else await userService.rejectFollowRequest(id);
+            setRequests(prev => {
+                const updated = prev.filter(r => String(r.id) !== String(id));
+                onCountChange?.(updated.length);
+                return updated;
+            });
+        } catch {}
+        setProcessingId(null);
+    };
+
+    return (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.5)',zIndex:300,display:'flex',alignItems:'center',justifyContent:'center'}} onClick={onClose}>
+            <div style={{background:'var(--layout)',borderRadius:12,width:'100%',maxWidth:420,maxHeight:'70vh',margin:'0 16px',display:'flex',flexDirection:'column',overflow:'hidden',boxShadow:'0 8px 30px rgba(0,0,0,.25)'}} onClick={e=>e.stopPropagation()}>
+                <div style={{display:'flex',alignItems:'center',justifyContent:'center',position:'relative',padding:'14px 16px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:15,color:'var(--text)'}}>
+                    Solicitudes de seguimiento
+                    <button onClick={onClose} style={{position:'absolute',right:14,background:'none',border:'none',fontSize:18,cursor:'pointer',color:'var(--text)'}}>✕</button>
+                </div>
+                <div style={{overflowY:'auto',flex:1,padding:'6px 0'}}>
+                    {loading && <p style={{textAlign:'center',padding:'2rem',color:'#8e8e8e',fontSize:14}}>Cargando...</p>}
+                    {!loading && requests.length === 0 && (
+                        <p style={{textAlign:'center',padding:'2rem',color:'#8e8e8e',fontSize:14}}>No tienes solicitudes pendientes</p>
+                    )}
+                    {requests.map(u => (
+                        <div key={u.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 16px',gap:10}}>
+                            <div style={{display:'flex',alignItems:'center',gap:12,cursor:'pointer',flex:1,minWidth:0}} onClick={()=>{onClose();navigate(`/perfil/${u.id}`);}}>
+                                <div style={{width:44,height:44,borderRadius:'50%',background:'#FBEAF0',flexShrink:0,overflow:'hidden',display:'flex',alignItems:'center',justifyContent:'center',fontSize:14,fontWeight:700,color:'#993556'}}>
+                                    {u.icon && u.icon !== 'default.png'
+                                        ? <img src={u.icon} alt={u.username} style={{width:'100%',height:'100%',objectFit:'cover',borderRadius:'50%'}}/>
+                                        : getInitials(u.username)}
+                                </div>
+                                <span style={{fontSize:14,fontWeight:600,color:'var(--text)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{u.username}</span>
+                            </div>
+                            <div style={{display:'flex',gap:6,flexShrink:0}}>
+                                <button
+                                    disabled={processingId === u.id}
+                                    onClick={() => handle(u.id, 'accept')}
+                                    style={{padding:'6px 12px',borderRadius:8,border:'none',fontSize:12,fontWeight:600,cursor:'pointer',background:'var(--h123)',color:'#fff',opacity: processingId === u.id ? 0.5 : 1}}
+                                >Aceptar</button>
+                                <button
+                                    disabled={processingId === u.id}
+                                    onClick={() => handle(u.id, 'reject')}
+                                    style={{padding:'6px 12px',borderRadius:8,border:'1px solid var(--border)',fontSize:12,fontWeight:600,cursor:'pointer',background:'var(--body)',color:'var(--text)',opacity: processingId === u.id ? 0.5 : 1}}
+                                >Rechazar</button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 const Header = () => {
     const { icon } = useContext(UserContext);
@@ -15,8 +86,8 @@ const Header = () => {
     const isApp     = ['posts', 'user', 'rawgAPI', 'post', 'perfil'].includes(resultURL);
     const isLoggedIn = !!localStorage.getItem('userId');
 
-    const [theme, setTheme]       = useState(() => localStorage.getItem('theme') || 'light');
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [theme, setTheme]             = useState(() => localStorage.getItem('theme') || 'light');
+    const [menuOpen, setMenuOpen]       = useState(false);
     const [requestsCount, setRequestsCount] = useState(0);
     const [showRequestsModal, setShowRequestsModal] = useState(false);
 
@@ -28,7 +99,9 @@ const Header = () => {
     useEffect(() => { setMenuOpen(false); }, [resultURL]);
 
     useEffect(() => {
-        const handler = (e) => { if (e.key === 'Escape') { setMenuOpen(false); setShowRequestsModal(false); } };
+        const handler = (e) => {
+            if (e.key === 'Escape') { setMenuOpen(false); setShowRequestsModal(false); }
+        };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
     }, []);
@@ -117,7 +190,7 @@ const Header = () => {
             )}
 
             {showRequestsModal && (
-                <FollowRequestsModal
+                <RequestsModal
                     onClose={() => setShowRequestsModal(false)}
                     onCountChange={setRequestsCount}
                 />
