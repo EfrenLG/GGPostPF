@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../../context/UserContext";
 import { url } from '../../functions/url.js';
+import userService from '../../services/api';
+import FollowRequestsModal from '../../components/FollowRequestsModal/FollowRequestsModal';
 
 const Header = () => {
     const { icon } = useContext(UserContext);
@@ -12,11 +14,14 @@ const Header = () => {
     const username  = localStorage.getItem('username');
     const isApp     = ['posts', 'user', 'rawgAPI', 'post', 'perfil'].includes(resultURL);
 
-    // FIX: comprobamos si hay sesión iniciada (token/userId guardado), no solo en qué página estamos
     const isLoggedIn = !!localStorage.getItem('userId');
 
     const [theme, setTheme]       = useState(() => localStorage.getItem('theme') || 'light');
     const [menuOpen, setMenuOpen] = useState(false);
+
+    // NUEVO: solicitudes de seguimiento pendientes
+    const [requestsCount, setRequestsCount] = useState(0);
+    const [showRequestsModal, setShowRequestsModal] = useState(false);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
@@ -28,16 +33,26 @@ const Header = () => {
 
     // Cerrar menú con Escape
     useEffect(() => {
-        const handler = (e) => { if (e.key === 'Escape') setMenuOpen(false); };
+        const handler = (e) => { if (e.key === 'Escape') { setMenuOpen(false); setShowRequestsModal(false); } };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
     }, []);
 
+    // NUEVO: cargar el número de solicitudes pendientes mientras haya sesión
+    useEffect(() => {
+        if (!isLoggedIn) return;
+        const loadCount = async () => {
+            try {
+                const res = await userService.getFollowRequests();
+                setRequestsCount(res.data.length);
+            } catch {}
+        };
+        loadCount();
+    }, [isLoggedIn, resultURL]);
+
     const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
     const goTo = (path) => { navigate(path); setMenuOpen(false); };
 
-    // FIX: el logo lleva a /posts si hay sesión iniciada (sea cual sea la página actual),
-    // y solo al login ('/') si no hay sesión
     const handleLogoClick = () => navigate(isLoggedIn ? '/posts' : '/');
 
     return (
@@ -60,12 +75,16 @@ const Header = () => {
                                 >
                                     <i className="fa-solid fa-house"></i>
                                 </button>
+
+                                {/* ACTUALIZADO: campana de solicitudes de seguimiento con badge */}
                                 <button
-                                    className="header-icon-btn desktop-only notif-dot"
-                                    aria-label="notificaciones"
+                                    className={`header-icon-btn desktop-only ${requestsCount > 0 ? 'notif-dot' : ''}`}
+                                    aria-label="solicitudes de seguimiento"
+                                    onClick={() => setShowRequestsModal(true)}
                                 >
-                                    <i className="fa-regular fa-heart"></i>
+                                    <i className="fa-regular fa-bell"></i>
                                 </button>
+
                                 <div
                                     className="profile-icon desktop-only"
                                     onClick={() => navigate('/user')}
@@ -143,6 +162,11 @@ const Header = () => {
                                 <i className="fa-regular fa-user"></i>
                                 Mi perfil
                             </button>
+                            {/* NUEVO: acceso a solicitudes también en móvil */}
+                            <button onClick={() => { setMenuOpen(false); setShowRequestsModal(true); }}>
+                                <i className="fa-regular fa-bell"></i>
+                                Solicitudes{requestsCount > 0 ? ` (${requestsCount})` : ''}
+                            </button>
                             <button onClick={() => goTo('/rawgAPI')}>
                                 <i className="fa-solid fa-gamepad"></i>
                                 Explorar juegos
@@ -156,6 +180,14 @@ const Header = () => {
                         </div>
                     </nav>
                 </div>
+            )}
+
+            {/* NUEVO: modal de solicitudes de seguimiento */}
+            {showRequestsModal && (
+                <FollowRequestsModal
+                    onClose={() => setShowRequestsModal(false)}
+                    onCountChange={setRequestsCount}
+                />
             )}
         </>
     );

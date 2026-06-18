@@ -39,7 +39,11 @@ const userService = {
     updateIconUser: (userData) => api.put('/api/user/icon', userData),
     followUser: (targetUserId) => api.post(`/api/user/follow/${targetUserId}`),
     getPublicProfile: (id) => api.get(`/api/user/profile/${id}`),
-    getFollowList: (id, type) => api.get(`/api/user/follow-list/${id}`, { params: { type } }), // NUEVO
+    getFollowList: (id, type) => api.get(`/api/user/follow-list/${id}`, { params: { type } }),
+    togglePrivacy: () => api.put('/api/user/privacy'), // NUEVO
+    getFollowRequests: () => api.get('/api/user/follow-requests'), // NUEVO
+    acceptFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/accept`), // NUEVO
+    rejectFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/reject`), // NUEVO
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true

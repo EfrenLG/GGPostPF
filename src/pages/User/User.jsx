@@ -31,6 +31,8 @@ const User = () => {
     const [showModalIcon, setShowModalIcon] = useState(false);
     const [showModalAddPost, setShowModalAddPost] = useState(false);
     const [showCard, setShowCard] = useState(false);
+    const [isPrivate, setIsPrivate] = useState(false); // NUEVO: estado de cuenta privada
+    const [togglingPrivacy, setTogglingPrivacy] = useState(false); // NUEVO
 
     const navigate = useNavigate();
 
@@ -45,6 +47,7 @@ const User = () => {
 
             setDataUser(dataUserR.data.usuario);
             setDataPost(dataUserR.data.post);
+            setIsPrivate(!!dataUserR.data.usuario.isPrivate); // NUEVO
 
             localStorage.setItem('userIcon', dataUserR.data.usuario.icon);
 
@@ -198,6 +201,20 @@ const User = () => {
         };
     };
 
+    // NUEVO: activar/desactivar cuenta privada
+    const handleTogglePrivacy = async () => {
+        if (togglingPrivacy) return;
+        setTogglingPrivacy(true);
+        try {
+            const res = await userService.togglePrivacy();
+            setIsPrivate(res.data.isPrivate);
+        } catch (e) {
+            console.log('Error al cambiar privacidad', e);
+        } finally {
+            setTogglingPrivacy(false);
+        }
+    };
+
     const closeSesion = () => {
 
         localStorage.removeItem('userIcon');
@@ -230,6 +247,28 @@ const User = () => {
                     <div className="user-data">
                         <p><strong>Usuario:</strong> {firstLetter(dataUser?.username)}</p>
                         <p><strong>Email:</strong> {dataUser.email}</p>
+
+                        {/* NUEVO: toggle de cuenta privada */}
+                        <div className="privacy-toggle-wrapper">
+                            <label className="privacy-toggle-label">
+                                <span>Cuenta privada</span>
+                                <button
+                                    type="button"
+                                    className={`privacy-switch ${isPrivate ? 'on' : ''}`}
+                                    onClick={handleTogglePrivacy}
+                                    disabled={togglingPrivacy}
+                                    aria-pressed={isPrivate}
+                                    aria-label="Activar o desactivar cuenta privada"
+                                >
+                                    <span className="privacy-switch-knob"></span>
+                                </button>
+                            </label>
+                            <p className="privacy-hint">
+                                {isPrivate
+                                    ? 'Solo tus seguidores aprobados pueden ver tus publicaciones.'
+                                    : 'Cualquiera puede ver tu perfil y tus publicaciones.'}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
@@ -319,4 +358,3 @@ const User = () => {
 };
 
 export default User;
-

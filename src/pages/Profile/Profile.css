@@ -87,6 +87,15 @@
     font-weight: 300;
     color: var(--text);
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* NUEVO: icono de candado junto al username */
+.profile-lock-icon {
+    font-size: 14px;
+    color: #8e8e8e;
 }
 
 .profile-follow-btn {
@@ -107,6 +116,15 @@
     border: 1px solid var(--border);
 }
 .profile-follow-btn.following:hover { background: #ffd6e0; border-color: var(--h123); }
+
+/* NUEVO: estado "Solicitado" — pendiente de aprobación */
+.profile-follow-btn.requested {
+    background: var(--body);
+    color: #8e8e8e;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+.profile-follow-btn.requested:hover { background: #ffe5ea; color: var(--h123); border-color: var(--h123); }
 
 .profile-edit-btn {
     padding: 7px 20px;
@@ -201,6 +219,38 @@
     padding: 5rem 0;
     color: #8e8e8e;
     font-size: 14px;
+}
+
+/* NUEVO: bloqueo de contenido para cuentas privadas sin acceso */
+.profile-private-lock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 4rem 1rem;
+    text-align: center;
+}
+.profile-private-lock i {
+    font-size: 40px;
+    color: var(--text);
+    border: 2px solid var(--text);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-private-lock h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+}
+.profile-private-lock p {
+    font-size: 14px;
+    color: #8e8e8e;
+    margin: 0;
 }
 
 /* ============================================
