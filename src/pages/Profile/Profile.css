@@ -132,6 +132,9 @@
     align-items: center;
     gap: 2px;
 }
+.profile-stat-clickable { cursor: pointer; }
+.profile-stat-clickable:hover .stat-number,
+.profile-stat-clickable:hover .stat-label { opacity: .65; }
 .stat-number {
     font-size: 16px;
     font-weight: 700;

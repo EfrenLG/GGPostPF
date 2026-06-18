@@ -1,0 +1,124 @@
+.follow-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fmodal-fade-in .15s ease;
+}
+@keyframes fmodal-fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+.follow-modal {
+    background: var(--layout);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    max-height: 70vh;
+    margin: 0 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,.25);
+}
+
+.follow-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+}
+
+.follow-modal-close {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text);
+    line-height: 1;
+}
+
+.follow-modal-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 6px 0;
+}
+
+.follow-modal-loading,
+.follow-modal-empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    font-size: 14px;
+    color: #8e8e8e;
+}
+
+.follow-modal-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    gap: 12px;
+}
+
+.follow-modal-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    flex: 1;
+    min-width: 0;
+}
+
+.follow-modal-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #FBEAF0;
+    flex-shrink: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #993556;
+}
+.follow-modal-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+.follow-modal-username {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.follow-modal-btn {
+    padding: 6px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--h123);
+    color: #fff;
+    flex-shrink: 0;
+    transition: background .2s;
+}
+.follow-modal-btn:hover { background: var(--buton-hover); }
+.follow-modal-btn.following {
+    background: var(--body);
+    color: var(--text);
+    border: 1px solid var(--border);
+}

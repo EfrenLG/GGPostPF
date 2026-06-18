@@ -38,7 +38,8 @@ const userService = {
     getUsers: () => api.get(`/api/user/all`),
     updateIconUser: (userData) => api.put('/api/user/icon', userData),
     followUser: (targetUserId) => api.post(`/api/user/follow/${targetUserId}`),
-    getPublicProfile: (id) => api.get(`/api/user/profile/${id}`), // NUEVO
+    getPublicProfile: (id) => api.get(`/api/user/profile/${id}`),
+    getFollowList: (id, type) => api.get(`/api/user/follow-list/${id}`, { params: { type } }), // NUEVO
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import userService from '../../services/api';
+import FollowListModal from '../../components/FollowListModal/FollowListModal';
 import './Profile.css';
 
 const getInitials = (name) => name ? name.slice(0, 2).toUpperCase() : '?';
@@ -15,6 +16,7 @@ const Profile = () => {
     const [stats, setStats]         = useState({ posts: 0, followers: 0, following: 0 });
     const [isFollowing, setIsFollowing] = useState(false);
     const [loading, setLoading]     = useState(true);
+    const [modalType, setModalType] = useState(null); // NUEVO: 'followers' | 'following' | null
 
     const isMyProfile = id === myUserId;
 
@@ -95,17 +97,23 @@ const Profile = () => {
                             )}
                         </div>
 
-                        {/* STATS */}
+                        {/* STATS — NUEVO: seguidores/siguiendo clickables */}
                         <div className="profile-stats">
                             <div className="profile-stat">
                                 <span className="stat-number">{stats.posts}</span>
                                 <span className="stat-label">publicaciones</span>
                             </div>
-                            <div className="profile-stat">
+                            <div
+                                className="profile-stat profile-stat-clickable"
+                                onClick={() => stats.followers > 0 && setModalType('followers')}
+                            >
                                 <span className="stat-number">{stats.followers}</span>
                                 <span className="stat-label">seguidores</span>
                             </div>
-                            <div className="profile-stat">
+                            <div
+                                className="profile-stat profile-stat-clickable"
+                                onClick={() => stats.following > 0 && setModalType('following')}
+                            >
                                 <span className="stat-number">{stats.following}</span>
                                 <span className="stat-label">siguiendo</span>
                             </div>
@@ -138,6 +146,15 @@ const Profile = () => {
                         </div>
                     ))}
                 </div>
+            )}
+
+            {/* NUEVO: modal de seguidores/seguidos */}
+            {modalType && (
+                <FollowListModal
+                    userId={id}
+                    type={modalType}
+                    onClose={() => setModalType(null)}
+                />
             )}
         </div>
     );
