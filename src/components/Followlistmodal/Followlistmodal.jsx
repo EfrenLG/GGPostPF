@@ -1,112 +1,100 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userService from '../../services/api';
-import './FollowRequestsModal.css';
+import './FollowListModal.css';
 
 const getInitials = (name) => name ? name.slice(0, 2).toUpperCase() : '?';
 
-const FollowRequestsModal = ({ onClose, onCountChange }) => {
+// type: 'followers' | 'following'
+const FollowListModal = ({ userId, type, onClose }) => {
     const navigate = useNavigate();
-    const [requests, setRequests] = useState([]);
-    const [loading, setLoading]   = useState(true);
-    const [processingId, setProcessingId] = useState(null);
+    const myUserId = localStorage.getItem('userId');
+
+    const [list, setList]       = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [followingIds, setFollowingIds] = useState([]);
+
+    const title = type === 'followers' ? 'Seguidores' : 'Siguiendo';
 
     useEffect(() => {
         const load = async () => {
             try {
-                const res = await userService.getFollowRequests();
-                setRequests(res.data);
+                const res = await userService.getFollowList(userId, type);
+                setList(res.data);
+
+                // Cargar mi propia lista de following para saber qué botones mostrar como "Siguiendo"
+                const myProfile = await userService.getPublicProfile(myUserId);
+                setFollowingIds((myProfile.data.usuario.following || []).map(String));
             } catch (e) {
-                console.error('Error cargando solicitudes', e);
+                console.error('Error cargando lista', e);
             } finally {
                 setLoading(false);
             }
         };
         load();
-    }, []);
+    }, [userId, type, myUserId]);
 
-    const handleAccept = async (requesterId) => {
-        setProcessingId(requesterId);
+    const handleFollow = async (targetId) => {
         try {
-            await userService.acceptFollowRequest(requesterId);
-            setRequests(prev => {
-                const updated = prev.filter(r => String(r.id) !== String(requesterId));
-                onCountChange?.(updated.length);
-                return updated;
-            });
-        } catch (e) {
-            console.error('Error al aceptar solicitud', e);
-        } finally {
-            setProcessingId(null);
-        }
-    };
-
-    const handleReject = async (requesterId) => {
-        setProcessingId(requesterId);
-        try {
-            await userService.rejectFollowRequest(requesterId);
-            setRequests(prev => {
-                const updated = prev.filter(r => String(r.id) !== String(requesterId));
-                onCountChange?.(updated.length);
-                return updated;
-            });
-        } catch (e) {
-            console.error('Error al rechazar solicitud', e);
-        } finally {
-            setProcessingId(null);
-        }
+            const res = await userService.followUser(targetId);
+            const action = res.data.action;
+            setFollowingIds(prev =>
+                action === 'follow'
+                    ? [...prev, targetId]
+                    : prev.filter(id => id !== targetId)
+            );
+        } catch {}
     };
 
     const goToProfile = (u) => {
         onClose();
-        navigate(`/perfil/${u.id}`);
+        if (String(u.id) === String(myUserId)) {
+            navigate('/user');
+        } else {
+            navigate(`/perfil/${u.id}`);
+        }
     };
 
     return (
-        <div className="requests-modal-overlay" onClick={onClose}>
-            <div className="requests-modal" onClick={e => e.stopPropagation()}>
-                <div className="requests-modal-header">
-                    <span>Solicitudes de seguimiento</span>
-                    <button className="requests-modal-close" onClick={onClose}>✕</button>
+        <div className="follow-modal-overlay" onClick={onClose}>
+            <div className="follow-modal" onClick={e => e.stopPropagation()}>
+                <div className="follow-modal-header">
+                    <span>{title}</span>
+                    <button className="follow-modal-close" onClick={onClose}>✕</button>
                 </div>
 
-                <div className="requests-modal-body">
+                <div className="follow-modal-body">
                     {loading ? (
-                        <div className="requests-modal-loading">Cargando...</div>
-                    ) : requests.length === 0 ? (
-                        <div className="requests-modal-empty">
-                            <i className="fa-regular fa-bell" style={{ fontSize: 32, marginBottom: 10, display: 'block' }}></i>
-                            No tienes solicitudes pendientes
+                        <div className="follow-modal-loading">Cargando...</div>
+                    ) : list.length === 0 ? (
+                        <div className="follow-modal-empty">
+                            {type === 'followers' ? 'Sin seguidores aún' : 'No sigue a nadie todavía'}
                         </div>
                     ) : (
-                        requests.map(u => (
-                            <div key={u.id} className="requests-modal-item">
-                                <div className="requests-modal-user" onClick={() => goToProfile(u)}>
-                                    <div className="requests-modal-avatar">
-                                        {u.icon && u.icon !== 'default.png'
-                                            ? <img src={u.icon} alt={u.username} />
-                                            : getInitials(u.username)}
+                        list.map(u => {
+                            const isMe = String(u.id) === String(myUserId);
+                            const isF  = followingIds.includes(String(u.id));
+                            return (
+                                <div key={u.id} className="follow-modal-item">
+                                    <div className="follow-modal-user" onClick={() => goToProfile(u)}>
+                                        <div className="follow-modal-avatar">
+                                            {u.icon && u.icon !== 'default.png'
+                                                ? <img src={u.icon} alt={u.username} />
+                                                : getInitials(u.username)}
+                                        </div>
+                                        <span className="follow-modal-username">{u.username}</span>
                                     </div>
-                                    <span className="requests-modal-username">{u.username}</span>
+                                    {!isMe && (
+                                        <button
+                                            className={`follow-modal-btn ${isF ? 'following' : ''}`}
+                                            onClick={() => handleFollow(String(u.id))}
+                                        >
+                                            {isF ? 'Siguiendo' : 'Seguir'}
+                                        </button>
+                                    )}
                                 </div>
-                                <div className="requests-modal-actions">
-                                    <button
-                                        className="req-btn req-accept"
-                                        disabled={processingId === u.id}
-                                        onClick={() => handleAccept(u.id)}
-                                    >
-                                        Aceptar
-                                    </button>
-                                    <button
-                                        className="req-btn req-reject"
-                                        disabled={processingId === u.id}
-                                        onClick={() => handleReject(u.id)}
-                                    >
-                                        Rechazar
-                                    </button>
-                                </div>
-                            </div>
-                        ))
+                            );
+                        })
                     )}
                 </div>
             </div>
@@ -114,4 +102,4 @@ const FollowRequestsModal = ({ onClose, onCountChange }) => {
     );
 };
 
-export default FollowRequestsModal;
+export default FollowListModal;
