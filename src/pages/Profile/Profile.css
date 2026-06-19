@@ -163,6 +163,16 @@
     color: var(--text);
 }
 
+/* NUEVO: bio del perfil público */
+.profile-bio {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
 /* ---- DIVISOR ---- */
 .profile-divider {
     border-top: 1px solid var(--border);

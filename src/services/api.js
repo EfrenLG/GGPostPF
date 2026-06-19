@@ -43,7 +43,8 @@ const userService = {
     togglePrivacy: () => api.put('/api/user/privacy'), // NUEVO
     getFollowRequests: () => api.get('/api/user/follow-requests'), // NUEVO
     acceptFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/accept`), // NUEVO
-    rejectFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/reject`), // NUEVO
+    rejectFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/reject`),
+    updateBio: (bio) => api.put('/api/user/bio', { bio }), // NUEVO
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         withCredentials: true

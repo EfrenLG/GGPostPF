@@ -148,6 +148,11 @@ const Profile = () => {
                                 <span className="stat-label">siguiendo</span>
                             </div>
                         </div>
+
+                        {/* NUEVO: bio del perfil */}
+                        {profile.bio && (
+                            <p className="profile-bio">{profile.bio}</p>
+                        )}
                     </div>
                 </div>
             </div>

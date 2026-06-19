@@ -68,6 +68,117 @@
   color: white;
 }
 
+/* NUEVO: bio editable */
+.bio-wrapper {
+  width: 100%;
+  max-width: 360px;
+  margin-top: 4px;
+}
+
+.bio-display {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.bio-text {
+  font-size: 0.95rem;
+  color: white;
+  margin: 0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.bio-placeholder {
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+}
+
+.bio-edit-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.bio-edit-btn:hover {
+  background: rgba(255,255,255,0.35);
+}
+
+.bio-edit-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.bio-textarea {
+  width: 100%;
+  min-height: 70px;
+  resize: vertical;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--text);
+  background: rgba(255,255,255,0.92);
+  outline: none;
+}
+
+.bio-edit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.bio-counter {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.8);
+}
+
+.bio-edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.bio-cancel-btn,
+.bio-save-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+.bio-cancel-btn:disabled,
+.bio-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bio-cancel-btn {
+  background: rgba(255,255,255,0.2);
+  color: white;
+}
+.bio-cancel-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.35);
+}
+
+.bio-save-btn {
+  background: white;
+  color: var(--h123);
+}
+.bio-save-btn:hover:not(:disabled) {
+  background: #ffe5ea;
+}
+
 /* NUEVO: toggle de cuenta privada */
 .privacy-toggle-wrapper {
   margin-top: 6px;

@@ -31,8 +31,12 @@ const User = () => {
     const [showModalIcon, setShowModalIcon] = useState(false);
     const [showModalAddPost, setShowModalAddPost] = useState(false);
     const [showCard, setShowCard] = useState(false);
-    const [isPrivate, setIsPrivate] = useState(false); // NUEVO: estado de cuenta privada
-    const [togglingPrivacy, setTogglingPrivacy] = useState(false); // NUEVO
+    const [isPrivate, setIsPrivate] = useState(false);
+    const [togglingPrivacy, setTogglingPrivacy] = useState(false);
+    const [bio, setBio] = useState('');             // NUEVO: bio actual guardada
+    const [isEditingBio, setIsEditingBio] = useState(false); // NUEVO
+    const [bioDraft, setBioDraft] = useState('');    // NUEVO: texto mientras se edita
+    const [savingBio, setSavingBio] = useState(false); // NUEVO
 
     const navigate = useNavigate();
 
@@ -47,7 +51,8 @@ const User = () => {
 
             setDataUser(dataUserR.data.usuario);
             setDataPost(dataUserR.data.post);
-            setIsPrivate(!!dataUserR.data.usuario.isPrivate); // NUEVO
+            setIsPrivate(!!dataUserR.data.usuario.isPrivate);
+            setBio(dataUserR.data.usuario.bio || ''); // NUEVO
 
             localStorage.setItem('userIcon', dataUserR.data.usuario.icon);
 
@@ -215,6 +220,31 @@ const User = () => {
         }
     };
 
+    // NUEVO: editar biografía
+    const startEditingBio = () => {
+        setBioDraft(bio);
+        setIsEditingBio(true);
+    };
+
+    const cancelEditingBio = () => {
+        setIsEditingBio(false);
+        setBioDraft('');
+    };
+
+    const handleSaveBio = async () => {
+        if (savingBio) return;
+        setSavingBio(true);
+        try {
+            const res = await userService.updateBio(bioDraft.trim());
+            setBio(res.data.bio);
+            setIsEditingBio(false);
+        } catch (e) {
+            console.log('Error al guardar la bio', e);
+        } finally {
+            setSavingBio(false);
+        }
+    };
+
     const closeSesion = () => {
 
         localStorage.removeItem('userIcon');
@@ -247,6 +277,42 @@ const User = () => {
                     <div className="user-data">
                         <p><strong>Usuario:</strong> {firstLetter(dataUser?.username)}</p>
                         <p><strong>Email:</strong> {dataUser.email}</p>
+
+                        {/* NUEVO: bio editable */}
+                        <div className="bio-wrapper">
+                            {!isEditingBio ? (
+                                <div className="bio-display">
+                                    <p className="bio-text">
+                                        {bio ? bio : <span className="bio-placeholder">Añade una biografía a tu perfil...</span>}
+                                    </p>
+                                    <button className="bio-edit-btn" onClick={startEditingBio}>
+                                        <i className="fa-solid fa-pen"></i> Editar bio
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="bio-edit-box">
+                                    <textarea
+                                        className="bio-textarea"
+                                        value={bioDraft}
+                                        onChange={(e) => setBioDraft(e.target.value.slice(0, 150))}
+                                        placeholder="Cuéntale algo sobre ti a la comunidad..."
+                                        maxLength={150}
+                                        autoFocus
+                                    />
+                                    <div className="bio-edit-footer">
+                                        <span className="bio-counter">{bioDraft.length}/150</span>
+                                        <div className="bio-edit-actions">
+                                            <button className="bio-cancel-btn" onClick={cancelEditingBio} disabled={savingBio}>
+                                                Cancelar
+                                            </button>
+                                            <button className="bio-save-btn" onClick={handleSaveBio} disabled={savingBio}>
+                                                {savingBio ? 'Guardando...' : 'Guardar'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
 
                         {/* NUEVO: toggle de cuenta privada */}
                         <div className="privacy-toggle-wrapper">
