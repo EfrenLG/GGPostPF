@@ -8,16 +8,38 @@ const api = axios.create({
     timeout: 30000,
     headers: {
         'Content-Type': 'application/json'
-    },
-    withCredentials: true
+    }
+    // FIX: withCredentials eliminado — ya no se usan cookies cross-domain.
+    // Las cookies httpOnly entre dominios distintos (Vercel <-> Render) se
+    // bloquean con protecciones de privacidad (Brave Shields, Safari ITP,
+    // uBlock/AdBlock en modo estricto), provocando 401 constantes y un bucle
+    // de recargas. Ahora la sesión se gestiona con JWT en localStorage,
+    // enviado manualmente como header Authorization.
 });
 
-// Interceptor centralizado para errores 401
+// NUEVO: interceptor de request — añade el token guardado a cada petición
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
+
+// Interceptor de response — limpia sesión y redirige solo si hace falta,
+// evitando el bucle de recargas que había antes
 api.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401 ||
-            error.response?.data?.error === 'Acceso no autorizado') {
+        const isAuthError =
+            error.response?.status === 401 ||
+            error.response?.data?.error === 'Acceso no autorizado';
+
+        if (isAuthError && window.location.pathname !== '/') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('username');
+            localStorage.removeItem('userIcon');
             window.location.href = '/';
         }
         return Promise.reject(error);
@@ -40,14 +62,13 @@ const userService = {
     followUser: (targetUserId) => api.post(`/api/user/follow/${targetUserId}`),
     getPublicProfile: (id) => api.get(`/api/user/profile/${id}`),
     getFollowList: (id, type) => api.get(`/api/user/follow-list/${id}`, { params: { type } }),
-    togglePrivacy: () => api.put('/api/user/privacy'), // NUEVO
-    getFollowRequests: () => api.get('/api/user/follow-requests'), // NUEVO
-    acceptFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/accept`), // NUEVO
+    togglePrivacy: () => api.put('/api/user/privacy'),
+    getFollowRequests: () => api.get('/api/user/follow-requests'),
+    acceptFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/accept`),
     rejectFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/reject`),
-    updateBio: (bio) => api.put('/api/user/bio', { bio }), // NUEVO
+    updateBio: (bio) => api.put('/api/user/bio', { bio }),
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: true
+        headers: { 'Content-Type': 'multipart/form-data' }
     }),
 
     // SERVICES POSTS
@@ -59,8 +80,7 @@ const userService = {
     deletePost: (idPost) => api.delete(`/api/post/delete/${idPost}`),
     newPost: (dataPost) => api.post('/api/post/register', dataPost),
     newImagePost: (formData) => api.post('/api/icon/upload/post', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: true
+        headers: { 'Content-Type': 'multipart/form-data' }
     }),
 
     // SERVICE OPENAI

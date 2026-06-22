@@ -47,6 +47,10 @@ const Login = () => {
 
             setShowCard(true);
 
+            // FIX: guardamos el token devuelto por el back en localStorage,
+            // ya que la autenticación ahora va por header Authorization
+            // en vez de cookie httpOnly.
+            localStorage.setItem('token', loginUserR.data.token);
             localStorage.setItem('userId', loginUserR.data.user.id);
             localStorage.setItem('username', loginUserR.data.user.username);
             localStorage.setItem('userIcon', loginUserR.data.user.icon);

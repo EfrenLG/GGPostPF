@@ -250,6 +250,7 @@ const User = () => {
         localStorage.removeItem('userIcon');
         localStorage.removeItem('userId');
         localStorage.removeItem('username');
+        localStorage.removeItem('token'); // FIX: limpiar también el JWT al cerrar sesión
 
         navigate('/');
     };
