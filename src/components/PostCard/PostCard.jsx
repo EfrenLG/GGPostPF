@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/api";
 import "./PostCard.css";
@@ -17,17 +17,18 @@ const timeAgo = (dateStr) => {
 const PostCard = ({ post, user }) => {
     const username = localStorage.getItem("username");
     const userId   = localStorage.getItem("userId");
-    const userIcon = localStorage.getItem("userIcon");
 
     const [localPost, setLocalPost]         = useState(null);
-    const [messages, setMessages]           = useState([]);
+    const [comments, setComments]           = useState([]);       // ACTUALIZADO: antes "messages"
+    const [loadingComments, setLoadingComments] = useState(true);  // NUEVO
     const [newMessage, setNewMessage]       = useState("");
+    const [sendingComment, setSendingComment] = useState(false);   // NUEVO
+    const [deletingId, setDeletingId]       = useState(null);      // NUEVO
     const [isEditing, setIsEditing]         = useState(false);
     const [editTitle, setEditTitle]         = useState("");
     const [editDescription, setEditDescription] = useState("");
     const [editCategories, setEditCategories]   = useState("");
     const [isFollowing, setIsFollowing]     = useState(false);
-    const wsRef    = useRef(null);
     const navigate = useNavigate();
 
     const isOwner = localPost?.idUser === userId;
@@ -41,28 +42,44 @@ const PostCard = ({ post, user }) => {
         }
     }, [post]);
 
+    // ACTUALIZADO: comentarios persistentes vía REST, ya no WebSocket
     useEffect(() => {
         if (!post?._id) return;
-        const ws = new WebSocket(import.meta.env.VITE_URL_API);
-        wsRef.current = ws;
-        ws.onopen = () => ws.send(JSON.stringify({ type: "join", postId: post._id }));
-        ws.onmessage = (e) => {
-            const data = JSON.parse(e.data);
-            if (data.type === "history") setMessages(data.messages);
-            else if (data.type === "message") setMessages(prev => [...prev, data]);
-        };
-        return () => ws.close();
+        setLoadingComments(true);
+        userService.getComments(post._id)
+            .then(res => setComments(res.data))
+            .catch(() => setComments([]))
+            .finally(() => setLoadingComments(false));
     }, [post?._id]);
 
-    const handleSendMessage = () => {
-        if (!newMessage.trim()) return;
-        wsRef.current?.send(JSON.stringify({
-            type: "message", postId: post._id, user: username, message: newMessage
-        }));
-        setNewMessage("");
+    const handleSendMessage = async () => {
+        if (!newMessage.trim() || sendingComment) return;
+        setSendingComment(true);
+        try {
+            const res = await userService.postComment(localPost._id, newMessage.trim());
+            setComments(prev => [...prev, res.data]);
+            setNewMessage("");
+        } catch (e) {
+            console.log('Error al enviar comentario', e);
+        } finally {
+            setSendingComment(false);
+        }
     };
 
-    // ACTUALIZADO: follow funcional con toggle visual
+    // NUEVO: borrar comentario (propio o, si eres el dueño del post, cualquiera)
+    const handleDeleteComment = async (commentId) => {
+        if (deletingId) return;
+        setDeletingId(commentId);
+        try {
+            await userService.deleteComment(commentId);
+            setComments(prev => prev.filter(c => c._id !== commentId));
+        } catch (e) {
+            console.log('Error al borrar comentario', e);
+        } finally {
+            setDeletingId(null);
+        }
+    };
+
     const handleFollow = async () => {
         try {
             const res = await userService.followUser(localPost.idUser);
@@ -70,7 +87,6 @@ const PostCard = ({ post, user }) => {
         } catch {}
     };
 
-    // NUEVO: navegar al perfil del autor
     const goToAuthorProfile = () => {
         if (localPost?.idUser === userId) {
             navigate('/user');
@@ -132,15 +148,12 @@ const PostCard = ({ post, user }) => {
 
             <div className="post-page">
 
-                {/* IMAGEN */}
                 <div className="post-media-container">
                     <img src={localPost.file} alt={localPost.tittle} className="post-media" />
                 </div>
 
-                {/* SIDEBAR */}
                 <div className="post-sidebar">
 
-                    {/* HEADER — avatar y nombre clickables */}
                     <div className="post-header">
                         <div className="post-header-left" style={{ cursor: 'pointer' }} onClick={goToAuthorProfile}>
                             {user?.icon && user.icon !== 'default.png'
@@ -170,7 +183,6 @@ const PostCard = ({ post, user }) => {
                         </div>
                     </div>
 
-                    {/* CAPTION */}
                     <div className="post-caption-block">
                         {user?.icon && user.icon !== 'default.png'
                             ? <img src={user.icon} className="caption-avatar" alt="" />
@@ -196,7 +208,6 @@ const PostCard = ({ post, user }) => {
                         </div>
                     </div>
 
-                    {/* EDICIÓN */}
                     {isEditing && (
                         <div className="edit-form">
                             <input className="edit-input" value={editTitle} onChange={e => setEditTitle(e.target.value)} placeholder="Título" />
@@ -209,22 +220,37 @@ const PostCard = ({ post, user }) => {
                         </div>
                     )}
 
-                    {/* COMENTARIOS */}
+                    {/* COMENTARIOS — ahora vía REST, persistentes, con borrado */}
                     <div className="comments-section">
-                        {messages.length === 0
-                            ? <p className="no-comments">Sé el primero en comentar</p>
-                            : messages.map((msg, i) => (
-                                <div key={i} className="comment">
-                                    <div className="comment-avatar">{getInitials(msg.username)}</div>
-                                    <div className="comment-body">
-                                        <strong>{msg.username}</strong>{msg.message}
+                        {loadingComments ? (
+                            <p className="no-comments">Cargando comentarios...</p>
+                        ) : comments.length === 0 ? (
+                            <p className="no-comments">Sé el primero en comentar</p>
+                        ) : (
+                            comments.map((c) => {
+                                const canDelete = String(c.userId) === String(userId) || isOwner;
+                                return (
+                                    <div key={c._id} className="comment">
+                                        <div className="comment-avatar">{getInitials(c.username)}</div>
+                                        <div className="comment-body">
+                                            <strong>{c.username}</strong>{c.message}
+                                        </div>
+                                        {canDelete && (
+                                            <button
+                                                className="comment-delete-btn"
+                                                onClick={() => handleDeleteComment(c._id)}
+                                                disabled={deletingId === c._id}
+                                                aria-label="borrar comentario"
+                                            >
+                                                <i className="fa-solid fa-trash"></i>
+                                            </button>
+                                        )}
                                     </div>
-                                </div>
-                            ))
-                        }
+                                );
+                            })
+                        )}
                     </div>
 
-                    {/* ACCIONES */}
                     <div className="post-actions">
                         <div className="post-actions-row">
                             <div className="actions-left">
@@ -246,7 +272,6 @@ const PostCard = ({ post, user }) => {
                         <div className="post-timestamp">{timeAgo(localPost.fechaAlta)}</div>
                     </div>
 
-                    {/* INPUT COMENTARIO */}
                     <div className="comment-input">
                         <button className="comment-input-emoji" aria-label="emoji">
                             <i className="fa-regular fa-face-smile"></i>
@@ -257,9 +282,10 @@ const PostCard = ({ post, user }) => {
                             value={newMessage}
                             onChange={e => setNewMessage(e.target.value)}
                             onKeyDown={e => e.key === "Enter" && handleSendMessage()}
+                            disabled={sendingComment}
                         />
-                        <button onClick={handleSendMessage} disabled={!newMessage.trim()}>
-                            Publicar
+                        <button onClick={handleSendMessage} disabled={!newMessage.trim() || sendingComment}>
+                            {sendingComment ? '...' : 'Publicar'}
                         </button>
                     </div>
                 </div>

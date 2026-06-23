@@ -67,6 +67,9 @@ const userService = {
     acceptFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/accept`),
     rejectFollowRequest: (requesterId) => api.post(`/api/user/follow-requests/${requesterId}/reject`),
     updateBio: (bio) => api.put('/api/user/bio', { bio }),
+    getComments: (postId) => api.get(`/api/comments/${postId}`), // NUEVO
+    postComment: (postId, message) => api.post('/api/comments', { postId, message }), // NUEVO
+    deleteComment: (commentId) => api.delete(`/api/comments/${commentId}`), // NUEVO
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),

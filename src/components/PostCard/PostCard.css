@@ -3,7 +3,6 @@
    Breakpoint: 900px
    ============================================= */
 
-/* ---------- BOTÓN VOLVER (siempre visible) ---------- */
 .back-btn {
     display: flex;
     align-items: center;
@@ -19,9 +18,6 @@
 }
 .back-btn:hover { opacity: .6; }
 
-/* =============================================
-   MÓVIL (< 900px): layout vertical tipo app
-   ============================================= */
 .post-page {
     max-width: 614px;
     margin: 0 auto;
@@ -39,7 +35,7 @@
     display: block;
 }
 
-.post-sidebar { display: contents; } /* en móvil no es sidebar real */
+.post-sidebar { display: contents; }
 
 .post-header {
     display: flex;
@@ -87,7 +83,6 @@
     font-size: 18px; padding: 4px; line-height: 1;
 }
 
-/* caption del dueño arriba de los comentarios */
 .post-caption-block {
     display: flex;
     gap: 10px;
@@ -115,7 +110,6 @@
 .post-tag  { font-size: 12px; color: #385898; cursor: pointer; }
 [data-theme='dark'] .post-tag { color: #85B7EB; }
 
-/* owner: editar/borrar */
 .owner-actions { display: flex; gap: 10px; margin-top: 8px; }
 .btn-edit {
     font-size: 12px; font-weight: 600; color: #8e8e8e;
@@ -127,7 +121,6 @@
     background: none; border: none; cursor: pointer; padding: 0;
 }
 
-/* edición inline */
 .edit-form {
     display: flex; flex-direction: column; gap: 8px;
     padding: 10px 12px; border-top: 1px solid var(--border);
@@ -161,18 +154,35 @@
     overflow-y: auto;
     border-bottom: 1px solid var(--border);
 }
-.comment { display: flex; gap: 10px; align-items: flex-start; }
+.comment {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
 .comment-avatar {
     width: 28px; height: 28px; border-radius: 50%;
     background: #FBEAF0;
     display: flex; align-items: center; justify-content: center;
     font-size: 10px; font-weight: 700; color: #993556; flex-shrink: 0;
 }
-.comment-body  { font-size: 13px; color: var(--text); line-height: 1.4; }
+.comment-body  { font-size: 13px; color: var(--text); line-height: 1.4; flex: 1; }
 .comment-body strong { font-weight: 600; margin-right: 4px; }
 .no-comments   { font-size: 13px; color: #8e8e8e; text-align: center; padding: 1.5rem 0; }
 
-/* acciones */
+/* NUEVO: botón borrar comentario */
+.comment-delete-btn {
+    background: none;
+    border: none;
+    color: #c7c7c7;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 2px 4px;
+    flex-shrink: 0;
+    transition: color .15s;
+}
+.comment-delete-btn:hover { color: #ed4956; }
+.comment-delete-btn:disabled { opacity: .4; cursor: not-allowed; }
+
 .post-actions { padding: 8px 12px 4px; border-bottom: 1px solid var(--border); }
 .post-actions-row {
     display: flex; align-items: center;
@@ -200,7 +210,6 @@
 .likes-count   { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .post-timestamp{ font-size: 10px; color: #8e8e8e; text-transform: uppercase; letter-spacing: .04em; }
 
-/* input comentario */
 .comment-input {
     display: flex; align-items: center; gap: 10px;
     padding: 10px 12px; border-top: 1px solid var(--border);
