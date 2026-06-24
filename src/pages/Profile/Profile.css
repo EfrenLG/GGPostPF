@@ -139,6 +139,48 @@
 }
 .profile-edit-btn:hover { background: var(--layout); }
 
+/* NUEVO: menú de opciones (⋯) con bloquear */
+.profile-options-wrapper {
+    position: relative;
+}
+.profile-options-btn {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 18px;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+.profile-options-btn:hover { background: var(--body); }
+
+.profile-options-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    background: var(--layout);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    min-width: 180px;
+    z-index: 60;
+    overflow: hidden;
+}
+.profile-options-menu button {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: #ed4956;
+    cursor: pointer;
+    transition: background .15s;
+}
+.profile-options-menu button:hover { background: var(--body); }
+.profile-options-menu button:disabled { opacity: .5; cursor: not-allowed; }
+
 /* STATS */
 .profile-stats {
     display: flex;

@@ -73,7 +73,11 @@ const userService = {
     getNotifications: () => api.get('/api/notifications'), // NUEVO
     getUnreadNotificationsCount: () => api.get('/api/notifications/unread-count'), // NUEVO
     markNotificationAsRead: (id) => api.put(`/api/notifications/${id}/read`), // NUEVO
-    markAllNotificationsAsRead: () => api.put('/api/notifications/read-all'), // NUEVO
+    markAllNotificationsAsRead: () => api.put('/api/notifications/read-all'),
+    removeFollower: (followerId) => api.delete(`/api/user/followers/${followerId}`), // NUEVO
+    blockUser: (targetId) => api.post(`/api/user/block/${targetId}`), // NUEVO
+    unblockUser: (targetId) => api.post(`/api/user/unblock/${targetId}`), // NUEVO
+    getBlockedUsers: () => api.get('/api/user/blocked'), // NUEVO
     saveIconUser: (formData) => api.post('/api/icon/upload/icon', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
     }),

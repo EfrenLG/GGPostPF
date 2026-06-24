@@ -13,8 +13,12 @@ const FollowListModal = ({ userId, type, onClose }) => {
     const [list, setList]       = useState([]);
     const [loading, setLoading] = useState(true);
     const [followingIds, setFollowingIds] = useState([]);
+    const [removingId, setRemovingId] = useState(null); // NUEVO
 
     const title = type === 'followers' ? 'Seguidores' : 'Siguiendo';
+
+    // NUEVO: solo se puede eliminar seguidores cuando es mi propia lista de seguidores
+    const canRemoveFollowers = type === 'followers' && String(userId) === String(myUserId);
 
     useEffect(() => {
         const load = async () => {
@@ -22,7 +26,6 @@ const FollowListModal = ({ userId, type, onClose }) => {
                 const res = await userService.getFollowList(userId, type);
                 setList(res.data);
 
-                // Cargar mi propia lista de following para saber qué botones mostrar como "Siguiendo"
                 const myProfile = await userService.getPublicProfile(myUserId);
                 setFollowingIds((myProfile.data.usuario.following || []).map(String));
             } catch (e) {
@@ -44,6 +47,21 @@ const FollowListModal = ({ userId, type, onClose }) => {
                     : prev.filter(id => id !== targetId)
             );
         } catch {}
+    };
+
+    // NUEVO: eliminar a alguien de mis seguidores
+    const handleRemoveFollower = async (followerId) => {
+        if (removingId) return;
+        if (!window.confirm('¿Eliminar a este seguidor? Podrá volver a seguirte en el futuro.')) return;
+        setRemovingId(followerId);
+        try {
+            await userService.removeFollower(followerId);
+            setList(prev => prev.filter(u => String(u.id) !== String(followerId)));
+        } catch (e) {
+            console.error('Error al eliminar seguidor', e);
+        } finally {
+            setRemovingId(null);
+        }
     };
 
     const goToProfile = (u) => {
@@ -84,14 +102,27 @@ const FollowListModal = ({ userId, type, onClose }) => {
                                         </div>
                                         <span className="follow-modal-username">{u.username}</span>
                                     </div>
-                                    {!isMe && (
-                                        <button
-                                            className={`follow-modal-btn ${isF ? 'following' : ''}`}
-                                            onClick={() => handleFollow(String(u.id))}
-                                        >
-                                            {isF ? 'Siguiendo' : 'Seguir'}
-                                        </button>
-                                    )}
+
+                                    <div className="follow-modal-actions">
+                                        {!isMe && !canRemoveFollowers && (
+                                            <button
+                                                className={`follow-modal-btn ${isF ? 'following' : ''}`}
+                                                onClick={() => handleFollow(String(u.id))}
+                                            >
+                                                {isF ? 'Siguiendo' : 'Seguir'}
+                                            </button>
+                                        )}
+                                        {/* NUEVO: botón eliminar seguidor */}
+                                        {!isMe && canRemoveFollowers && (
+                                            <button
+                                                className="follow-modal-remove-btn"
+                                                onClick={() => handleRemoveFollower(String(u.id))}
+                                                disabled={removingId === String(u.id)}
+                                            >
+                                                Eliminar
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             );
                         })

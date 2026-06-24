@@ -15,43 +15,61 @@ const Profile = () => {
     const [posts, setPosts]             = useState([]);
     const [stats, setStats]             = useState({ posts: 0, followers: 0, following: 0 });
     const [isFollowing, setIsFollowing] = useState(false);
-    const [hasRequested, setHasRequested] = useState(false); // NUEVO: solicitud pendiente enviada
-    const [canViewPosts, setCanViewPosts] = useState(true);   // NUEVO
+    const [hasRequested, setHasRequested] = useState(false);
+    const [canViewPosts, setCanViewPosts] = useState(true);
     const [loading, setLoading]         = useState(true);
-    const [modalType, setModalType]     = useState(null);     // 'followers' | 'following' | null
+    const [modalType, setModalType]     = useState(null);
+    const [isBlocked, setIsBlocked]     = useState(false);     // NUEVO: bloqueo en cualquier sentido
+    const [blockedByMe, setBlockedByMe] = useState(false);     // NUEVO: si fui yo quien bloqueó
+    const [showOptionsMenu, setShowOptionsMenu] = useState(false); // NUEVO
+    const [blockingInProgress, setBlockingInProgress] = useState(false); // NUEVO
 
     const isMyProfile = id === myUserId;
 
+    const loadProfile = async () => {
+        try {
+            const res = await userService.checkToken();
+            if (res.data.message !== 'Token válido') { navigate('/'); return; }
+
+            const profileRes = await userService.getPublicProfile(id);
+            const {
+                usuario,
+                posts: userPosts,
+                stats: userStats,
+                canViewPosts: viewable,
+                hasPendingRequest,
+                isBlocked: blocked,
+                blockedByMe: byMe,
+            } = profileRes.data;
+
+            setProfile(usuario);
+            setPosts(userPosts);
+            setStats(userStats);
+            setIsFollowing(usuario.followers?.includes(myUserId));
+            setCanViewPosts(viewable);
+            setHasRequested(!!hasPendingRequest);
+            setIsBlocked(!!blocked);
+            setBlockedByMe(!!byMe);
+        } catch (e) {
+            console.error('Error cargando perfil', e);
+            navigate('/posts');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const load = async () => {
-            try {
-                const res = await userService.checkToken();
-                if (res.data.message !== 'Token válido') { navigate('/'); return; }
-
-                const profileRes = await userService.getPublicProfile(id);
-                const {
-                    usuario,
-                    posts: userPosts,
-                    stats: userStats,
-                    canViewPosts: viewable,
-                    hasPendingRequest,
-                } = profileRes.data;
-
-                setProfile(usuario);
-                setPosts(userPosts);
-                setStats(userStats);
-                setIsFollowing(usuario.followers?.includes(myUserId));
-                setCanViewPosts(viewable);
-                setHasRequested(!!hasPendingRequest);
-            } catch (e) {
-                console.error('Error cargando perfil', e);
-                navigate('/posts');
-            } finally {
-                setLoading(false);
-            }
-        };
-        load();
+        loadProfile();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, navigate, myUserId]);
+
+    // NUEVO: cerrar el menú de opciones al hacer click fuera
+    useEffect(() => {
+        if (!showOptionsMenu) return;
+        const handleClickOutside = () => setShowOptionsMenu(false);
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, [showOptionsMenu]);
 
     const handleFollow = async () => {
         try {
@@ -76,12 +94,45 @@ const Profile = () => {
         }
     };
 
+    // NUEVO: bloquear al usuario del perfil
+    const handleBlock = async () => {
+        if (blockingInProgress) return;
+        if (!window.confirm(`¿Bloquear a ${profile.username}? Dejará de poder seguirte o ver tu perfil.`)) return;
+        setShowOptionsMenu(false);
+        setBlockingInProgress(true);
+        try {
+            await userService.blockUser(id);
+            setIsBlocked(true);
+            setBlockedByMe(true);
+            setIsFollowing(false);
+            setCanViewPosts(false);
+        } catch (e) {
+            console.error('Error al bloquear', e);
+        } finally {
+            setBlockingInProgress(false);
+        }
+    };
+
+    // NUEVO: desbloquear al usuario del perfil
+    const handleUnblock = async () => {
+        if (blockingInProgress) return;
+        setShowOptionsMenu(false);
+        setBlockingInProgress(true);
+        try {
+            await userService.unblockUser(id);
+            await loadProfile(); // recargar perfil con datos actualizados
+        } catch (e) {
+            console.error('Error al desbloquear', e);
+        } finally {
+            setBlockingInProgress(false);
+        }
+    };
+
     if (loading) return <div className="profile-loading">Cargando perfil...</div>;
     if (!profile) return null;
 
     const iconSrc = profile.icon && profile.icon !== 'default.png' ? profile.icon : null;
 
-    // NUEVO: determinar texto/estado del botón seguir
     let followLabel = 'Seguir';
     let followClass = '';
     if (isFollowing) { followLabel = 'Siguiendo'; followClass = 'following'; }
@@ -90,12 +141,10 @@ const Profile = () => {
     return (
         <div className="profile-page">
 
-            {/* CABECERA */}
             <div className="profile-header">
                 <button className="profile-back-btn" onClick={() => navigate(-1)}>← Volver</button>
 
                 <div className="profile-info">
-                    {/* AVATAR */}
                     <div className="profile-avatar-ring">
                         {iconSrc
                             ? <img src={iconSrc} alt={profile.username} className="profile-avatar-img" />
@@ -103,7 +152,6 @@ const Profile = () => {
                         }
                     </div>
 
-                    {/* DATOS */}
                     <div className="profile-meta">
                         <div className="profile-username-row">
                             <h2 className="profile-username">
@@ -112,7 +160,16 @@ const Profile = () => {
                                     <i className="fa-solid fa-lock profile-lock-icon" title="Cuenta privada"></i>
                                 )}
                             </h2>
-                            {!isMyProfile && (
+
+                            {/* NUEVO: si yo bloqueé a este usuario, solo mostramos "Desbloquear" */}
+                            {!isMyProfile && blockedByMe && (
+                                <button className="profile-follow-btn" onClick={handleUnblock} disabled={blockingInProgress}>
+                                    Desbloquear
+                                </button>
+                            )}
+
+                            {/* Si no hay bloqueo, comportamiento normal de seguir */}
+                            {!isMyProfile && !isBlocked && (
                                 <button
                                     className={`profile-follow-btn ${followClass}`}
                                     onClick={handleFollow}
@@ -120,14 +177,34 @@ const Profile = () => {
                                     {followLabel}
                                 </button>
                             )}
+
                             {isMyProfile && (
                                 <button className="profile-edit-btn" onClick={() => navigate('/user')}>
                                     Editar perfil
                                 </button>
                             )}
+
+                            {/* NUEVO: menú de opciones (⋯) con Bloquear, solo en perfiles ajenos sin bloqueo previo por mí */}
+                            {!isMyProfile && !blockedByMe && (
+                                <div className="profile-options-wrapper">
+                                    <button
+                                        className="profile-options-btn"
+                                        onClick={(e) => { e.stopPropagation(); setShowOptionsMenu(o => !o); }}
+                                        aria-label="más opciones"
+                                    >
+                                        <i className="fa-solid fa-ellipsis"></i>
+                                    </button>
+                                    {showOptionsMenu && (
+                                        <div className="profile-options-menu">
+                                            <button onClick={handleBlock} disabled={blockingInProgress}>
+                                                Bloquear a {profile.username}
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
-                        {/* STATS */}
                         <div className="profile-stats">
                             <div className="profile-stat">
                                 <span className="stat-number">{stats.posts}</span>
@@ -149,7 +226,6 @@ const Profile = () => {
                             </div>
                         </div>
 
-                        {/* NUEVO: bio del perfil */}
                         {profile.bio && (
                             <p className="profile-bio">{profile.bio}</p>
                         )}
@@ -157,11 +233,20 @@ const Profile = () => {
                 </div>
             </div>
 
-            {/* SEPARADOR */}
             <div className="profile-divider" />
 
-            {/* NUEVO: bloqueo de contenido para cuentas privadas sin acceso */}
-            {!canViewPosts ? (
+            {/* NUEVO: aviso si hay bloqueo en cualquier sentido */}
+            {isBlocked ? (
+                <div className="profile-private-lock">
+                    <i className="fa-solid fa-ban"></i>
+                    <h3>{blockedByMe ? 'Has bloqueado a este usuario' : 'No disponible'}</h3>
+                    <p>
+                        {blockedByMe
+                            ? 'No verás sus publicaciones mientras esté bloqueado.'
+                            : 'No puedes ver el contenido de este perfil.'}
+                    </p>
+                </div>
+            ) : !canViewPosts ? (
                 <div className="profile-private-lock">
                     <i className="fa-solid fa-lock"></i>
                     <h3>Esta cuenta es privada</h3>
@@ -189,7 +274,6 @@ const Profile = () => {
                 </div>
             )}
 
-            {/* Modal de seguidores/seguidos */}
             {modalType && (
                 <FollowListModal
                     userId={id}

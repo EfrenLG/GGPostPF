@@ -11,6 +11,7 @@ import { UserContext } from "../../context/UserContext";
 // Componentes
 import PostsCard from '../../components/PostsCard/PostsCard';
 import ChargeCard from '../../components/ChargeCard/ChargeCard';
+import BlockedUsersModal from '../../components/BlockedUsersModal/BlockedUsersModal'; // NUEVO
 
 // Servicios
 import userService from '../../services/api';
@@ -36,7 +37,8 @@ const User = () => {
     const [bio, setBio] = useState('');             // NUEVO: bio actual guardada
     const [isEditingBio, setIsEditingBio] = useState(false); // NUEVO
     const [bioDraft, setBioDraft] = useState('');    // NUEVO: texto mientras se edita
-    const [savingBio, setSavingBio] = useState(false); // NUEVO
+    const [savingBio, setSavingBio] = useState(false);
+    const [showBlockedModal, setShowBlockedModal] = useState(false); // NUEVO // NUEVO
 
     const navigate = useNavigate();
 
@@ -336,6 +338,11 @@ const User = () => {
                                     : 'Cualquiera puede ver tu perfil y tus publicaciones.'}
                             </p>
                         </div>
+
+                        {/* NUEVO: acceso a cuentas bloqueadas */}
+                        <button className="blocked-link-btn" onClick={() => setShowBlockedModal(true)}>
+                            <i className="fa-solid fa-ban"></i> Cuentas bloqueadas
+                        </button>
                     </div>
                 </div>
 
@@ -419,6 +426,11 @@ const User = () => {
 
                 <PostsCard posts={dataPost} usuario={dataUser} />
             </section>
+
+            {/* NUEVO: modal de cuentas bloqueadas */}
+            {showBlockedModal && (
+                <BlockedUsersModal onClose={() => setShowBlockedModal(false)} />
+            )}
 
         </section>
     );

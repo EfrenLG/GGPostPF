@@ -239,6 +239,23 @@
   max-width: 320px;
 }
 
+/* NUEVO: enlace a cuentas bloqueadas */
+.blocked-link-btn {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: underline;
+  transition: opacity .2s;
+}
+.blocked-link-btn:hover { opacity: .75; }
+
 /* Modal */
 
 .modal-title {

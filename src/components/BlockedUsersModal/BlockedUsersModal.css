@@ -1,4 +1,4 @@
-.follow-modal-overlay {
+.blocked-modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(0,0,0,.5);
@@ -6,11 +6,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: fmodal-fade-in .15s ease;
+    animation: bmodal-fade-in .15s ease;
 }
-@keyframes fmodal-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bmodal-fade-in { from { opacity: 0; } to { opacity: 1; } }
 
-.follow-modal {
+.blocked-modal {
     background: var(--layout);
     border-radius: 12px;
     width: 100%;
@@ -23,7 +23,7 @@
     box-shadow: 0 8px 30px rgba(0,0,0,.25);
 }
 
-.follow-modal-header {
+.blocked-modal-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,7 +35,7 @@
     color: var(--text);
 }
 
-.follow-modal-close {
+.blocked-modal-close {
     position: absolute;
     right: 14px;
     top: 50%;
@@ -48,21 +48,21 @@
     line-height: 1;
 }
 
-.follow-modal-body {
+.blocked-modal-body {
     overflow-y: auto;
     flex: 1;
     padding: 6px 0;
 }
 
-.follow-modal-loading,
-.follow-modal-empty {
+.blocked-modal-loading,
+.blocked-modal-empty {
     text-align: center;
     padding: 2.5rem 1rem;
     font-size: 14px;
     color: #8e8e8e;
 }
 
-.follow-modal-item {
+.blocked-modal-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -70,7 +70,7 @@
     gap: 12px;
 }
 
-.follow-modal-user {
+.blocked-modal-user {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -79,7 +79,7 @@
     min-width: 0;
 }
 
-.follow-modal-avatar {
+.blocked-modal-avatar {
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -93,9 +93,9 @@
     font-weight: 700;
     color: #993556;
 }
-.follow-modal-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.blocked-modal-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
-.follow-modal-username {
+.blocked-modal-username {
     font-size: 14px;
     font-weight: 600;
     color: var(--text);
@@ -104,47 +104,17 @@
     white-space: nowrap;
 }
 
-.follow-modal-btn {
+.blocked-modal-unblock-btn {
     padding: 6px 16px;
     border-radius: 8px;
-    border: none;
+    border: 1px solid var(--border);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    background: var(--h123);
-    color: #fff;
+    background: var(--body);
+    color: var(--text);
     flex-shrink: 0;
     transition: background .2s;
 }
-.follow-modal-btn:hover { background: var(--buton-hover); }
-.follow-modal-btn.following {
-    background: var(--body);
-    color: var(--text);
-    border: 1px solid var(--border);
-}
-
-/* NUEVO: wrapper de acciones y botón eliminar seguidor */
-.follow-modal-actions {
-    flex-shrink: 0;
-}
-
-.follow-modal-remove-btn {
-    padding: 6px 16px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    background: var(--body);
-    color: var(--text);
-    transition: background .2s, color .2s, border-color .2s;
-}
-.follow-modal-remove-btn:hover {
-    background: #ffe5ea;
-    color: #ed4956;
-    border-color: #ed4956;
-}
-.follow-modal-remove-btn:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
+.blocked-modal-unblock-btn:hover { background: var(--layout); border-color: var(--h123); color: var(--h123); }
+.blocked-modal-unblock-btn:disabled { opacity: .5; cursor: not-allowed; }
